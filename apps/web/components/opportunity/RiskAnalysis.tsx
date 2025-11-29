@@ -1,0 +1,532 @@
+"use client";
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Shield,
+  AlertTriangle,
+  TrendingDown,
+  Info,
+  Activity,
+  LineChart,
+} from "lucide-react";
+type Opportunity = {
+  id: string;
+  protocol: string;
+  pair: string;
+  chain: string;
+  apr: number;
+  apy: number;
+  risk: "Low" | "Medium" | "High";
+  tvlUsd: number;
+  rewardToken: string;
+  lastUpdated: string;
+  originalUrl: string;
+  summary: string;
+};
+
+interface RiskAnalysisProps {
+  data: Opportunity;
+}
+
+interface RiskItem {
+  category: string;
+  level: number; // 0-100, higher means higher risk
+  status: "Low" | "Medium" | "High";
+  description: string;
+  icon: React.ReactNode;
+  color: { bg: string; bar: string; text: string };
+}
+
+export function RiskAnalysis({ data }: RiskAnalysisProps) {
+  // Fetch comprehensive risk analysis from new API
+  const [riskData, setRiskData] = React.useState<{
+    overallRiskScore: number;
+    riskLevel: 'low' | 'medium' | 'high' | 'critical';
+    confidence: number;
+    factors: string[];
+    technicalRisk?: number;
+    financialRisk?: number;
+    operationalRisk?: number;
+    securityRisk?: number;
+    marketRegime?: string;
+    marketVolatility?: { daily: number; weekly: number; monthly: number; yearly: number };
+    yieldComponents?: { baseYield: number; rewardTokenYield: number; tradingFees: number; sustainability: number };
+    liquidityAnalysis?: { depth: Record<string, number>; concentration: number; utilization: number };
+    stressTests?: Array<{ scenario: string; severity: string; impact: { valueChange: number; apyChange: number; riskScoreChange: number } }>;
+    recommendations?: string[];
+    system: 'enhanced' | 'legacy';
+  } | null>(null);
+
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    let mounted = true;
+    async function loadRiskAnalysis() {
+      try {
+        setLoading(true);
+        const resp = await fetch(`/api/opportunities/${data.id}/risk`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const json = await resp.json();
+
+        if (!mounted) return;
+
+        if (json.success && json.data) {
+          setRiskData({
+            overallRiskScore: json.riskScore || json.data.overallRiskScore,
+            riskLevel: json.riskLevel || json.data.riskLevel,
+            confidence: json.data.confidence || 0.8,
+            factors: json.data.factors || [],
+            technicalRisk: json.enhanced?.technicalRisk,
+            financialRisk: json.enhanced?.financialRisk,
+            operationalRisk: json.enhanced?.operationalRisk,
+            securityRisk: json.enhanced?.securityRisk,
+            marketRegime: json.enhanced?.marketRegime,
+            marketVolatility: json.enhanced?.marketVolatility,
+            yieldComponents: json.enhanced?.yieldComponents,
+            liquidityAnalysis: json.enhanced?.liquidityAnalysis,
+            stressTests: json.enhanced?.stressTests,
+            recommendations: json.enhanced?.recommendations,
+            system: json.system || 'legacy'
+          });
+        } else {
+          throw new Error(json.error || 'Failed to load risk analysis');
+        }
+      } catch (err) {
+        if (mounted) {
+          setError(err instanceof Error ? err.message : 'Failed to load risk analysis');
+          console.error('Risk analysis fetch error:', err);
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    }
+    loadRiskAnalysis();
+    return () => {
+      mounted = false;
+    };
+  }, [data.id]);
+
+  // Fetch recent series to compute heuristic risk metrics if needed
+  const [series, setSeries] = React.useState<
+    Array<{
+      timestamp: number;
+      tvlUsd: number;
+      apy?: number;
+      apr?: number;
+      volume24h?: number;
+    }>
+  >([]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        // no-op: internal loading state is not displayed
+        const resp = await fetch(`/api/opportunities/${data.id}/chart?days=90`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const json = await resp.json();
+        const pts = Array.isArray(json.series) ? json.series : [];
+        if (!mounted) return;
+        setSeries(pts);
+      } catch {
+        setSeries([]);
+      } finally {
+        // no-op
+      }
+    }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, [data.id]);
+
+  // Helpers
+  const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+  const pct = (n: number) => Math.round(n * 100);
+  const mean = (arr: number[]) =>
+    arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+  const stdev = (arr: number[]) => {
+    if (arr.length < 2) return 0;
+    const m = mean(arr);
+    const v = mean(arr.map((x) => (x - m) * (x - m)));
+    return Math.sqrt(v);
+  };
+  const slope = (arr: number[]) => {
+    const n = arr.length;
+    if (n < 2) return 0;
+    const xs = Array.from({ length: n }, (_, i) => i + 1);
+    const xMean = mean(xs);
+    const yMean = mean(arr);
+    const num = xs.reduce((s, x, i) => s + (x - xMean) * (arr[i] - yMean), 0);
+    const den = xs.reduce((s, x) => s + (x - xMean) * (x - xMean), 0) || 1;
+    return num / den;
+  };
+  const maxDrawdown = (arr: number[]) => {
+    let peak = arr[0] || 0;
+    let maxDD = 0;
+    for (const v of arr) {
+      peak = Math.max(peak, v);
+      maxDD = Math.min(maxDD, (v - peak) / (peak || 1));
+    }
+    return Math.abs(maxDD); // 0..1
+  };
+  const herfindahl = (arr: number[]) => {
+    const s = arr.reduce((a, b) => a + Math.max(b, 0), 0) || 1;
+    return arr.reduce((a, v) => a + Math.pow(Math.max(v, 0) / s, 2), 0); // 1/N..1
+  };
+
+  // Build time-series vectors
+  const tvlVec = series
+    .map((p) => p.tvlUsd)
+    .filter((n) => Number.isFinite(n)) as number[];
+  const apyVec = series
+    .map((p) =>
+      typeof p.apy === "number" ? p.apy : typeof p.apr === "number" ? p.apr : 0,
+    )
+    .filter((n) => Number.isFinite(n)) as number[];
+  const volVec = series
+    .map((p) => p.volume24h ?? 0)
+    .filter((n) => Number.isFinite(n)) as number[];
+
+  const latestTvl = tvlVec.length ? tvlVec[tvlVec.length - 1] : data.tvlUsd;
+  const tvlMean = mean(tvlVec);
+  const tvlVol = stdev(tvlVec);
+  const tvlCv = tvlMean ? tvlVol / tvlMean : 0; // coefficient of variation
+  const tvlSlope = slope(tvlVec);
+  const tvlDD = maxDrawdown(tvlVec);
+
+  const apyMean = mean(apyVec);
+  const apyVol = stdev(apyVec);
+  const apyCv = apyMean ? apyVol / Math.abs(apyMean) : 0;
+  const apySlope = slope(apyVec);
+
+  const volHerf = volVec.length
+    ? herfindahl(volVec)
+    : 1 / Math.max(1, volVec.length || 1);
+  const turnover = tvlMean ? mean(volVec) / tvlMean : 0; // approx daily
+
+  // Risk mappings (0..100 higher = higher risk)
+  const liquidityRisk = (() => {
+    const tvlRisk = 1 - clamp01(Math.log10((latestTvl || 1) + 1) / 7); // high TVL => low risk
+    const turnoverRisk = clamp01(turnover); // higher turnover => higher risk of churn
+    return pct(clamp01(0.7 * tvlRisk + 0.3 * turnoverRisk));
+  })();
+
+  const stabilityRisk = (() => {
+    const volRisk = clamp01(tvlCv); // variability
+    const ddRisk = clamp01(tvlDD); // deep drawdowns
+    return pct(clamp01(0.6 * volRisk + 0.4 * ddRisk));
+  })();
+
+  const yieldRisk = (() => {
+    const volRisk = clamp01(apyCv);
+    const trendBonus = apySlope > 0 ? -0.1 : 0.05; // improving yield reduces risk slightly
+    return pct(clamp01(volRisk + trendBonus));
+  })();
+
+  const concentrationRisk = (() => {
+    if (volVec.length < 5) return 55; // unknown → medium
+    // Higher Herfindahl implies more concentrated volume flow
+    const h = clamp01((volHerf - 0.1) / 0.9);
+    return Number(pct(h).toFixed(2));
+  })();
+
+  const momentumRisk = (() => {
+    // Negative momentum increases risk, positive reduces
+    const m = tvlSlope;
+    // Normalize slope by scale of TVL
+    const norm = tvlMean ? m / (tvlMean || 1) : 0;
+    const mapped = 0.5 - Math.max(-0.5, Math.min(0.5, norm * 200)); // heuristic
+    return pct(clamp01(mapped));
+  })();
+
+  const toStatus = (score: number): RiskItem["status"] =>
+    score < 33 ? "Low" : score < 66 ? "Medium" : "High";
+
+  // Use enhanced risk data if available, otherwise fallback to calculated values
+  const scores = riskData ? {
+    liquidity: riskData.operationalRisk ? riskData.operationalRisk * 100 : liquidityRisk,
+    stability: riskData.technicalRisk ? riskData.technicalRisk * 100 : stabilityRisk,
+    yield: riskData.financialRisk ? riskData.financialRisk * 100 : yieldRisk,
+    concentration: riskData.operationalRisk ? riskData.operationalRisk * 90 : concentrationRisk,
+    momentum: riskData.technicalRisk ? riskData.technicalRisk * 80 : momentumRisk,
+    total: riskData.overallRiskScore
+  } : {
+    liquidity: liquidityRisk,
+    stability: stabilityRisk,
+    yield: yieldRisk,
+    concentration: concentrationRisk,
+    momentum: momentumRisk,
+    total: Math.round(
+      (liquidityRisk +
+        stabilityRisk +
+        yieldRisk +
+        concentrationRisk +
+        momentumRisk) /
+        5,
+    ),
+  };
+
+
+
+  const risks: RiskItem[] = [
+    {
+      category: "Liquidity Risk",
+      level: scores.liquidity,
+      status: toStatus(scores.liquidity),
+      description: "Exit depth and turnover vs TVL (derived from real series)",
+      icon: <AlertTriangle size={16} />,
+      color: {
+        bg: "bg-purple-50",
+        bar: "bg-purple-500",
+        text: "text-purple-700",
+      },
+    },
+    {
+      category: "Stability Risk",
+      level: scores.stability,
+      status: toStatus(scores.stability),
+      description: "TVL volatility and drawdown computed from historical data",
+      icon: <TrendingDown size={16} />,
+      color: { bg: "bg-amber-50", bar: "bg-amber-500", text: "text-amber-700" },
+    },
+    {
+      category: "Yield Risk",
+      level: scores.yield,
+      status: toStatus(scores.yield),
+      description: "APR/APY variability and trend of returns",
+      icon: <LineChart size={16} />,
+      color: { bg: "bg-blue-50", bar: "bg-blue-500", text: "text-blue-700" },
+    },
+    {
+      category: "Concentration Risk",
+      level: scores.concentration,
+      status: toStatus(scores.concentration),
+      description:
+        "Volume distribution proxy (higher concentration = higher risk)",
+      icon: <Shield size={16} />,
+      color: { bg: "bg-rose-50", bar: "bg-rose-500", text: "text-rose-700" },
+    },
+    {
+      category: "Momentum Risk",
+      level: scores.momentum,
+      status: toStatus(scores.momentum),
+      description: "Recent TVL momentum; weakening momentum increases risk",
+      icon: <Activity size={16} />,
+      color: {
+        bg: "bg-emerald-50",
+        bar: "bg-emerald-500",
+        text: "text-emerald-700",
+      },
+    },
+  ];
+
+  const overallRiskScore = riskData?.overallRiskScore || scores.total ||
+    Math.round(
+      risks.reduce((sum, r) => sum + r.level, 0) / (risks.length || 1),
+    );
+
+  const getRiskLabel = (score: number) => {
+    if (score < 25) return { label: "Low Risk", color: "text-emerald-600" };
+    if (score < 50) return { label: "Medium Risk", color: "text-amber-600" };
+    if (score < 75) return { label: "High Risk", color: "text-rose-600" };
+    return { label: "Critical Risk", color: "text-red-700" };
+  };
+
+  const overallLabel = getRiskLabel(overallRiskScore);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, delay: 0.2 }}
+      className="rounded-3xl border border-black/5 bg-[var(--sand-50,#F6F4EF)] p-5 md:p-6"
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between mb-6">
+        <div>
+          <h3 className="font-display text-lg md:text-xl text-zinc-900 flex items-center gap-2">
+            <Shield size={20} className="text-zinc-400" />
+            Risk Analysis
+            {riskData?.system === 'enhanced' && (
+              <span className="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                Enhanced
+              </span>
+            )}
+          </h3>
+          <p className="mt-1 text-sm text-zinc-600">
+            {riskData?.system === 'enhanced'
+              ? 'Advanced risk assessment with AI-powered market analysis'
+              : 'Multi-factor risk assessment based on protocol metrics'
+            }
+          </p>
+        </div>
+
+        {/* Overall Score */}
+        <div className="text-right">
+          {loading ? (
+            <div className="animate-pulse">
+              <div className="h-8 bg-gray-200 rounded w-20 mb-1"></div>
+              <div className="h-4 bg-gray-200 rounded w-16"></div>
+            </div>
+          ) : error ? (
+            <div className="text-red-600 text-sm">Error</div>
+          ) : (
+            <>
+              <div className="text-2xl font-bold text-zinc-900 tabular-nums">
+                {overallRiskScore}
+                <span className="text-sm font-normal text-zinc-500">/100</span>
+              </div>
+              <div className={`text-xs font-medium ${overallLabel.color}`}>
+                {overallLabel.label}
+                {riskData?.confidence && (
+                  <span className="text-gray-500 ml-1">
+                    ({Math.round(riskData.confidence * 100)}% confidence)
+                  </span>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Risk Categories */}
+      <div className="space-y-4">
+        {risks.map((risk, index) => (
+          <motion.div
+            key={risk.category}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 * index }}
+            className="p-4 rounded-xl bg-white"
+          >
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className={`p-2 rounded-lg ${risk.color.bg}`}>
+                  <div className={risk.color.text}>{risk.icon}</div>
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-zinc-900">
+                    {risk.category}
+                  </h4>
+                  <p className="text-xs text-zinc-500 mt-0.5">
+                    {risk.description}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-sm font-semibold text-zinc-900 tabular-nums">
+                  {risk.level}%
+                </div>
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="relative h-2 rounded-full bg-zinc-100 overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${risk.level}%` }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeOut",
+                  delay: 0.2 + index * 0.1,
+                }}
+                className={`absolute left-0 top-0 h-full rounded-full ${risk.color.bar}`}
+              />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Enhanced Risk Insights */}
+      {riskData?.system === 'enhanced' && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.8 }}
+          className="mt-6 space-y-4"
+        >
+          {/* Market Conditions */}
+          {riskData.marketRegime && (
+            <div className="p-4 rounded-xl bg-gradient-to-r from-indigo-50 to-purple-50">
+              <h4 className="text-sm font-medium text-indigo-900 mb-2">
+                Market Conditions
+              </h4>
+              <div className="flex items-center gap-4">
+                <span className="px-3 py-1 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                  {riskData.marketRegime.replace('_', ' ').toUpperCase()}
+                </span>
+                {riskData.marketVolatility && (
+                  <span className="text-xs text-indigo-700">
+                    Volatility: {(riskData.marketVolatility.yearly * 100).toFixed(1)}%
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Risk Factors */}
+          {(riskData.technicalRisk !== undefined || riskData.financialRisk !== undefined ||
+            riskData.operationalRisk !== undefined || riskData.securityRisk !== undefined) && (
+            <div className="p-4 rounded-xl bg-gray-50">
+              <h4 className="text-sm font-medium text-gray-900 mb-3">
+                Advanced Risk Factors
+              </h4>
+              <div className="grid grid-cols-2 gap-3">
+                {riskData.technicalRisk !== undefined && (
+                  <div>
+                    <div className="text-xs text-gray-600">Technical Risk</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {(riskData.technicalRisk * 100).toFixed(0)}%
+                    </div>
+                  </div>
+                )}
+                {riskData.financialRisk !== undefined && (
+                  <div>
+                    <div className="text-xs text-gray-600">Financial Risk</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {(riskData.financialRisk * 100).toFixed(0)}%
+                    </div>
+                  </div>
+                )}
+                {riskData.operationalRisk !== undefined && (
+                  <div>
+                    <div className="text-xs text-gray-600">Operational Risk</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {(riskData.operationalRisk * 100).toFixed(0)}%
+                    </div>
+                  </div>
+                )}
+                {riskData.securityRisk !== undefined && (
+                  <div>
+                    <div className="text-xs text-gray-600">Security Risk</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {(riskData.securityRisk * 100).toFixed(0)}%
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          </motion.div>
+      )}
+
+      {/* Info Footer */}
+      <div className="mt-6 p-3 rounded-lg bg-blue-50 flex items-start gap-2">
+        <Info size={14} className="text-blue-600 mt-0.5" />
+        <div className="flex-1">
+          <p className="text-xs text-blue-700">
+            {riskData?.system === 'enhanced'
+              ? 'Enhanced risk analysis uses AI-powered market data, stress testing, and machine learning models to provide comprehensive risk assessment. Scores are updated in real-time based on market conditions.'
+              : 'Risk scores are derived from real series: TVL volatility/drawdown, APR/APY volatility, liquidity turnover, volume concentration and recent momentum. Lower scores indicate lower risk.'
+            }
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}

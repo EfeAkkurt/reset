@@ -1,0 +1,11 @@
+node_modules
+dist
+.build
+.next
+.env*
+coverage
+CLAUDE.md
+.claude
+*.db
+*.sqlite
+*.sqlite3

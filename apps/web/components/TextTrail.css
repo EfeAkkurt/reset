@@ -1,0 +1,10 @@
+.text-trail {
+  width: 100%;
+  height: 100%;
+  background: transparent !important;
+}
+
+.text-trail canvas {
+  background: transparent !important;
+  mix-blend-mode: screen !important;
+}
