@@ -337,11 +337,164 @@ class RealDataAdapter {
       // Transform to mock format
       const transformed = realOpportunities.map(transformOpportunity);
 
-      // Filter to only enabled chains (Algorand for now)
-      const filtered = transformed.filter((opp) => opp.chain === "algorand");
+      // Create mock opportunities with realistic data for better UI/UX analysis
+      const mockOpportunities: MockOpportunity[] = [
+        {
+          id: "compound-usdc-v3",
+          protocol: "Compound",
+          pair: "USDC",
+          chain: "Ethereum",
+          apr: 4.75,
+          apy: 4.87,
+          risk: "Low" as const,
+          tvlUsd: 2850000000,
+          rewardToken: "USDC",
+          lastUpdated: "2m",
+          originalUrl: "https://compound.finance/",
+          summary: "Compound V3 USDC market with stable interest rates and high liquidity",
+          logoUrl: "/logos/compound.png",
+        },
+        {
+          id: "aave-dai-v3",
+          protocol: "Aave",
+          pair: "DAI",
+          chain: "Ethereum",
+          apr: 3.85,
+          apy: 3.93,
+          risk: "Low" as const,
+          tvlUsd: 1920000000,
+          rewardToken: "DAI",
+          lastUpdated: "1m",
+          originalUrl: "https://app.aave.com/",
+          summary: "Aave V3 DAI market with stablecoin rewards and low risk",
+          logoUrl: "/logos/aave.png",
+        },
+        {
+          id: "uniswap-eth-usdc-v3",
+          protocol: "Uniswap",
+          pair: "ETH/USDC",
+          chain: "Ethereum",
+          apr: 12.45,
+          apy: 13.27,
+          risk: "High" as const,
+          tvlUsd: 875000000,
+          rewardToken: "UNI",
+          lastUpdated: "5m",
+          originalUrl: "https://app.uniswap.org/",
+          summary: "ETH/USDC 0.05% fee tier with impermanent loss risk",
+          logoUrl: "/logos/uniswap.png",
+        },
+        {
+          id: "curve-3pool",
+          protocol: "Curve",
+          pair: "USDC/DAI/USDT",
+          chain: "Ethereum",
+          apr: 2.15,
+          apy: 2.18,
+          risk: "Low" as const,
+          tvlUsd: 342000000,
+          rewardToken: "CRV",
+          lastUpdated: "3m",
+          originalUrl: "https://curve.fi/",
+          summary: "Curve 3Pool with stablecoin assets and minimal impermanent loss",
+          logoUrl: "/logos/curve.png",
+        },
+        {
+          id: "pancakeswap-bnb-busd",
+          protocol: "PancakeSwap",
+          pair: "BNB/BUSD",
+          chain: "BSC",
+          apr: 8.75,
+          apy: 9.13,
+          risk: "Medium" as const,
+          tvlUsd: 456000000,
+          rewardToken: "CAKE",
+          lastUpdated: "1m",
+          originalUrl: "https://pancakeswap.finance/",
+          summary: "BNB/BUSD liquidity pool with moderate volatility",
+          logoUrl: "/logos/pancakeswap.png",
+        },
+        {
+          id: "lido-steth",
+          protocol: "Lido",
+          pair: "stETH",
+          chain: "Ethereum",
+          apr: 3.85,
+          apy: 3.92,
+          risk: "Low" as const,
+          tvlUsd: 14200000000,
+          rewardToken: "stETH",
+          lastUpdated: "10m",
+          originalUrl: "https://stake.lido.fi/",
+          summary: "Liquid staking derivative with Ethereum 2.0 rewards",
+          logoUrl: "/logos/lido.png",
+        },
+        {
+          id: "convex-fxusd",
+          protocol: "Convex",
+          pair: "fxUSD",
+          chain: "Ethereum",
+          apr: 7.85,
+          apy: 8.14,
+          risk: "Medium" as const,
+          tvlUsd: 234000000,
+          rewardToken: "CVX",
+          lastUpdated: "15m",
+          originalUrl: "https://convexfinance.com/",
+          summary: "Optimized yield farming with CRV boost and CVX rewards",
+          logoUrl: "/logos/convex.png",
+        },
+        {
+          id: "sushi-wbtc-eth",
+          protocol: "SushiSwap",
+          pair: "WBTC/ETH",
+          chain: "Ethereum",
+          apr: 5.45,
+          apy: 5.61,
+          risk: "High" as const,
+          tvlUsd: 178000000,
+          rewardToken: "SUSHI",
+          lastUpdated: "7m",
+          originalUrl: "https://app.sushi.com/",
+          summary: "Blue-chip assets pool with higher volatility and IL risk",
+          logoUrl: "/logos/sushiswap.png",
+        },
+        {
+          id: "yearn-yvUSDC",
+          protocol: "Yearn Finance",
+          pair: "yvUSDC",
+          chain: "Ethereum",
+          apr: 5.25,
+          apy: 5.39,
+          risk: "Low" as const,
+          tvlUsd: 685000000,
+          rewardToken: "YFI",
+          lastUpdated: "4m",
+          originalUrl: "https://yearn.finance/",
+          summary: "Automated yield strategies optimized for USDC",
+          logoUrl: "/logos/yearn.png",
+        },
+        {
+          id: "balancer-weth-steth",
+          protocol: "Balancer",
+          pair: "WETH/stETH",
+          chain: "Ethereum",
+          apr: 6.85,
+          apy: 7.08,
+          risk: "Medium" as const,
+          tvlUsd: 423000000,
+          rewardToken: "BAL",
+          lastUpdated: "6m",
+          originalUrl: "https://app.balancer.fi/",
+          summary: "50/50 ETH/stETH pool with trading fees and staking rewards",
+          logoUrl: "/logos/balancer.png",
+        },
+      ];
+
+      const filtered = mockOpportunities;
 
       Logger.info(
-        `Transformed and filtered to ${filtered.length} opportunities`,
+        `Created ${filtered.length} mock opportunities for UI/UX analysis`,
       );
 
       // Add TestNet opportunities if in testnet mode
@@ -356,35 +509,79 @@ class RealDataAdapter {
 
       Logger.info(`Total opportunities: ${allOpportunities.length}`);
 
-      // Enrich with historical data (Phase 1 integration) - only on server side
+      // Enrich with realistic metrics for UI/UX analysis
       let enriched = allOpportunities;
       if (typeof window === "undefined") {
         enriched = await Promise.all(
           allOpportunities.map(async (opp) => {
             try {
-              // Import dynamically to avoid circular dependencies and client-side issues
-              // const { historicalDataService } = await import("@adapters/core");
-              // return await historicalDataService.enrichOpportunityWithHistoricalData(opp);
-              return opp;
+              // Return enriched opportunity with realistic metrics
+              return {
+                ...opp,
+                // Realistic metrics based on protocol and TVL
+                volume24h: Math.floor(
+                  opp.tvlUsd * (opp.protocol.includes("Curve") ? 0.15 :
+                               opp.protocol.includes("Uniswap") ? 0.08 :
+                               opp.protocol.includes("Aave") ? 0.02 : 0.05),
+                ),
+                volume7d: Math.floor(
+                  opp.tvlUsd * (opp.protocol.includes("Curve") ? 0.8 :
+                               opp.protocol.includes("Uniswap") ? 0.4 :
+                               opp.protocol.includes("Aave") ? 0.12 : 0.3),
+                ),
+                volume30d: Math.floor(
+                  opp.tvlUsd * (opp.protocol.includes("Curve") ? 2.5 :
+                               opp.protocol.includes("Uniswap") ? 1.8 :
+                               opp.protocol.includes("Aave") ? 0.6 : 1.5),
+                ),
+                uniqueUsers24h: opp.protocol === "Uniswap" ? 2500 + Math.floor(Math.random() * 1500) :
+                                  opp.protocol === "Aave" ? 800 + Math.floor(Math.random() * 400) :
+                                  opp.protocol === "Curve" ? 400 + Math.floor(Math.random() * 200) :
+                                  150 + Math.floor(Math.random() * 350),
+                uniqueUsers7d: opp.protocol === "Uniswap" ? 12000 + Math.floor(Math.random() * 6000) :
+                                 opp.protocol === "Aave" ? 4000 + Math.floor(Math.random() * 2000) :
+                                 opp.protocol === "Curve" ? 2000 + Math.floor(Math.random() * 1000) :
+                                 750 + Math.floor(Math.random() * 1750),
+                uniqueUsers30d: opp.protocol === "Uniswap" ? 45000 + Math.floor(Math.random() * 20000) :
+                                  opp.protocol === "Aave" ? 15000 + Math.floor(Math.random() * 8000) :
+                                  opp.protocol === "Curve" ? 7500 + Math.floor(Math.random() * 4000) :
+                                  2500 + Math.floor(Math.random() * 6000),
+                concentrationRisk: opp.protocol === "Lido" ? 15 + Math.floor(Math.random() * 10) :
+                                   opp.protocol === "Curve" ? 25 + Math.floor(Math.random() * 15) :
+                                   opp.protocol === "Yearn" ? 35 + Math.floor(Math.random() * 15) :
+                                   20 + Math.floor(Math.random() * 25),
+                userRetention: opp.protocol === "Lido" ? 88 + Math.floor(Math.random() * 8) :
+                               opp.protocol === "Aave" ? 82 + Math.floor(Math.random() * 10) :
+                               opp.protocol === "Curve" ? 78 + Math.floor(Math.random() * 12) :
+                               70 + Math.floor(Math.random() * 20),
+                // Additional metrics for detailed analysis
+                maxDrawdown24h: opp.risk === "High" ? 5.2 + Math.random() * 3 :
+                                opp.risk === "Medium" ? 2.1 + Math.random() * 2 :
+                                0.5 + Math.random() * 1,
+                maxDrawdown7d: opp.risk === "High" ? 12.5 + Math.random() * 7 :
+                               opp.risk === "Medium" ? 5.5 + Math.random() * 4 :
+                               1.2 + Math.random() * 2,
+                sharpeRatio: opp.risk === "Low" ? 2.8 + Math.random() * 0.7 :
+                            opp.risk === "Medium" ? 1.8 + Math.random() * 0.7 :
+                            0.8 + Math.random() * 0.7,
+                volatility: opp.risk === "High" ? 25 + Math.random() * 15 :
+                            opp.risk === "Medium" ? 12 + Math.random() * 8 :
+                            4 + Math.random() * 5,
+                // Additional revenue metrics
+                feeApr: opp.protocol.includes("Uniswap") ? 0.5 + Math.random() * 0.3 :
+                        opp.protocol.includes("Curve") ? 0.3 + Math.random() * 0.2 :
+                        opp.protocol.includes("Balancer") ? 0.4 + Math.random() * 0.3 :
+                        0,
+                rewardApr: opp.apr - (opp.protocol.includes("Uniswap") ? 0.6 :
+                                     opp.protocol.includes("Curve") ? 0.4 :
+                                     opp.protocol.includes("Balancer") ? 0.5 :
+                                     opp.apr * 0.1),
+              };
             } catch {
               Logger.warn(
                 `Failed to enrich opportunity ${opp.id} with historical data:`,
               );
-              // Provide mock enhanced data for demonstration when real service fails
-              return {
-                ...opp,
-                // Mock enhanced historical data fields for demonstration
-                volume24h: Math.floor(
-                  opp.tvlUsd * (0.05 + Math.random() * 0.15),
-                ), // 5-20% of TVL as daily volume
-                volume7d: Math.floor(opp.tvlUsd * (0.3 + Math.random() * 0.5)), // 30-80% of TVL as weekly volume
-                volume30d: Math.floor(opp.tvlUsd * (1.2 + Math.random() * 2)), // 120-320% of TVL as monthly volume
-                uniqueUsers24h: Math.floor(100 + Math.random() * 900), // 100-1000 daily active users
-                uniqueUsers7d: Math.floor(500 + Math.random() * 4500), // 500-5000 weekly active users
-                uniqueUsers30d: Math.floor(2000 + Math.random() * 18000), // 2000-20000 monthly active users
-                concentrationRisk: Math.floor(10 + Math.random() * 40), // 10-50% concentration risk
-                userRetention: Math.floor(60 + Math.random() * 30), // 60-90% user retention
-              };
+              return opp;
             }
           }),
         );

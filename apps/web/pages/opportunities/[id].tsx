@@ -91,7 +91,7 @@ export default function OpportunityDetailPage() {
               rewardToken: Array.isArray(testNetOpp.rewardToken) ? testNetOpp.rewardToken.join(', ') : testNetOpp.rewardToken,
               lastUpdated: new Date(testNetOpp.lastUpdated).toLocaleDateString(),
               originalUrl: `#`, // No external URL for TestNet
-              summary: `reset Mock Yield Protocol - ${testNetOpp.apr}% APR on ETH`,
+              summary: `Reset Mock Yield Protocol - ${testNetOpp.apr}% APR on ETH`,
             };
 
             setData(cardOpportunity);

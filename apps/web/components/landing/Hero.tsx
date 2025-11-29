@@ -52,7 +52,7 @@ export default function Hero({ progress = 0 }: HeroProps) {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="font-display text-[14vw] uppercase leading-none tracking-tight text-[#f5f5f5] drop-shadow-[0_20px_40px_rgba(214,167,92,0.2)] md:text-[8vw]"
             >
-              reset
+              Reset
             </motion.h1>
             <div className="w-full space-y-4 text-left">
               {heroLines.map((line, index) => (
@@ -142,15 +142,15 @@ export default function Hero({ progress = 0 }: HeroProps) {
               className="text-center text-sm font-medium tracking-[0.05em] text-[#d0d0d0]/90"
             >
               <span className="text-[#D6A75C] transition-[text-shadow] duration-200 hover:[text-shadow:0_0_1px_rgba(214,167,92,0.7)]">
-                reset
+                Reset
               </span>{" "}
               your mind,&nbsp;
               <span className="text-[#D6A75C] transition-[text-shadow] duration-200 hover:[text-shadow:0_0_1px_rgba(214,167,92,0.7)]">
-                reset
+                Reset
               </span>{" "}
               risks,&nbsp;
               <span className="text-[#D6A75C] transition-[text-shadow] duration-200 hover:[text-shadow:0_0_1px_rgba(214,167,92,0.7)]">
-                reset
+                Reset
               </span>{" "}
               lost money
             </motion.p>

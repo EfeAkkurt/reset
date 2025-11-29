@@ -16,7 +16,7 @@ export default function EndCapFooter() {
         transition={{ duration: 0.45, ease: "easeOut" }}
         className="font-display font-semibold tracking-[-0.02em] text-center text-white text-[clamp(72px,12vw,280px)] leading-[0.9] select-none drop-shadow-[0_6px_24px_rgba(0,0,0,0.5)]"
       >
-        reset
+        Reset
       </motion.h1>
 
       <motion.p

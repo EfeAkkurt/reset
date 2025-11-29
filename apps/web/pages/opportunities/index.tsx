@@ -200,19 +200,19 @@ export default function OpportunitiesPage() {
   return (
     <>
       <Head>
-        <title>Yield Opportunities | reset</title>
+        <title>Yield Opportunities | Reset</title>
         <meta
           name="description"
           content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
         />
-        <meta property="og:title" content="Yield Opportunities | reset" />
+        <meta property="og:title" content="Yield Opportunities | Reset" />
         <meta
           property="og:description"
           content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Yield Opportunities | reset" />
+        <meta name="twitter:title" content="Yield Opportunities | Reset" />
         <meta
           name="twitter:description"
           content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."

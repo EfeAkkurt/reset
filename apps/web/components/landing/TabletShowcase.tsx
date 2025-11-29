@@ -43,7 +43,7 @@ export function TabletShowcase({ progress }: TabletShowcaseProps) {
         <div className="relative aspect-[1.38696] w-full overflow-hidden rounded-[32px] border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
           <Image
             src="/backgrounds/tablet.svg"
-            alt="reset Opportunities Tablet"
+            alt="Reset Opportunities Tablet"
             fill
             className="object-cover"
             priority

@@ -3,8 +3,7 @@
 import React from "react";
 import Head from "next/head";
 import { ScrollOrchestrator } from "@/components/ScrollOrchestrator";
-import KineticHero from "@/components/landing/KineticHero";
-import Atmosphere from "@/components/landing/Atmosphere";
+import Hero from "@/components/landing/Hero";
 import NavigationButtons from "@/components/landing/NavigationButtons";
 import WhyUsInset from "@/components/sections/WhyUsInset";
 import { Market } from "@/components/landing/Market";
@@ -19,14 +18,14 @@ export default function Landing() {
   return (
     <>
       <Head>
-        <title>reset - Institutional Yield Aggregator</title>
+        <title>Reset - Institutional Yield Aggregator</title>
         <meta
           name="description"
           content="Production-grade yield tooling across multiple chains. Built with security, transparency and user control at the forefront."
         />
         <meta
           property="og:title"
-          content="reset - Institutional Yield Aggregator"
+          content="Reset - Institutional Yield Aggregator"
         />
         <meta
           property="og:description"
@@ -36,7 +35,7 @@ export default function Landing() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="reset - Institutional Yield Aggregator"
+          content="Reset - Institutional Yield Aggregator"
         />
         <meta
           name="twitter:description"
@@ -60,11 +59,11 @@ export default function Landing() {
                 end: 0.10,
                 theme: "dark",
                 bg: "transparent",
-                render: () => (
+                render: (progress) => (
                   <div className="relative h-full w-full">
-                    <Atmosphere />
+                    {/* Beams animasyonu kaldırıldı */}
                     <div className="relative z-10">
-                      <KineticHero />
+                      <Hero progress={progress} />
                     </div>
                   </div>
                 ),
@@ -75,7 +74,7 @@ export default function Landing() {
                 end: 0.65,
                 theme: "dark",
                 bg: "transparent",
-                render: () => <HowItWorks />,
+                render: (p) => <HowItWorks progress={p} />,
               },
               {
                 id: "whyus",
