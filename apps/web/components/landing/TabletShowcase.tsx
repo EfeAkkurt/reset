@@ -21,11 +21,13 @@ const triBlend = (p: number, start: number, middle: number, end: number) => {
 };
 
 export function TabletShowcase({ progress }: TabletShowcaseProps) {
-  const normalized = clamp01((progress - 0.04) / 0.9);
-  const translateY = triBlend(normalized, -10, -562.1995, 0);
-  const scale = triBlend(normalized, 0.8, 0.922251, 1);
+  // Clamp progress to 0-0.10 range so tablet stays in final position after hero section
+  const clampedProgress = Math.min(progress, 0.10);
+  const normalized = clamp01((clampedProgress - 0.04) / 0.06);
+  const translateY = triBlend(normalized, -10, -552.1995, 0);
+  const scale = triBlend(normalized, 0.8, 1.122251, 1);
   const rotateX = triBlend(normalized, 30, 11.6624, 0);
-  const opacity = triBlend(normalized, 0.6, 0.85, 1);
+  const opacity = triBlend(normalized, 1, 1, 1);
 
   return (
     <div className="relative flex w-full justify-center">
