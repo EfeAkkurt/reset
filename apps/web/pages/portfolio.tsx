@@ -11,8 +11,8 @@ import { colors } from "../lib/colors";
 import { AccountSummary } from "@/components/portfolio/AccountSummary";
 import { PositionsList } from "@/components/portfolio/PositionsList";
 import PortfolioOverviewChart from "@/components/PortfolioOverviewChart";
-import { ActivityFeed } from "@/components/portfolio/ActivityFeed";
 import { toCSV, downloadCSV } from "@/lib/csv";
+import { AlertCircle } from "lucide-react";
 
 // Removed unused calc function - was used for MiniSummary that was removed
 
@@ -270,6 +270,7 @@ export default function PortfolioPage() {
     Logger.info(`✅ Exported ${rows.length} portfolio entries to CSV`);
   };
 
+  
   const emptyIllustration =
     "https://images.unsplash.com/photo-1622547748225-3fc4abd2cca0?auto=format&fit=crop&q=80&w=1200";
 
@@ -279,33 +280,26 @@ export default function PortfolioPage() {
         <title>Portfolio | OI</title>
         <meta
           name="description"
-          content="Track your yield OIg portfolio, view positions, and monitor your returns on OI."
+          content="Track your yield portfolio, view positions, and monitor your returns on OI."
         />
         <meta property="og:title" content="Portfolio | OI" />
         <meta
           property="og:description"
-          content="Track your yield OIg portfolio, view positions, and monitor your returns on OI."
+          content="Track your yield portfolio, view positions, and monitor your returns on OI."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Portfolio | OI" />
         <meta
           name="twitter:description"
-          content="Track your yield OIg portfolio, view positions, and monitor your returns on OI."
+          content="Track your yield portfolio, view positions, and monitor your returns on OI."
         />
       </Head>
-      <div className="mx-auto max-w-6xl px-4 py-12">
-        <h1 className="typo-portfolio-h1">Portfolio</h1>
-        <p className="typo-portfolio-sub max-w-2xl">
-          💼 Real portfolio tracking (wallet integration pending). Recent
-          redirects and estimated returns shown below.
-        </p>
-
-        {/* Portfolio Status Indicator */}
+      <div className="mx-auto max-w-7xl px-4 py-12">
         {error && (
-          <div className="mt-4 rounded-lg border border-red-200 bg-red-50 p-4">
+          <div className="mb-8 rounded-lg border border-red-200 bg-red-50 p-4">
             <div className="flex items-center space-x-3">
-              <div className="h-5 w-5 text-red-600">❌</div>
+              <AlertCircle className="h-5 w-5 text-red-600" />
               <div>
                 <p className="text-sm font-medium text-red-800">
                   Portfolio Loading Failed
@@ -315,23 +309,6 @@ export default function PortfolioPage() {
             </div>
           </div>
         )}
-
-        {!error && !loading && (
-          <div className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
-            <div className="flex items-center space-x-3">
-              <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div>
-              <div>
-                <p className="text-sm font-medium text-blue-800">
-                  🚀 Portfolio System Ready
-                </p>
-                <p className="text-sm text-blue-700">
-                  Wallet integration required to show real transactions
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
-
         {loading ? (
           <div className="mt-8 text-center">
             <div className="inline-flex items-center gap-2 text-gray-600">
@@ -350,7 +327,7 @@ export default function PortfolioPage() {
               />
             </div>
             <div className="p-6">
-              <h3 className="typo-section-h">Start OIg now</h3>
+              <h3 className="typo-section-h">Start Yield Farming now</h3>
               <p className="typo-empty mt-1">
                 Explore opportunities and use the deposit button to add entries
                 here.
@@ -365,8 +342,7 @@ export default function PortfolioPage() {
           </Card>
         ) : (
           <>
-            {/* Period Toggle */}
-            <div className="mt-6 flex justify-center">
+            <div className="mb-8 flex justify-center">
               <div className="inline-flex rounded-lg bg-zinc-100 p-1">
                 {(["24H", "7D", "30D"] as const).map((p) => (
                   <button
@@ -383,40 +359,43 @@ export default function PortfolioPage() {
                 ))}
               </div>
             </div>
-
-            <div className="mt-6">
-              <PortfolioOverviewChart
-                period={period}
-                data={overviewByPeriod[period]}
-              />
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              <AccountSummary rows={rows as any} />
-            </div>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <PositionsList rows={rows as any} />
-            <Card className="mt-6 border-white/40 bg-white/60 p-4 backdrop-blur-2xl">
-              <div className="flex items-center justify-between px-2">
-                <h3 className="typo-section-h">Recent activity</h3>
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={exportCSV}
-                    className={`border-[${colors.zinc[300]}]`}
-                  >
-                    Export CSV
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={clear}
-                    className={`border-[${colors.zinc[300]}]`}
-                  >
-                    Clear
-                  </Button>
-                </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-8">
+                <PortfolioOverviewChart
+                  period={period}
+                  data={overviewByPeriod[period]}
+                />
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                <PositionsList rows={rows as any} />
               </div>
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              <ActivityFeed rows={rows as any} />
-            </Card>
+
+              <div className="space-y-8">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                <AccountSummary rows={rows as any} />
+
+                <Card className="border-white/40 bg-white/60 p-6 backdrop-blur-2xl">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="typo-section-h">Actions</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <Button
+                      variant="outline"
+                      onClick={exportCSV}
+                      className={`w-full border-[${colors.zinc[300]}]`}
+                    >
+                      Export CSV
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={clear}
+                      className={`w-full border-[${colors.zinc[300]}]`}
+                    >
+                      Clear Data
+                    </Button>
+                  </div>
+                </Card>
+              </div>
+            </div>
           </>
         )}
       </div>

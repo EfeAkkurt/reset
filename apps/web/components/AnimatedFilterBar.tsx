@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
-import LogoLoopWithCircles from "./LogoLoopWithCircles";
 
 type RiskKey = "all" | "low" | "medium" | "high";
 type SortKey =
@@ -16,123 +15,88 @@ type SortKey =
   | "risk-desc"
   | "risk-asc";
 
+type MenuItems =
+  | { key: string; label: string }[]
+  | { group: string; options: { key: string; label: string }[] }[];
+
+const isGroupedItems = (
+  items: MenuItems,
+): items is { group: string; options: { key: string; label: string }[] }[] =>
+  Array.isArray(items) &&
+  items.length > 0 &&
+  Object.prototype.hasOwnProperty.call(items[0], "group");
+
 export default function AnimatedFilterBar({
   defaultRisk = "all",
   defaultSort = "apr-desc",
   onRiskChange,
   onSortChange,
-  query = "",
-  onQueryChange,
   sticky = true,
 }: {
   defaultRisk?: RiskKey;
   defaultSort?: SortKey;
   onRiskChange: (_: string) => void;
   onSortChange: (_: string) => void;
-  query: string;
-  onQueryChange: (_: string) => void;
   sticky?: boolean;
 }) {
   return (
     <div
       className={clsx(
-        "w-full",
+        "w-full border-y border-alpha-gold-16 bg-[rgba(10,10,10,0.95)] backdrop-blur",
         sticky &&
-          "sticky top-0 z-30 backdrop-blur bg-white/70 supports-[backdrop-filter]:bg-white/60",
+          "sticky top-0 z-20 shadow-[0_20px_45px_rgba(0,0,0,0.45)] supports-[backdrop-filter]:backdrop-blur-xl",
       )}
       role="toolbar"
       aria-label="Filters and sorting"
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
-        {/* Search field - left side */}
-        <div className="flex-1 max-w-xs">
-          <input
-            type="text"
-            placeholder="Search protocol or pair"
-            value={query}
-            onChange={(e) => onQueryChange?.(e.target.value)}
-            className="w-full rounded-full border border-black/5 bg-[var(--sand-50)] px-4 py-2 text-sm text-zinc-900 placeholder-zinc-500 shadow-sm transition-colors focus:border-[var(--brand-orange)] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--brand-orange)]/20"
-          />
-        </div>
-
-        {/* Logo loop in between */}
-        <div
-          className="mx-3 hidden sm:flex items-center justify-center overflow-hidden py-1"
-          style={{ width: "700px" }}
-        >
-          <LogoLoopWithCircles
-            logos={[
-              {
-                src: "/logos/pera.svg",
-                alt: "Pera Wallet",
-                title: "Pera Wallet",
-              },
-                {
-                src: "/logos/defly.svg",
-                alt: "Defly",
-                title: "Defly",
-              },
-            ]}
-            speed={30}
-            logoHeight={35}
-            gap={30}
-            direction="left"
-            pauseOnHover={true}
-            fadeOut={false}
-            scaleOnHover={true}
-          />
-        </div>
-
-        {/* Filters - right side */}
-        <div className="flex items-center gap-3 ml-auto">
-          <Menu
-            label="Risk"
-            items={[
-              { key: "all", label: "All Networks" },
-              { key: "ethereum", label: "Ethereum" },
-              { key: "solana", label: "Solana" },
-            ]}
-            onSelect={(k) => onRiskChange?.(k as RiskKey)}
-            defaultKey={defaultRisk}
-          />
-          <Menu
-            label="Sort"
-            items={[
-              {
-                group: "APR",
-                options: [
-                  { key: "apr-desc", label: "High → Low" },
-                  { key: "apr-asc", label: "Low → High" },
-                ],
-              },
-              {
-                group: "APY",
-                options: [
-                  { key: "apy-desc", label: "High → Low" },
-                  { key: "apy-asc", label: "Low → High" },
-                ],
-              },
-              {
-                group: "TVL",
-                options: [
-                  { key: "tvl-desc", label: "High → Low" },
-                  { key: "tvl-asc", label: "Low → High" },
-                ],
-              },
-              {
-                group: "Risk",
-                options: [
-                  { key: "risk-desc", label: "High → Low" },
-                  { key: "risk-asc", label: "Low → High" },
-                ],
-              },
-            ]}
-            onSelect={(k) => onSortChange?.(k as SortKey)}
-            defaultKey={defaultSort}
-            orangeSelected // turuncu tema
-            wide
-          />
-        </div>
+      <div className="mx-auto flex max-w-5xl items-center justify-center gap-4 px-6 py-6">
+        <Menu
+          label="Risk"
+          items={[
+            { key: "all", label: "All Risks" },
+            { key: "low", label: "Low" },
+            { key: "medium", label: "Medium" },
+            { key: "high", label: "High" },
+          ]}
+          onSelect={(k) => onRiskChange?.(k as RiskKey)}
+          defaultKey={defaultRisk}
+        />
+        <Menu
+          label="Sort"
+          items={[
+            {
+              group: "APR",
+              options: [
+                { key: "apr-desc", label: "High → Low" },
+                { key: "apr-asc", label: "Low → High" },
+              ],
+            },
+            {
+              group: "APY",
+              options: [
+                { key: "apy-desc", label: "High → Low" },
+                { key: "apy-asc", label: "Low → High" },
+              ],
+            },
+            {
+              group: "TVL",
+              options: [
+                { key: "tvl-desc", label: "High → Low" },
+                { key: "tvl-asc", label: "Low → High" },
+              ],
+            },
+            {
+              group: "Risk",
+              options: [
+                { key: "risk-desc", label: "High → Low" },
+                { key: "risk-asc", label: "Low → High" },
+              ],
+            },
+          ]}
+          onSelect={(k) => onSortChange?.(k as SortKey)}
+          defaultKey={defaultSort}
+          wide
+        />
       </div>
     </div>
   );
@@ -155,68 +119,73 @@ function Menu({
   items,
   onSelect,
   defaultKey,
-  orangeSelected,
   wide,
 }: {
   label: string;
-  items:
-    | { key: string; label: string }[]
-    | { group: string; options: { key: string; label: string }[] }[];
+  items: MenuItems;
   onSelect: (key: string) => void;
   defaultKey?: string;
-  orangeSelected?: boolean;
   wide?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(defaultKey);
   const ref = useOutsideClose<HTMLDivElement>(() => setOpen(false));
 
-  const activeStyles = orangeSelected
-    ? "bg-[var(--brand-orange)] text-white ring-[var(--brand-orange)]"
-    : "bg-[var(--brand-orange)] text-white ring-[var(--brand-orange)]";
+  const flattened = useMemo(() => {
+    if (!Array.isArray(items) || items.length === 0) return [];
+    if (isGroupedItems(items)) {
+      return items.flatMap((group) => group.options);
+    }
+    return items as { key: string; label: string }[];
+  }, [items]);
+
+  const activeLabel =
+    flattened.find((opt) => opt.key === current)?.label ??
+    flattened.find((opt) => opt.key === defaultKey)?.label ??
+    label;
 
   return (
     <div ref={ref} className="relative">
       <button
         type="button"
         className={clsx(
-          "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm ring-1 transition",
+          "inline-flex items-center gap-3 rounded-full border border-alpha-gold-16 bg-[var(--neutral-900)] px-5 py-2.5 text-sm font-medium text-white transition-all hover:border-gold-400 hover:text-gold-200",
           open
-            ? activeStyles
-            : "bg-[var(--sand-50)] border border-black/5 text-zinc-800 ring-black/5 hover:bg-white hover:shadow-sm",
-          "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--brand-orange)]/20",
+            ? "bg-gold-500 text-[#1A1B1E] ring-2 ring-gold-500 ring-offset-2 ring-offset-transparent"
+            : "",
+          "focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-transparent",
         )}
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
-        {label}
+        <div className="flex flex-col text-left leading-none">
+          <span>{label}</span>
+          <span className="text-xs font-normal opacity-70">
+            {activeLabel}
+          </span>
+        </div>
         <Chevron open={open} />
       </button>
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            role="menu"
-            initial={{ opacity: 0, y: 6, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.98 }}
-            transition={{ duration: 0.18 }}
-            className={clsx(
-              "absolute left-0 mt-2 rounded-2xl bg-white shadow-lg ring-1 ring-black/5",
-              wide ? "w-64" : "w-48",
-            )}
-          >
-            {Array.isArray(items) && items.length > 0 && "group" in items[0] ? (
+            <motion.div
+              role="menu"
+              initial={{ opacity: 0, y: 6, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 4, scale: 0.98 }}
+              transition={{ duration: 0.18 }}
+              className={clsx(
+              "absolute left-0 mt-3 rounded-2xl border border-alpha-gold-16 bg-[var(--neutral-900)] text-white shadow-2xl shadow-black/40 ring-1 ring-gold-500 backdrop-blur z-50",
+                wide ? "w-64" : "w-48",
+              )}
+            >
+            {isGroupedItems(items) ? (
               <div className="max-h-[60vh] overflow-auto p-2">
-                {(
-                  items as {
-                    group: string;
-                    options: { key: string; label: string }[];
-                  }[]
-                ).map((g) => (
+                {items.map((g) => (
                   <div key={g.group} className="mb-1 last:mb-0">
-                    <div className="px-2 py-1 text-[11px] uppercase tracking-wide text-zinc-500">
+                    <div className="px-2 py-1 text-[11px] uppercase tracking-wide text-white/40">
                       {g.group}
                     </div>
                     {g.options.map((opt) => (
@@ -273,11 +242,13 @@ function MenuItem({
       onClick={onClick}
       className={clsx(
         "flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm",
-        active ? "bg-zinc-100 text-zinc-900" : "text-zinc-700 hover:bg-zinc-50",
+        active
+          ? "bg-alpha-gold-16 text-white"
+          : "text-white/70 hover:bg-white/5",
       )}
     >
       <span>{label}</span>
-      {active && <span className="text-xs text-zinc-500">✓</span>}
+      {active && <span className="text-xs text-gold-200">✓</span>}
     </button>
   );
 }

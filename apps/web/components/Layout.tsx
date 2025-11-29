@@ -2,6 +2,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import resetLogo from "@/public/logos/resetLogo.png";
 import { useSlowScroll } from "@/hooks/useSlowScroll";
 
 import NavigationButtons from "@/components/landing/NavigationButtons";
@@ -78,6 +80,46 @@ import { YieldBanner } from "@/components/YieldBanner";
 export const Header = () => {
   // const [isVisible] = React.useState(true); // Unused variable
   // const [lastScrollY, setLastScrollY] = React.useState(0); // Unused variable
+  const router = useRouter();
+  const [isClickAnimating, setIsClickAnimating] = React.useState(false);
+  const animationTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+
+  const handleLogoClick = React.useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey
+      ) {
+        return;
+      }
+      if (isClickAnimating) return;
+      event.preventDefault();
+
+      setIsClickAnimating(true);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      animationTimeoutRef.current = setTimeout(() => {
+        setIsClickAnimating(false);
+        void router.push("/");
+      }, 1500);
+    },
+    [isClickAnimating, router],
+  );
+
+  React.useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
 
   React.useEffect(() => {
     // const handleScroll = () => {
@@ -106,14 +148,23 @@ export const Header = () => {
       }}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <Link href="/" className="flex items-center gap-2">
+        <Link
+          href="/"
+          onClick={handleLogoClick}
+          aria-label="Reset home"
+          className="group flex items-center gap-3"
+        >
           <Image
-            src="/logo-full.png"
+            src={resetLogo}
             alt="Reset"
-            width={3547}
-            height={850}
-            className="h-8 w-auto"
+            width={160}
+            height={58}
+            priority
+            className={`h-10 w-auto origin-center ${isClickAnimating ? "animate-logo-click" : "group-hover:animate-logo-hover"}`}
           />
+          <div className="wordmark">
+            <span className="wordmark-text text-[20px]">RESET</span>
+          </div>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-white">
           {/* Navigation links removed */}

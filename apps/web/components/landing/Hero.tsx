@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { TabletShowcase } from "./TabletShowcase";
+import ResetTitle from "./ResetTitle";
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
@@ -21,17 +22,13 @@ export default function Hero({ progress = 0 }: HeroProps) {
   const yOffset = easedVisibility * 5;
 
   const heroLines = [
-    { pre: "Do the", highlight: "Risk Analysis", post: "" },
+    { pre: "Do the ", highlight: "Risk Analysis", post: "" },
     { pre: "Insure your positions", highlight: "", post: "" },
-    { pre: "Enjoy the", highlight: "Opportunities", post: "" },
+    { pre: "Enjoy the ", highlight: "Opportunities", post: "" },
   ];
-  const goldBase = "#B37B2C";
-  const goldGlow = "rgba(179, 123, 44, 0.55)";
-  const goldHighlight = "#E3BA63";
-  const lineInterval = 2;
   const lineAnimationDuration = 1.25;
+  const lineInterval = 2;
   const lineRepeatDelay = heroLines.length * lineInterval - lineAnimationDuration;
-
   return (
     <section className="relative h-screen w-full overflow-hidden text-white">
       {/* Hero section now uses the BackgroundSystem for all background effects */}
@@ -46,28 +43,26 @@ export default function Hero({ progress = 0 }: HeroProps) {
             <div className="absolute right-16 top-10 h-72 w-72 rounded-full bg-[#f1c477]/10 blur-[160px]" />
           </div>
           <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-8 text-center">
-            <motion.h1
+            <motion.div
               initial={{ y: 60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-[14vw] uppercase leading-none tracking-tight text-[#f5f5f5] drop-shadow-[0_20px_40px_rgba(214,167,92,0.2)] md:text-[8vw]"
             >
-              Reset
-            </motion.h1>
-            <div className="w-full space-y-4 text-left">
+              <ResetTitle glow />
+            </motion.div>
+            <div className="w-full space-y-1 text-left">
               {heroLines.map((line, index) => (
-                <div key={`${line.pre}-${index}`} className="overflow-hidden">
+                <div key={index} className="overflow-hidden">
                   <div className="flex items-center gap-3">
                     <motion.span
-                      className="h-[2px] w-9 origin-left rounded-full"
-                      style={{ backgroundColor: goldHighlight }}
+                      className="hero-line-marker"
                       animate={{
                         scaleX: [0, 1, 1, 0],
                         boxShadow: [
-                          `0 0 0 ${goldGlow}`,
-                          `0 0 12px ${goldGlow}`,
-                          `0 0 12px ${goldGlow}`,
-                          `0 0 0 ${goldGlow}`,
+                          "0 0 0 rgba(224,145,44,0.0)",
+                          "0 0 10px rgba(224,145,44,0.45)",
+                          "0 0 10px rgba(224,145,44,0.45)",
+                          "0 0 0 rgba(224,145,44,0.0)",
                         ],
                       }}
                       transition={{
@@ -86,50 +81,38 @@ export default function Hero({ progress = 0 }: HeroProps) {
                         duration: 0.8,
                         ease: "easeOut",
                       }}
-                      className="font-display text-[6vw] font-medium leading-tight text-white md:text-[2.8vw]"
+                      className="hero-line"
                     >
-                      <span className="flex flex-wrap items-baseline">
-                        <span
-                          className={
-                            line.highlight
-                              ? "mr-1 text-white/80"
-                              : "text-white/75"
-                          }
+                      <span>{line.pre}</span>
+                      {line.highlight ? (
+                        <motion.span
+                          className="gold hero-highlight"
+                          animate={{
+                            textShadow: [
+                              "0 0 0 rgba(224,145,44,0)",
+                              "0 0 12px rgba(224,145,44,0.45)",
+                              "0 0 12px rgba(224,145,44,0.45)",
+                              "0 0 0 rgba(224,145,44,0)",
+                            ],
+                            color: [
+                              "var(--gold-500)",
+                              "#FFD28A",
+                              "#FFD28A",
+                              "var(--gold-500)",
+                            ],
+                          }}
+                          transition={{
+                            duration: lineAnimationDuration,
+                            delay: index * lineInterval,
+                            repeat: Infinity,
+                            repeatDelay: lineRepeatDelay,
+                            ease: [0.45, 0, 0.55, 1],
+                          }}
                         >
-                          {line.pre}
-                        </span>
-                        {line.highlight && (
-                          <motion.span
-                            className="mx-1 text-[#D6A75C]"
-                            animate={{
-                              textShadow: [
-                                `0 0 0 ${goldGlow}`,
-                                `0 0 14px ${goldGlow}`,
-                                `0 0 14px ${goldGlow}`,
-                                `0 0 0 ${goldGlow}`,
-                              ],
-                              color: [
-                                goldBase,
-                                goldHighlight,
-                                goldHighlight,
-                                goldBase,
-                              ],
-                            }}
-                            transition={{
-                              duration: lineAnimationDuration,
-                              delay: index * lineInterval,
-                              repeat: Infinity,
-                              repeatDelay: lineRepeatDelay,
-                              ease: [0.45, 0, 0.55, 1],
-                            }}
-                          >
-                            {line.highlight}
-                          </motion.span>
-                        )}
-                        {line.post && (
-                          <span className="ml-1 text-white/80">{line.post}</span>
-                        )}
-                      </span>
+                          {line.highlight}
+                        </motion.span>
+                      ) : null}
+                      <span>{line.post}</span>
                     </motion.p>
                   </div>
                 </div>
@@ -139,20 +122,11 @@ export default function Hero({ progress = 0 }: HeroProps) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-              className="text-center text-sm font-medium tracking-[0.05em] text-[#d0d0d0]/90"
+              className="micro-tagline"
             >
-              <span className="text-[#D6A75C] transition-[text-shadow] duration-200 hover:[text-shadow:0_0_1px_rgba(214,167,92,0.7)]">
-                Reset
-              </span>{" "}
-              your mind,&nbsp;
-              <span className="text-[#D6A75C] transition-[text-shadow] duration-200 hover:[text-shadow:0_0_1px_rgba(214,167,92,0.7)]">
-                Reset
-              </span>{" "}
-              risks,&nbsp;
-              <span className="text-[#D6A75C] transition-[text-shadow] duration-200 hover:[text-shadow:0_0_1px_rgba(214,167,92,0.7)]">
-                Reset
-              </span>{" "}
-              lost money
+              <span className="gold-reset">Reset</span> your mind,&nbsp;
+              <span className="gold-reset">Reset</span> risks,&nbsp;
+              <span className="gold-reset">Reset</span> lost money
             </motion.p>
           </div>
           <div className="relative mt-20">

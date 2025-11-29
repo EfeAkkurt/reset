@@ -1,0 +1,550 @@
+"use client";
+
+import React, { useEffect, useRef, useState, useMemo } from "react";
+import { motion, useMotionValue, useTransform, useReducedMotion } from "framer-motion";
+import { useWindowSize } from "@/hooks/useWindowSize";
+import {
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  Bell,
+  Share2,
+  Zap,
+  Eye,
+  Activity,
+  RefreshCw,
+  Loader2
+} from "lucide-react";
+import { Button } from "@/components/ui/primitives";
+import { formatUSD, formatPct } from "@/lib/format";
+
+interface HeroDashboardProps {
+  totalBalance: number;
+  change24h: number;
+  availableLiquidity: number;
+  isDemoMode: boolean;
+  lastSyncTime: Date | null;
+  onConnectWallet?: () => void;
+  onAddAlert?: () => void;
+  onRefresh?: () => void;
+  userName?: string;
+  streakDays?: number;
+}
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+}
+
+const ParticleBackground: React.FC<{
+  isConnected: boolean;
+  children: React.ReactNode;
+}> = ({ isConnected, children }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const { width, height } = useWindowSize();
+  const animationRef = useRef<number>();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    // Initialize particles
+    const particleCount = Math.min(50, Math.floor((width * height) / 15000));
+    const newParticles: Particle[] = [];
+
+    for (let i = 0; i < particleCount; i++) {
+      newParticles.push({
+        id: i,
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        size: Math.random() * 3 + 1,
+        opacity: Math.random() * 0.5 + 0.2,
+      });
+    }
+
+    setParticles(newParticles);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      newParticles.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // Wrap around edges
+        if (particle.x < 0) particle.x = width;
+        if (particle.x > width) particle.x = 0;
+        if (particle.y < 0) particle.y = height;
+        if (particle.y > height) particle.y = 0;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+
+        const gradient = ctx.createRadialGradient(
+          particle.x, particle.y, 0,
+          particle.x, particle.y, particle.size
+        );
+
+        if (isConnected) {
+          gradient.addColorStop(0, `rgba(140, 69, 255, ${particle.opacity})`);
+          gradient.addColorStop(1, `rgba(140, 69, 255, 0)`);
+        } else {
+          gradient.addColorStop(0, `rgba(107, 114, 128, ${particle.opacity})`);
+          gradient.addColorStop(1, `rgba(107, 114, 128, 0)`);
+        }
+
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      });
+
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [width, height, isConnected]);
+
+  return (
+    <div className="relative overflow-hidden">
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 pointer-events-none"
+        style={{ opacity: 0.6 }}
+      />
+      <div className="relative z-10">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const AnimatedCounter: React.FC<{
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  duration?: number;
+  formatter?: (value: number) => string;
+}> = ({ value, prefix = "", suffix = "", duration = 1.5, formatter }) => {
+  const [displayValue, setDisplayValue] = useState(value);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setDisplayValue(value);
+      return;
+    }
+
+    setIsAnimating(true);
+    const startTime = Date.now();
+    const startValue = displayValue;
+    const change = value - startValue;
+
+    const animate = () => {
+      const now = Date.now();
+      const progress = Math.min((now - startTime) / (duration * 1000), 1);
+
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      const currentValue = startValue + change * easeOutQuart;
+
+      setDisplayValue(currentValue);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setIsAnimating(false);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [value, duration, displayValue, shouldReduceMotion]);
+
+  const formattedValue = formatter ? formatter(displayValue) : displayValue.toFixed(2);
+
+  return (
+    <motion.span
+      className={`font-mono tabular-nums ${isAnimating ? 'text-purple-600' : ''}`}
+      animate={isAnimating ? { scale: [1, 1.02, 1] } : {}}
+      transition={{ duration: 0.3 }}
+    >
+      {prefix}{formattedValue}{suffix}
+    </motion.span>
+  );
+};
+
+const GreetingBadge: React.FC<{
+  userName?: string;
+  streakDays?: number;
+}> = ({ userName, streakDays = 0 }) => {
+  const hour = new Date().getHours();
+  const getGreeting = () => {
+    if (hour < 12) return "GM";
+    if (hour < 17) return "Good afternoon";
+    return "GN";
+  };
+
+  const greeting = getGreeting();
+
+  return (
+    <motion.div
+      className="flex items-center gap-3 mb-6"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <div>
+        <h1 className="text-4xl font-bold text-gray-900">
+          {greeting}, {userName || "Stellar"} ⭐
+        </h1>
+        <p className="text-gray-600 mt-1">
+          Ready to optimize your yield strategy?
+        </p>
+      </div>
+
+      {streakDays > 0 && (
+        <motion.div
+          className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", delay: 0.3 }}
+          whileHover={{ scale: 1.05 }}
+        >
+          <Zap className="w-4 h-4 text-orange-500" />
+          <span className="text-sm font-medium text-orange-700">
+            {streakDays}-day streak 🔥
+          </span>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+};
+
+const KPICard: React.FC<{
+  label: string;
+  value: string | number;
+  change?: number;
+  icon?: React.ReactNode;
+  delay?: number;
+  formatter?: (value: number) => string;
+}> = ({ label, value, change, icon, delay = 0, formatter }) => {
+    const numericValue = typeof value === 'number' ? value : 0;
+    const formattedValue = typeof value === 'number' && formatter
+      ? formatter(value)
+      : value.toString();
+
+    return (
+      <motion.div
+        className="glass-card rounded-2xl p-6 border border-white/20 bg-white/60 backdrop-blur-xl"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay, duration: 0.5 }}
+        whileHover={{ y: -4, scale: 1.02 }}
+        style={{
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
+        }}
+      >
+        <div className="flex items-start justify-between mb-3">
+          <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+            {label}
+          </span>
+          {icon && (
+            <motion.div
+              className="p-2 rounded-lg bg-purple-50"
+              whileHover={{ rotate: 360 }}
+              transition={{ duration: 0.5 }}
+            >
+              {icon}
+            </motion.div>
+          )}
+        </div>
+
+        <div className="space-y-1">
+          {typeof value === 'number' ? (
+            <AnimatedCounter
+              value={numericValue}
+              prefix="$"
+              duration={1.5}
+              formatter={formatter}
+            />
+          ) : (
+            <span className="text-2xl font-bold text-gray-900">
+              {formattedValue}
+            </span>
+          )}
+
+          {change !== undefined && (
+            <motion.div
+              className="flex items-center gap-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: delay + 0.5 }}
+            >
+              {change >= 0 ? (
+                <TrendingUp className="w-4 h-4 text-emerald-500" />
+              ) : (
+                <TrendingDown className="w-4 h-4 text-red-500" />
+              )}
+              <span
+                className={`text-sm font-medium ${
+                  change >= 0 ? 'text-emerald-600' : 'text-red-600'
+                }`}
+              >
+                {change >= 0 ? '+' : ''}{formatPct(change)} (24h)
+              </span>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
+    );
+  };
+};
+
+const SystemStatusPill: React.FC<{
+  isDemoMode: boolean;
+  lastSyncTime: Date | null;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
+}> = ({ isDemoMode, lastSyncTime, onRefresh, isRefreshing = false }) => {
+  const [timeAgo, setTimeAgo] = useState<string>('');
+  const [isLive, setIsLive] = useState<boolean>(!isDemoMode);
+
+  useEffect(() => {
+    const updateTimeAgo = () => {
+      if (!lastSyncTime) {
+        setTimeAgo('Never');
+        return;
+      }
+
+      const diff = Date.now() - lastSyncTime.getTime();
+      const minutes = Math.floor(diff / 60000);
+      const hours = Math.floor(minutes / 60);
+
+      if (minutes < 1) {
+        setTimeAgo('Just now');
+        setIsLive(true);
+      } else if (minutes < 60) {
+        setTimeAgo(`${minutes}m ago`);
+        setIsLive(minutes < 5);
+      } else if (hours < 24) {
+        setTimeAgo(`${hours}h ago`);
+        setIsLive(false);
+      } else {
+        const days = Math.floor(hours / 24);
+        setTimeAgo(`${days}d ago`);
+        setIsLive(false);
+      }
+    };
+
+    updateTimeAgo();
+    const interval = setInterval(updateTimeAgo, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [lastSyncTime]);
+
+  return (
+    <motion.div
+      className="fixed top-6 right-6 z-50"
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.8 }}
+    >
+      <div className="flex items-center gap-3 px-4 py-2.5 rounded-full glass-card border border-white/30 bg-white/80 backdrop-blur-xl">
+        <div className="flex items-center gap-2">
+          <motion.div
+            className={`w-2 h-2 rounded-full ${
+              isLive ? 'bg-emerald-500' : isDemoMode ? 'bg-amber-500' : 'bg-gray-400'
+            }`}
+            animate={isLive ? { scale: [1, 1.2, 1] } : {}}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <span className="text-sm font-medium">
+            {isDemoMode ? 'Demo Mode' : isLive ? 'Live' : 'Offline'}
+          </span>
+        </div>
+
+        <div className="h-4 w-px bg-gray-300" />
+
+        <span className="text-xs text-gray-600">
+          Synced {timeAgo}
+        </span>
+
+        {onRefresh && (
+          <motion.button
+            onClick={onRefresh}
+            className="p-1 rounded-lg hover:bg-gray-100 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            disabled={isRefreshing}
+          >
+            {isRefreshing ? (
+              <Loader2 className="w-3.5 h-3.5 text-gray-500 animate-spin" />
+            ) : (
+              <RefreshCw className="w-3.5 h-3.5 text-gray-500" />
+            )}
+          </motion.button>
+        )}
+      </div>
+    </motion.div>
+  );
+};
+
+export const HeroDashboard: React.FC<HeroDashboardProps> = ({
+  totalBalance,
+  change24h,
+  availableLiquidity,
+  isDemoMode,
+  lastSyncTime,
+  onConnectWallet,
+  onAddAlert,
+  onRefresh,
+  userName,
+  streakDays,
+}) => {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const { width, height } = useWindowSize();
+
+  const rotateX = useTransform(mouseY, [0, height], [-5, 5]);
+  const rotateY = useTransform(mouseX, [0, width], [-5, 5]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await onRefresh?.();
+    } finally {
+      setTimeout(() => setIsRefreshing(false), 1500);
+    }
+  };
+
+  const backgroundGradient = useMemo(() => {
+    if (onConnectWallet) {
+      // Not connected - grayscale gradient
+      return "from-gray-100 via-gray-50 to-white";
+    }
+    // Connected - Stellar purple gradient
+    return "from-purple-100 via-pink-50 to-indigo-100";
+  }, [onConnectWallet]);
+
+  return (
+    <ParticleBackground isConnected={!onConnectWallet}>
+      <motion.div
+        className={`min-h-screen bg-gradient-to-br ${backgroundGradient} transition-all duration-1000 relative`}
+        style={{ perspective: 1000 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        {/* System Status Pill */}
+        <SystemStatusPill
+          isDemoMode={isDemoMode}
+          lastSyncTime={lastSyncTime}
+          onRefresh={handleRefresh}
+          isRefreshing={isRefreshing}
+        />
+
+        <div className="mx-auto max-w-7xl px-4 py-12">
+          {/* Greeting Section */}
+          <GreetingBadge userName={userName} streakDays={streakDays} />
+
+          {/* KPI Cards */}
+          <div className="grid-cols-1 md:grid-cols-3 gap-6 grid">
+            <KPICard
+              label="Total Portfolio"
+              value={totalBalance}
+              change={change24h}
+              icon={<Activity className="w-5 h-5 text-purple-600" />}
+              delay={0.1}
+              formatter={formatUSD}
+            />
+
+            <KPICard
+              label="24h Change"
+              value={change24h}
+              icon={change24h >= 0 ?
+                <TrendingUp className="w-5 h-5 text-emerald-500" /> :
+                <TrendingDown className="w-5 h-5 text-red-500" />
+              }
+              delay={0.2}
+              formatter={(val) => formatPct(val, true)}
+            />
+
+            <KPICard
+              label="Available Liquidity"
+              value={availableLiquidity}
+              icon={<Wallet className="w-5 h-5 text-blue-600" />}
+              delay={0.3}
+              formatter={formatUSD}
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <motion.div
+            className="flex flex-wrap gap-4 mt-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            {onConnectWallet ? (
+              <Button
+                onClick={onConnectWallet}
+                className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                icon={<Wallet className="w-5 h-5" />}
+              >
+                Connect Wallet
+              </Button>
+            ) : (
+              <>
+                <Button
+                  variant="primary"
+                  className="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                  icon={<Eye className="w-5 h-5" />}
+                >
+                  View Analytics
+                </Button>
+              </>
+            )}
+
+            <Button
+              onClick={onAddAlert}
+              variant="outline"
+              className="px-8 py-3 border-2 border-purple-200 text-purple-700 rounded-xl font-semibold hover:bg-purple-50 transition-all duration-200"
+              icon={<Bell className="w-5 h-5" />}
+            >
+              Add Alert
+            </Button>
+
+            <Button
+              variant="ghost"
+              className="px-8 py-3 text-gray-600 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-200"
+              icon={<Share2 className="w-5 h-5" />}
+            >
+              Share Snapshot
+            </Button>
+          </motion.div>
+        </div>
+      </motion.div>
+    </ParticleBackground>
+  );
+};

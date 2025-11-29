@@ -7,7 +7,7 @@ import Hero from "@/components/landing/Hero";
 import NavigationButtons from "@/components/landing/NavigationButtons";
 import WhyUsInset from "@/components/sections/WhyUsInset";
 import { Market } from "@/components/landing/Market";
-import { Marquee } from "@/components/landing/Marquee";
+import { CharacterCards } from "@/components/landing/CharacterCards";
 import US from "@/components/landing/US";
 import HowItWorks from "@/components/HowItWorks";
 import EndCapFooter from "@/components/EndCapFooter";
@@ -110,7 +110,7 @@ export default function Landing() {
                 end: 1,
                 theme: "dark",
                 bg: "transparent",
-                render: (p) => <Marquee progress={p} />,
+                render: (p) => <CharacterCards progress={p} />,
               },
             ]}
           />

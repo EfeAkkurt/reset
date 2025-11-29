@@ -66,7 +66,7 @@ const STEP_DATA: StepData[] = [
         before the crowd
       </>
     ),
-    body: "Track every pool and protocol with real-time APRs and TVL shifts across chains.",
+    body: "Track every pool and protocol with real-time APRs and TVL shifts across chains",
   },
   {
     side: "right",
@@ -208,7 +208,7 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
               }}>
                 secured yield
               </span>
-              — everything happens on-chain.
+              — everything happens on-chain
             </h2>
           </motion.div>
 

@@ -70,8 +70,10 @@ export function ParticleField() {
       
       dummy.rotation.set(s * 5, s * 5, s * 5);
       dummy.updateMatrix();
-      
-      mesh.current.setMatrixAt(i, dummy.matrix);
+
+      if (mesh.current) {
+        mesh.current.setMatrixAt(i, dummy.matrix);
+      }
     });
     
     mesh.current.instanceMatrix.needsUpdate = true;

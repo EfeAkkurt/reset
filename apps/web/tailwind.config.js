@@ -124,6 +124,8 @@ module.exports = {
         'marquee': 'marquee 28s cubic-bezier(0.16, 1, 0.3, 1) infinite',
         'marquee-rev': 'marquee-rev 32s cubic-bezier(0.16, 1, 0.3, 1) infinite',
         'breathe': 'breathe-rotate 12s linear infinite',
+        'logo-hover': 'logo-hover 1s ease-in-out 1',
+        'logo-click': 'logo-click 1.5s ease-in-out 1',
       },
       keyframes: {
         marquee: {
@@ -137,6 +139,14 @@ module.exports = {
         'breathe-rotate': {
           '0%': { transform: 'rotate(0deg) scale(1.05)', opacity: '0.95' },
           '100%': { transform: 'rotate(360deg) scale(1.05)', opacity: '0.95' },
+        },
+        'logo-hover': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        'logo-click': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(1800deg)' },
         },
       },
     },
