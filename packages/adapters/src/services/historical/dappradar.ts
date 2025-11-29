@@ -43,11 +43,11 @@ export class DAppRadarService {
     }
   }
 
-  async getAlgorandDefiMetrics(): Promise<UserMetrics> {
+  async getStellarDefiMetrics(): Promise<UserMetrics> {
     try {
-      console.log('👥 Fetching Algorand DeFi user metrics');
+      console.log('👥 Fetching Stellar DeFi user metrics');
 
-      // Mock data for Algorand ecosystem
+      // Mock data for Stellar ecosystem
       return {
         uniqueUsers24h: Math.floor(Math.random() * 5000) + 1000,
         uniqueUsers7d: Math.floor(Math.random() * 25000) + 5000,
@@ -55,7 +55,7 @@ export class DAppRadarService {
         userRetention: Math.random() * 0.6 + 0.3,
       };
     } catch (error) {
-      console.error('❌ Failed to fetch Algorand DeFi metrics:', error);
+      console.error('❌ Failed to fetch Stellar DeFi metrics:', error);
       throw error;
     }
   }
@@ -67,9 +67,9 @@ export class DAppRadarService {
 
       // Mock implementation
       return [
-        { name: 'Tinyman', category: 'dex', users: 15000, volume: 25000000 },
-        { name: 'Pact', category: 'lend', users: 8000, volume: 12000000 },
-        { name: 'Algofi', category: 'lend', users: 12000, volume: 18000000 },
+        { name: 'StellarX', category: 'dex', users: 15000, volume: 25000000 },
+        { name: 'Soroban Pools', category: 'lend', users: 8000, volume: 12000000 },
+        { name: 'Aqua Network', category: 'dex', users: 12000, volume: 18000000 },
       ];
     } catch (error) {
       console.error('❌ Failed to fetch dApp rankings:', error);

@@ -1,14 +1,14 @@
 import { Opportunity } from '@adapters/core';
 
 export const TESTNET_MOCK_YIELD_OPPORTUNITY: Opportunity = {
-  id: 'testnet-mock-yield-eth',
-  chain: 'ethereum',
+  id: 'testnet-mock-yield-stellar',
+  chain: 'stellar',
   protocol: 'Mock Yield Protocol',
-  pool: 'ETH Yield Pool',
-  tokens: ['ETH', 'USDC'],
+  pool: 'XLM Yield Pool',
+  tokens: ['XLM', 'USDC'],
   apr: 4.5, // 4.5% APR
   apy: 4.61, // 4.61% APY (compounded)
-  rewardToken: 'ETH',
+  rewardToken: 'XLM',
   tvlUsd: 15000, // Mock TVL for demo
   risk: 'low',
   source: 'mock',
@@ -26,8 +26,8 @@ export const TESTNET_OPPORTUNITIES: Opportunity[] = [
 
 export const isTestNetMode = (): boolean => {
   // Check both server-side and client-side environment variables
-  return process.env.ALGORAND_NETWORK === 'testnet' ||
-         process.env.NEXT_PUBLIC_ALGORAND_NETWORK === 'testnet';
+  return process.env.STELLAR_NETWORK === 'testnet' ||
+         process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'testnet';
 };
 
 export const getTestNetOpportunities = (): Opportunity[] => {

@@ -102,7 +102,7 @@ export function DetailPage({ poolId }: DetailPageProps) {
               { id: 'rewards', label: 'Rewards', icon: '💰' },
               { id: 'liquidity', label: 'Liquidity', icon: '💧' },
 
-              ...(detailData.basic?.id === 'testnet-mock-yield-algo' ? [{ id: 'router', label: 'Router', icon: '🔗' }] : [])
+              ...(detailData.basic?.id === 'testnet-mock-yield-stellar' ? [{ id: 'router', label: 'Router', icon: '🔗' }] : [])
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -185,7 +185,7 @@ export function DetailPage({ poolId }: DetailPageProps) {
 
 
 
-            {activeTab === 'router' && detailData.basic?.id === 'testnet-mock-yield-algo' && (
+            {activeTab === 'router' && detailData.basic?.id === 'testnet-mock-yield-stellar' && (
               <RouterTab opportunity={detailData.basic} />
             )}
           </motion.div>
@@ -193,7 +193,7 @@ export function DetailPage({ poolId }: DetailPageProps) {
       </div>
 
       {/* Footer Action Buttons - Only show for TestNet Mock-Yield */}
-      {detailData.basic?.id === 'testnet-mock-yield-algo' && (
+      {detailData.basic?.id === 'testnet-mock-yield-stellar' && (
         <div className="sticky bottom-0 bg-black/80 backdrop-blur-xl border-t border-purple-500/20 p-6">
           <div className="container mx-auto flex justify-between items-center">
             <div className="text-sm text-gray-400">

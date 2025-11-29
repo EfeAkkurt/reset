@@ -124,7 +124,7 @@ function getOpportunityById(id: string): Opportunity | undefined {
     rewardToken: meta.rewardToken,
     lastUpdated,
     originalUrl: "",
-    summary: `${meta.protocol} ${meta.pair} pool on Algorand with ${risk} risk`,
+    summary: `${meta.protocol} ${meta.pair} pool on Stellar with ${risk} risk`,
   };
 }
 import { protocolLogo } from "@/lib/logos";

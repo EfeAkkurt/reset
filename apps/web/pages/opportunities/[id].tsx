@@ -71,7 +71,7 @@ export default function OpportunityDetailPage() {
         setError(null);
 
         // Check if this is a TestNet opportunity first
-        if (opportunityId === 'testnet-mock-yield-algo') {
+        if (opportunityId === 'testnet-mock-yield-stellar') {
           const testNetOpps = getTestNetOpportunities();
           const testNetOpp = testNetOpps.find(opp => opp.id === opportunityId);
 
@@ -91,7 +91,7 @@ export default function OpportunityDetailPage() {
               rewardToken: Array.isArray(testNetOpp.rewardToken) ? testNetOpp.rewardToken.join(', ') : testNetOpp.rewardToken,
               lastUpdated: new Date(testNetOpp.lastUpdated).toLocaleDateString(),
               originalUrl: `#`, // No external URL for TestNet
-              summary: `Reset Mock Yield Protocol - ${testNetOpp.apr}% APR on ETH`,
+              summary: `Reset Mock Yield Protocol - ${testNetOpp.apr}% APR on XLM`,
             };
 
             setData(cardOpportunity);

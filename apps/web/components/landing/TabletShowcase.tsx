@@ -22,7 +22,7 @@ const triBlend = (p: number, start: number, middle: number, end: number) => {
 
 export function TabletShowcase({ progress }: TabletShowcaseProps) {
   const normalized = clamp01((progress - 0.04) / 0.9);
-  const translateY = triBlend(normalized, -10, -551, -551);
+  const translateY = triBlend(normalized, -10, -500, -500);
   const scale = triBlend(normalized, 0.8, 1.122251, 1);
   const rotateX = triBlend(normalized, 30, 11.6624, 11.6);
   const opacity = triBlend(normalized, 1, 1, 1);

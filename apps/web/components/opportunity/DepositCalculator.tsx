@@ -75,7 +75,7 @@ export function DepositCalculator({
 
   // Check if this is the TestNet Mock-Yield opportunity
   const isTestNetMockYield =
-    data.id === "testnet-mock-yield-algo" &&
+    data.id === "testnet-mock-yield-stellar" &&
     data.protocol === "Mock Yield Protocol";
 
   // Check wallet status
@@ -121,7 +121,7 @@ export function DepositCalculator({
     try {
       // Mock deposit
       toast.success("Deposit successful!", {
-        description: `Deposited ${amount} ALGO to Mock Yield Protocol`,
+        description: `Deposited ${amount} XLM to Mock Yield Protocol`,
       });
 
       setShowSuccess(true);
@@ -150,7 +150,7 @@ export function DepositCalculator({
     try {
       // Mock withdrawal
       toast.success("Withdrawal successful!", {
-        description: `Withdrew ${amount} ALGO from Mock Yield Protocol`,
+        description: `Withdrew ${amount} XLM from Mock Yield Protocol`,
       });
 
       setShowSuccess(true);
@@ -264,10 +264,10 @@ export function DepositCalculator({
             <label className="flex items-center justify-between mb-2">
               <span className="text-xs font-medium text-zinc-600 flex items-center gap-1">
                 <DollarSign size={12} />
-                Amount ({isTestNetMockYield ? "ALGO" : "USD"})
+                Amount ({isTestNetMockYield ? "XLM" : "USD"})
               </span>
               <span className="text-xs text-zinc-500">
-                {isTestNetMockYield ? "ALGO amount" : "Principal investment"}
+                {isTestNetMockYield ? "XLM amount" : "Principal investment"}
               </span>
             </label>
             <div className="relative">
@@ -283,7 +283,7 @@ export function DepositCalculator({
               />
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
                 <span className="text-xs text-zinc-500">
-                  {isTestNetMockYield ? "ALGO" : "USD"}
+                  {isTestNetMockYield ? "XLM" : "USD"}
                 </span>
               </div>
             </div>
@@ -300,7 +300,7 @@ export function DepositCalculator({
                   className="flex-1 rounded-lg bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-200 transition-colors"
                 >
                   {isTestNetMockYield
-                    ? `${val} ALGO`
+                    ? `${val} XLM`
                     : `$${val.toLocaleString()}`}
                 </button>
               ))}
@@ -510,12 +510,12 @@ export function DepositCalculator({
                   <>
                     {activeTab === "deposit" ? (
                       <>
-                        Deposit {amount} ALGO
+                        Deposit {amount} XLM
                         <ArrowDownRight size={16} />
                       </>
                     ) : (
                       <>
-                        Withdraw {amount} ALGO
+                        Withdraw {amount} XLM
                         <ArrowUpRight size={16} />
                       </>
                     )}
@@ -538,7 +538,7 @@ export function DepositCalculator({
           {/* Info Text */}
           <p className="text-xs text-zinc-500 text-center">
             {isTestNetMockYield
-              ? `Demo Mode - ${activeTab === "deposit" ? "Deposit" : "Withdraw"} ALGO to TestNet Mock Yield Protocol`
+              ? `Demo Mode - ${activeTab === "deposit" ? "Deposit" : "Withdraw"} XLM to TestNet Mock Yield Protocol`
               : isRouterMode
                 ? "One-click routing will handle the deposit for you"
                 : `You'll be redirected to ${data.protocol}. Non-custodial.`}

@@ -9,26 +9,11 @@ import AnimatedFilterBar from "@/components/AnimatedFilterBar";
 import { EmptyState } from "@/components/opportunities/EmptyState";
 import HeroHeader from "@/components/HeroHeader";
 import HeroKpiBar from "@/components/HeroKpiBar";
+import type { CardOpportunity } from "@/lib/types";
 // Removed chain filter pills - only Stacks for now
 import OpportunityCardPlaceholder from "@/components/OpportunityCardPlaceholder";
 // Enhanced components temporarily removed due to TypeScript errors
 // import { ChartTimeSelector } from "@/components/enhanced/TimeSelector";
-
-type CardOpportunity = {
-  id: string;
-  protocol: string;
-  pair: string;
-  chain: string;
-  apr: number; // percent
-  apy: number; // percent
-  risk: "Low" | "Medium" | "High";
-  tvlUsd: number;
-  rewardToken: string;
-  lastUpdated: string; // label like 5m, 2h
-  originalUrl: string;
-  summary: string;
-  source?: "live" | "demo";
-};
 
 export default function OpportunitiesPage() {
   const [query, setQuery] = React.useState("");
@@ -49,6 +34,7 @@ export default function OpportunitiesPage() {
     [],
   );
   const [error, setError] = React.useState<string | null>(null);
+  const [dataSource, setDataSource] = React.useState<"live" | "demo">("live");
   const [, setStats] = React.useState({
     avgApr7d: 0,
     totalTvlUsd: 0,
@@ -71,8 +57,13 @@ export default function OpportunitiesPage() {
         const resp = await fetch("/api/opportunities");
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const json = await resp.json();
+        const nextSource: "live" | "demo" =
+          json?.metadata?.dataSource === "demo" ? "demo" : "live";
         const realOpportunities: CardOpportunity[] = (json.items || []).map(
-          (it: CardOpportunity) => ({ ...it, source: "live" }),
+          (it: CardOpportunity) => ({
+            ...it,
+            source: it.source ?? nextSource,
+          }),
         );
 
         // Basic stats (client-side)
@@ -88,13 +79,14 @@ export default function OpportunitiesPage() {
         if (!mounted) return;
 
         Logger.info(
-          `✅ Loaded ${realOpportunities.length} opportunities from REAL APIs`,
+          `✅ Loaded ${realOpportunities.length} opportunities (source: ${nextSource})`,
         );
         Logger.info(
           `📊 Stats: ${realStats.avgApr7d.toFixed(1)}% avg APR, $${(realStats.totalTvlUsd / 1_000_000).toFixed(1)}M TVL`,
         );
 
         setOpportunities(realOpportunities);
+        setDataSource(nextSource);
         setStats(realStats);
       } catch (error) {
         Logger.error(
@@ -105,6 +97,7 @@ export default function OpportunitiesPage() {
           `Real data loading failed: ${error instanceof Error ? error.message : "Unknown error"}`,
         );
         setOpportunities([]);
+        setDataSource("live");
         setStats({ avgApr7d: 0, totalTvlUsd: 0, results: 0 });
       } finally {
         if (mounted) {
@@ -203,25 +196,25 @@ export default function OpportunitiesPage() {
         <title>Yield Opportunities | Reset</title>
         <meta
           name="description"
-          content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
+          content="Explore the best yield farming opportunities across Stellar. Find the highest APR/APY rates live today."
         />
         <meta property="og:title" content="Yield Opportunities | Reset" />
         <meta
           property="og:description"
-          content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
+          content="Explore the best yield farming opportunities across Stellar. Find the highest APR/APY rates live today."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Yield Opportunities | Reset" />
         <meta
           name="twitter:description"
-          content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
+          content="Explore the best yield farming opportunities across Stellar. Find the highest APR/APY rates live today."
         />
       </Head>
       <main>
         <HeroHeader
           title="Explore Yield Opportunities"
-          subtitle="Find the best APR/APY on Algorand. Multichain coming soon."
+          subtitle="Find the best APR/APY on Stellar. Multichain coming soon."
           size="standard"
           // Multi-chain support enabled
           kpis={<HeroKpiBar kpis={displayStats} />}
@@ -278,7 +271,7 @@ export default function OpportunitiesPage() {
         <section className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
 
           {/* Real Data Status Indicator */}
-          {!error && !loading && (
+          {!error && !loading && dataSource === "live" && (
             <div className="mb-10 rounded-lg border border-green-200 bg-green-50 p-4">
               <div className="flex items-center space-x-3">
                 <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
@@ -289,6 +282,22 @@ export default function OpportunitiesPage() {
                   <p className="text-sm text-green-700">
                     Real-time data from DeFiLlama API and leading DeFi protocols •
                     Updated every 5 minutes
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+          {!error && !loading && dataSource === "demo" && (
+            <div className="mb-10 rounded-lg border border-amber-200 bg-amber-50 p-4">
+              <div className="flex items-center space-x-3">
+                <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></div>
+                <div>
+                  <p className="text-sm font-medium text-amber-900">
+                    ⚠️ Demo Data Mode
+                  </p>
+                  <p className="text-sm text-amber-800">
+                    Live APIs are temporarily unavailable. Showing Stellar mock data
+                    so you can continue refining the UI.
                   </p>
                 </div>
               </div>

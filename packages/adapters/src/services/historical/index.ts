@@ -56,11 +56,11 @@ export class HistoricalDataService {
     }
   }
 
-  async getAlgorandHistoricalData() {
+  async getStellarHistoricalData() {
     try {
       const [volumeData, userMetrics] = await Promise.all([
-        import('./bitquery').then(m => m.bitqueryService.getAlgorandDefiVolume()),
-        import('./dappradar').then(m => m.dappradarService.getAlgorandDefiMetrics()),
+        import('./bitquery').then(m => m.bitqueryService.getStellarDefiVolume()),
+        import('./dappradar').then(m => m.dappradarService.getStellarDefiMetrics()),
       ]);
 
       return {
@@ -69,7 +69,7 @@ export class HistoricalDataService {
         timestamp: Date.now(),
       };
     } catch (error) {
-      console.error('Failed to fetch Algorand historical data:', error);
+      console.error('Failed to fetch Stellar historical data:', error);
       throw error;
     }
   }

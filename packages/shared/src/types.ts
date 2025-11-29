@@ -1,4 +1,4 @@
-export type Chain = "algorand" | "ethereum" | "solana";
+export type Chain = "stellar" | "ethereum" | "solana";
 
 export interface Opportunity {
   id: string;
