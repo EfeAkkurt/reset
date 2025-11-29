@@ -4,6 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { TabletShowcase } from "./TabletShowcase";
 import ResetTitle from "./ResetTitle";
+import { HeroStats } from "./HeroStats";
 
 const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
 
@@ -26,6 +27,11 @@ export default function Hero({ progress = 0 }: HeroProps) {
     { pre: "Insure your positions", highlight: "", post: "" },
     { pre: "Enjoy the ", highlight: "Opportunities", post: "" },
   ];
+  const heroSecondaryLines = [
+    { pre: "", highlight: "Reset", post: " your mind" },
+    { pre: "", highlight: "Reset", post: " risks" },
+    { pre: "", highlight: "Reset", post: " lost money" },
+  ];
   const lineAnimationDuration = 1.25;
   const lineInterval = 2;
   const lineRepeatDelay = heroLines.length * lineInterval - lineAnimationDuration;
@@ -42,7 +48,7 @@ export default function Hero({ progress = 0 }: HeroProps) {
             <div className="absolute -left-16 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-[#d6a75c]/12 blur-[160px]" />
             <div className="absolute right-16 top-10 h-72 w-72 rounded-full bg-[#f1c477]/10 blur-[160px]" />
           </div>
-          <div className="relative mx-auto flex max-w-4xl flex-col items-center gap-8 text-center">
+          <div className="relative mx-auto flex w-full max-w-5xl flex-col items-center gap-7.5 text-center">
             <motion.div
               initial={{ y: 60, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -50,84 +56,169 @@ export default function Hero({ progress = 0 }: HeroProps) {
             >
               <ResetTitle glow />
             </motion.div>
-            <div className="w-full space-y-1 text-left">
-              {heroLines.map((line, index) => (
-                <div key={index} className="overflow-hidden">
-                  <div className="flex items-center gap-3">
-                    <motion.span
-                      className="hero-line-marker"
-                      animate={{
-                        scaleX: [0, 1, 1, 0],
-                        boxShadow: [
-                          "0 0 0 rgba(224,145,44,0.0)",
-                          "0 0 10px rgba(224,145,44,0.45)",
-                          "0 0 10px rgba(224,145,44,0.45)",
-                          "0 0 0 rgba(224,145,44,0.0)",
-                        ],
-                      }}
-                      transition={{
-                        duration: lineAnimationDuration,
-                        delay: index * lineInterval,
-                        repeat: Infinity,
-                        repeatDelay: lineRepeatDelay,
-                        ease: [0.45, 0, 0.55, 1],
-                      }}
-                    />
-                    <motion.p
-                      initial={{ y: "100%", opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{
-                        delay: 0.35 + index * 0.2,
-                        duration: 0.8,
-                        ease: "easeOut",
-                      }}
-                      className="hero-line"
-                    >
-                      <span>{line.pre}</span>
-                      {line.highlight ? (
-                        <motion.span
-                          className="gold hero-highlight"
-                          animate={{
-                            textShadow: [
-                              "0 0 0 rgba(224,145,44,0)",
-                              "0 0 12px rgba(224,145,44,0.45)",
-                              "0 0 12px rgba(224,145,44,0.45)",
-                              "0 0 0 rgba(224,145,44,0)",
-                            ],
-                            color: [
-                              "var(--gold-500)",
-                              "#FFD28A",
-                              "#FFD28A",
-                              "var(--gold-500)",
-                            ],
-                          }}
-                          transition={{
-                            duration: lineAnimationDuration,
-                            delay: index * lineInterval,
-                            repeat: Infinity,
-                            repeatDelay: lineRepeatDelay,
-                            ease: [0.45, 0, 0.55, 1],
-                          }}
-                        >
-                          {line.highlight}
-                        </motion.span>
-                      ) : null}
-                      <span>{line.post}</span>
-                    </motion.p>
+            <div className="relative w-full">
+              <div className="gap-12 md:grid md:grid-cols-2 md:items-start">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    duration: 1.2,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: 0.3,
+                  }}
+                  className="relative overflow-hidden rounded-2xl bg-transparent pl-8 pr-6 pt-8"
+                >
+                  <div className="w-full space-y-1 text-left">
+                    {heroLines.map((line, index) => (
+                      <div key={index} className="overflow-hidden">
+                        <div className="flex items-center gap-3">
+                          <motion.span
+                            className="hero-line-marker"
+                            animate={{
+                              scaleX: [0, 1, 1, 0],
+                              boxShadow: [
+                                "0 0 0 rgba(224,145,44,0.0)",
+                                "0 0 10px rgba(224,145,44,0.45)",
+                                "0 0 10px rgba(224,145,44,0.45)",
+                                "0 0 0 rgba(224,145,44,0.0)",
+                              ],
+                            }}
+                            transition={{
+                              duration: lineAnimationDuration,
+                              delay: index * lineInterval,
+                              repeat: Infinity,
+                              repeatDelay: lineRepeatDelay,
+                              ease: [0.45, 0, 0.55, 1],
+                            }}
+                          />
+                          <motion.p
+                            initial={{ y: "100%", opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{
+                              delay: 0.35 + index * 0.2,
+                              duration: 0.8,
+                              ease: "easeOut",
+                            }}
+                            className="hero-line"
+                          >
+                            <span>{line.pre}</span>
+                            {line.highlight ? (
+                              <motion.span
+                                className="gold hero-highlight"
+                                animate={{
+                                  textShadow: [
+                                    "0 0 0 rgba(224,145,44,0)",
+                                    "0 0 12px rgba(224,145,44,0.45)",
+                                    "0 0 12px rgba(224,145,44,0.45)",
+                                    "0 0 0 rgba(224,145,44,0)",
+                                  ],
+                                  color: [
+                                    "var(--gold-500)",
+                                    "#FFD28A",
+                                    "#FFD28A",
+                                    "var(--gold-500)",
+                                  ],
+                                }}
+                                transition={{
+                                  duration: lineAnimationDuration,
+                                  delay: index * lineInterval,
+                                  repeat: Infinity,
+                                  repeatDelay: lineRepeatDelay,
+                                  ease: [0.45, 0, 0.55, 1],
+                                }}
+                              >
+                                {line.highlight}
+                              </motion.span>
+                            ) : null}
+                            <span>{line.post}</span>
+                          </motion.p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              ))}
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{
+                    duration: 1.2,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: 0.45,
+                  }}
+                  className="relative mt-8 overflow-hidden rounded-2xl bg-transparent pl-8 pr-6 pt-8 md:mt-0"
+                >
+                  <div className="w-full space-y-1 text-left">
+                    {heroSecondaryLines.map((line, index) => (
+                      <div key={line.post} className="overflow-hidden">
+                        <div className="flex items-center gap-3">
+                          <motion.span
+                            className="hero-line-marker"
+                            animate={{
+                              scaleX: [0, 1, 1, 0],
+                              boxShadow: [
+                                "0 0 0 rgba(224,145,44,0.0)",
+                                "0 0 10px rgba(224,145,44,0.45)",
+                                "0 0 10px rgba(224,145,44,0.45)",
+                                "0 0 0 rgba(224,145,44,0.0)",
+                              ],
+                            }}
+                            transition={{
+                              duration: lineAnimationDuration,
+                              delay: index * lineInterval,
+                              repeat: Infinity,
+                              repeatDelay: lineRepeatDelay,
+                              ease: [0.45, 0, 0.55, 1],
+                            }}
+                          />
+                          <motion.p
+                            initial={{ y: "100%", opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{
+                              delay: 0.55 + index * 0.18,
+                              duration: 0.8,
+                              ease: "easeOut",
+                            }}
+                            className="hero-line"
+                          >
+                            <span>{line.pre}</span>
+                            {line.highlight ? (
+                              <motion.span
+                                className="gold hero-highlight"
+                                animate={{
+                                  textShadow: [
+                                    "0 0 0 rgba(224,145,44,0)",
+                                    "0 0 12px rgba(224,145,44,0.45)",
+                                    "0 0 12px rgba(224,145,44,0.45)",
+                                    "0 0 0 rgba(224,145,44,0)",
+                                  ],
+                                  color: [
+                                    "var(--gold-500)",
+                                    "#FFD28A",
+                                    "#FFD28A",
+                                    "var(--gold-500)",
+                                  ],
+                                }}
+                                transition={{
+                                  duration: lineAnimationDuration,
+                                  delay: index * lineInterval,
+                                  repeat: Infinity,
+                                  repeatDelay: lineRepeatDelay,
+                                  ease: [0.45, 0, 0.55, 1],
+                                }}
+                              >
+                                {line.highlight}
+                              </motion.span>
+                            ) : null}
+                            <span>{line.post}</span>
+                          </motion.p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+              <HeroStats />
             </div>
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-              className="micro-tagline"
-            >
-              <span className="gold-reset">Reset</span> your mind,&nbsp;
-              <span className="gold-reset">Reset</span> risks,&nbsp;
-              <span className="gold-reset">Reset</span> lost money
-            </motion.p>
           </div>
           <div className="relative mt-20">
             <TabletShowcase progress={progress} />
