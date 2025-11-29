@@ -28,7 +28,7 @@ export function TabletShowcase({ progress }: TabletShowcaseProps) {
   const opacity = triBlend(normalized, 1, 1, 1);
 
   return (
-    <div className="relative flex w-full justify-center">
+    <div className="relative z-30 flex w-full justify-center">
       <motion.div
         style={{
           y: translateY,

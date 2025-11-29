@@ -39,7 +39,7 @@ export default function Hero({ progress = 0 }: HeroProps) {
     <section className="relative h-screen w-full overflow-hidden text-white">
       {/* Hero section now uses the BackgroundSystem for all background effects */}
 
-      <div className="relative z-10 mx-auto w-full max-w-[1400px] px-6 py-24 md:px-10">
+      <div className="relative z-0 mx-auto w-full max-w-[1400px] px-6 py-24 md:px-10">
         <motion.div
           className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#0f0f15]/90 via-[#050505]/92 to-[#000000]/95 p-8 shadow-[0_40px_140px_rgba(0,0,0,0.85)] backdrop-blur-3xl md:p-14"
           style={{ opacity: textOpacity, y: yOffset }}
@@ -56,7 +56,7 @@ export default function Hero({ progress = 0 }: HeroProps) {
             >
               <ResetTitle glow />
             </motion.div>
-            <div className="relative w-full">
+            <div className="relative z-0 w-full">
               <div className="gap-12 md:grid md:grid-cols-2 md:items-start">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
@@ -217,10 +217,10 @@ export default function Hero({ progress = 0 }: HeroProps) {
                   </div>
                 </motion.div>
               </div>
-              <HeroStats />
+              <HeroStats className="relative z-0" />
             </div>
           </div>
-          <div className="relative mt-20">
+          <div className="relative z-20 mt-20">
             <TabletShowcase progress={progress} />
           </div>
         </motion.div>
