@@ -116,13 +116,13 @@ export default function WhyUsInset() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-7">
               <div className="text-xs uppercase tracking-[0.18em] text-white/60">
-                Why OI
+                Why Reset
               </div>
               <h2
                 id="whyus-title"
                 className="mt-2 text-4xl md:text-5xl text-white tracking-tight font-semibold"
               >
-                Why OI
+                Why Reset
               </h2>
               <p className="mt-3 text-white/80 max-w-prose">
                 We focus on clarity and safety: curated pools, transparent

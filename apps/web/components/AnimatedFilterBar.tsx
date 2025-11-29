@@ -44,12 +44,12 @@ export default function AnimatedFilterBar({
       className={clsx(
         "w-full border-y border-alpha-gold-16 bg-[rgba(10,10,10,0.95)] backdrop-blur",
         sticky &&
-          "sticky top-0 z-20 shadow-[0_20px_45px_rgba(0,0,0,0.45)] supports-[backdrop-filter]:backdrop-blur-xl",
+          "sticky top-0 z-[9998] shadow-[0_20px_45px_rgba(0,0,0,0.45)] supports-[backdrop-filter]:backdrop-blur-xl",
       )}
       role="toolbar"
       aria-label="Filters and sorting"
     >
-      <div className="mx-auto flex max-w-5xl items-center justify-center gap-4 px-6 py-6">
+      <div className="mx-auto flex max-w-5xl items-center justify-center gap-4 px-6 py-6 relative">
         <Menu
           label="Risk"
           items={[
@@ -150,10 +150,8 @@ function Menu({
         type="button"
         className={clsx(
           "inline-flex items-center gap-3 rounded-full border border-alpha-gold-16 bg-[var(--neutral-900)] px-5 py-2.5 text-sm font-medium text-white transition-all hover:border-gold-400 hover:text-gold-200",
-          open
-            ? "bg-gold-500 text-[#1A1B1E] ring-2 ring-gold-500 ring-offset-2 ring-offset-transparent"
-            : "",
-          "focus:outline-none focus:ring-2 focus:ring-gold-400 focus:ring-offset-2 focus:ring-offset-transparent",
+          open ? "bg-gold-500 text-[#1A1B1E]" : "",
+          "focus:outline-none focus:ring-0",
         )}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -177,7 +175,7 @@ function Menu({
               exit={{ opacity: 0, y: 4, scale: 0.98 }}
               transition={{ duration: 0.18 }}
               className={clsx(
-              "absolute left-0 mt-3 rounded-2xl border border-alpha-gold-16 bg-[var(--neutral-900)] text-white shadow-2xl shadow-black/40 ring-1 ring-gold-500 backdrop-blur z-50",
+              "absolute left-0 mt-2 rounded-2xl bg-[var(--neutral-900)] text-white shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] ring-0 backdrop-blur z-[9999]",
                 wide ? "w-64" : "w-48",
               )}
             >

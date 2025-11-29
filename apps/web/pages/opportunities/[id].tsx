@@ -214,31 +214,31 @@ export default function OpportunityDetailPage() {
       <Head>
         <title>
           {data
-            ? `${data.protocol} ${data.pair} | OI UI`
-            : "Opportunity Details | OI UI"}
+            ? `${data.protocol} ${data.pair} | Reset UI`
+            : "Opportunity Details | Reset UI"}
         </title>
         <meta
           name="description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield OIg opportunity on Stacks.`
-              : "View detailed information about yield OIg opportunities on OI UI."
+              ? `Detailed information about ${data.protocol} ${data.pair} yield opportunity on Stacks.`
+              : "View detailed information about yield opportunities on Reset."
           }
         />
         <meta
           property="og:title"
           content={
             data
-              ? `${data.protocol} ${data.pair} | OI UI`
-              : "Opportunity Details | OI UI"
+              ? `${data.protocol} ${data.pair} | Reset UI`
+              : "Opportunity Details | Reset UI"
           }
         />
         <meta
           property="og:description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield OIg opportunity on Stacks.`
-              : "View detailed information about yield OIg opportunities on OI UI."
+              ? `Detailed information about ${data.protocol} ${data.pair} yield opportunity on Stacks.`
+              : "View detailed information about yield opportunities on Reset."
           }
         />
         <meta property="og:type" content="website" />
@@ -247,16 +247,16 @@ export default function OpportunityDetailPage() {
           name="twitter:title"
           content={
             data
-              ? `${data.protocol} ${data.pair} | OI UI`
-              : "Opportunity Details | OI UI"
+              ? `${data.protocol} ${data.pair} | Reset UI`
+              : "Opportunity Details | Reset UI"
           }
         />
         <meta
           name="twitter:description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield OIg opportunity on Stacks.`
-              : "View detailed information about yield OIg opportunities on OI UI."
+              ? `Detailed information about ${data.protocol} ${data.pair} yield Reset opportunity on Stacks.`
+              : "View detailed information about yield opportunities on Reset."
           }
         />
       </Head>

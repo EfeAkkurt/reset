@@ -73,13 +73,13 @@ export const OpportunityCard: React.FC<
       }}
       aria-label={`View ${data.protocol} ${data.pair}`}
       className={clsx(
-        "group relative flex flex-col overflow-hidden rounded-3xl border border-alpha-gold-16/50 bg-[var(--neutral-800)] p-6 text-left transition duration-300",
-        "shadow-[0_20px_50px_rgba(0,0,0,0.45)] hover:-translate-y-1 hover:border-gold-500/60 hover:shadow-[0_30px_60px_rgba(0,0,0,0.55)]",
+        "group relative flex flex-col overflow-hidden rounded-[28px] border border-[rgba(255,182,72,0.16)] bg-gradient-to-b from-[#16171B] via-[#0E0F12] to-[#050506] p-6 text-left transition duration-300",
+        "shadow-[0_25px_65px_rgba(0,0,0,0.6)] hover:-translate-y-1 hover:border-[#F3A233]/70 hover:shadow-[0_35px_80px_rgba(0,0,0,0.65)]",
         disabled && "cursor-not-allowed opacity-60",
         !disabled && "cursor-pointer",
       )}
     >
-      <div className="flex items-start justify-between">
+      <div className="relative flex items-start justify-between">
         <div className="space-y-2">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40">
             {data.protocol}
@@ -88,52 +88,27 @@ export const OpportunityCard: React.FC<
         </div>
         <span
           className={clsx(
-            "inline-flex items-center gap-2 rounded-full border py-1 text-xs font-semibold transition-colors",
-            {
-              Low: "px-2.5",
-              Medium: "px-3.5",
-              High: "px-3.5",
-            }[data.risk],
+            "inline-flex items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.3em] transition-colors",
             riskStyles[data.risk].badge,
           )}
-          style={data.risk === "Low" ? { letterSpacing: "0.16em" } : undefined}
         >
           <span
-            className={clsx("h-2 w-2 rounded-full", riskStyles[data.risk].dot)}
+            className={clsx("h-2 w-1.5 rounded-full", riskStyles[data.risk].dot)}
           />
           {data.risk}
         </span>
       </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-4">
-        <div>
-          <p className="text-[11px] uppercase tracking-wide text-white/50">
-            APR
-          </p>
-          <p className="mt-1 text-xl font-semibold text-white">
-            {formatPct(data.apr, 2)}
-          </p>
-        </div>
-        <div>
-          <p className="text-[11px] uppercase tracking-wide text-white/50">
-            APY
-          </p>
-          <p className="mt-1 text-xl font-semibold text-white">
-            {formatPct(data.apy, 2)}
-          </p>
-        </div>
-        <div>
-          <p className="text-[11px] uppercase tracking-wide text-white/50">
-            TVL
-          </p>
-          <p className="mt-1 text-xl font-semibold text-white">
-            {formatTVL(data.tvlUsd)}
-          </p>
-        </div>
+      <div className="relative mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">
+        <MetricCard label="APR" value={formatPct(data.apr, 2)} />
+        <MetricCard label="APY" value={formatPct(data.apy, 2)} />
+        <MetricCard label="TVL" value={formatTVL(data.tvlUsd)} />
       </div>
 
-      <div className="mt-6 flex items-center justify-between text-gold-400">
-        <span className="text-sm font-medium">View details</span>
+      <div className="mt-8 flex items-center justify-between text-gold-400">
+        <span className="text-sm font-medium tracking-[0.3em] text-white/70">
+          View details
+        </span>
         <span className="rounded-full border border-gold-500/50 bg-gold-500/10 p-2 transition group-hover:bg-gold-500/30 group-hover:text-white">
           <ArrowUpRight className="h-4 w-4" />
         </span>
@@ -141,3 +116,24 @@ export const OpportunityCard: React.FC<
     </article>
   );
 };
+
+function MetricCard({ label, value }: { label: string; value: string }) {
+  const lengthFactor = Math.min(
+    1,
+    Math.max(0.4, value.toString().replace(/[^0-9.]/g, "").length / 6),
+  );
+  return (
+    <div className="group rounded-2xl border border-white/10 bg-[#101115] px-4 py-3 shadow-inner shadow-black/60">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-white/45">
+        {label}
+      </p>
+      <p className="mt-2 font-mono text-xl text-white">{value}</p>
+      <div
+        className="mt-3 h-px bg-[rgba(255,182,72,0.2)] transition-all group-hover:bg-[#F3A233]"
+        style={{
+          width: `${lengthFactor * 100}%`,
+        }}
+      />
+    </div>
+  );
+}

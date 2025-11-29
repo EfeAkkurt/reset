@@ -5,9 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 // import { UserPosition } from "../../../../packages/shared/src/types"; // TODO: Use when wallet integration ready
 import { Logger } from "@/lib/adapters/real";
-import { Card, Button } from "@/components/ui/primitives";
 import { toast } from "sonner";
-import { colors } from "../lib/colors";
 import { AccountSummary } from "@/components/portfolio/AccountSummary";
 import { PositionsList } from "@/components/portfolio/PositionsList";
 import PortfolioOverviewChart from "@/components/PortfolioOverviewChart";
@@ -277,127 +275,137 @@ export default function PortfolioPage() {
   return (
     <>
       <Head>
-        <title>Portfolio | OI</title>
+        <title>Portfolio | Reset</title>
         <meta
           name="description"
-          content="Track your yield portfolio, view positions, and monitor your returns on OI."
+          content="Track your yield portfolio, view positions, and monitor your returns on Reset."
         />
-        <meta property="og:title" content="Portfolio | OI" />
+        <meta property="og:title" content="Portfolio | Reset" />
         <meta
           property="og:description"
-          content="Track your yield portfolio, view positions, and monitor your returns on OI."
+          content="Track your yield portfolio, view positions, and monitor your returns on Reset."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Portfolio | OI" />
+        <meta name="twitter:title" content="Portfolio | Reset" />
         <meta
           name="twitter:description"
-          content="Track your yield portfolio, view positions, and monitor your returns on OI."
+          content="Track your yield portfolio, view positions, and monitor your returns on Reset."
         />
       </Head>
-      <div className="mx-auto max-w-7xl px-4 py-12">
-        {error && (
-          <div className="mb-8 rounded-lg border border-red-200 bg-red-50 p-4">
-            <div className="flex items-center space-x-3">
-              <AlertCircle className="h-5 w-5 text-red-600" />
+      <div className="relative min-h-screen bg-[#050505] text-white">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(243,162,51,0.14),_transparent_55%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(255,255,255,0.02),transparent_45%)]" />
+        <div className="relative mx-auto max-w-7xl px-4 py-16">
+          <header className="mb-10 space-y-4 text-center md:text-left">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.55em] text-[#D8D9DE]/70">
+              Reset / Portfolio
+            </p>
+            <h1 className="text-4xl font-black md:text-5xl">
+              Explore Yield Opportunities
+            </h1>
+            <p className="max-w-3xl text-sm text-[#D8D9DE]/80">
+              Ultra-clear portfolio telemetry with gold-accented precision. View
+              principal exposure, performance, and live opportunity tiles in a
+              single institutional console.
+            </p>
+          </header>
+
+          {error && (
+            <div className="mb-8 flex items-start gap-3 rounded-2xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
+              <AlertCircle className="mt-1 h-5 w-5 text-red-200" />
               <div>
-                <p className="text-sm font-medium text-red-800">
-                  Portfolio Loading Failed
+                <p className="font-semibold uppercase tracking-[0.3em]">
+                  Portfolio loading failed
                 </p>
-                <p className="text-sm text-red-700">{error}</p>
+                <p className="text-red-100/80">{error}</p>
               </div>
             </div>
-          </div>
-        )}
-        {loading ? (
-          <div className="mt-8 text-center">
-            <div className="inline-flex items-center gap-2 text-gray-600">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-blue-600"></div>
-              Loading portfolio data...
-            </div>
-          </div>
-        ) : rows.length === 0 ? (
-          <Card className="mt-8 overflow-hidden border-white/40 bg-white/60 backdrop-blur-2xl">
-            <div className="relative h-48 w-full">
-              <Image
-                src={emptyIllustration}
-                alt="empty"
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-6">
-              <h3 className="typo-section-h">Start Yield Farming now</h3>
-              <p className="typo-empty mt-1">
-                Explore opportunities and use the deposit button to add entries
-                here.
+          )}
+
+          {loading ? (
+            <div className="mt-20 flex flex-col items-center gap-4 text-[#D8D9DE]/70">
+              <div className="h-12 w-12 animate-spin rounded-full border-2 border-[#F3A233]/30 border-t-[#F3A233]" />
+              <p className="text-xs uppercase tracking-[0.4em]">
+                Syncing ledger...
               </p>
-              <Link
-                href="/opportunities"
-                className="typo-link-primary mt-4 inline-block"
-              >
-                Browse opportunities →
-              </Link>
             </div>
-          </Card>
-        ) : (
-          <>
-            <div className="mb-8 flex justify-center">
-              <div className="inline-flex rounded-lg bg-zinc-100 p-1">
-                {(["24H", "7D", "30D"] as const).map((p) => (
-                  <button
-                    key={p}
-                    onClick={() => setPeriod(p)}
-                    className={`typo-toggle px-4 py-2 rounded-md transition-colors ${
-                      period === p
-                        ? "bg-[#8C45FF] text-white shadow-sm"
-                        : "text-zinc-700 hover:bg-zinc-200"
-                    }`}
+          ) : rows.length === 0 ? (
+            <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-gradient-to-br from-[#131315] to-[#050505] p-10 shadow-[0_25px_60px_rgba(0,0,0,0.6)]">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_60%)]" />
+              <div className="relative grid gap-8 md:grid-cols-2">
+                <div>
+                  <p className="text-[11px] uppercase tracking-[0.55em] text-[#D8D9DE]/70">
+                    No active holdings
+                  </p>
+                  <h3 className="mt-4 text-3xl font-black">
+                    Deploy idle capital
+                  </h3>
+                  <p className="mt-3 text-sm text-[#D8D9DE]/80">
+                    Browse Reset opportunities and pin protocols into your
+                    institutional ledger. All data shown is mocked for UX
+                    parity—start a deposit to simulate flows.
+                  </p>
+                  <Link
+                    href="/opportunities"
+                    className="mt-6 inline-flex rounded-full border border-[#F3A233] px-6 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#F3A233] hover:bg-[#F3A233]/10"
                   >
-                    {p}
-                  </button>
-                ))}
+                    Browse opportunities
+                  </Link>
+                </div>
+                <div className="relative h-64 w-full overflow-hidden rounded-2xl">
+                  <Image
+                    src={emptyIllustration}
+                    alt="Portfolio preview"
+                    fill
+                    className="object-cover opacity-80"
+                  />
+                </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-8">
+          ) : (
+            <div className="flex flex-col gap-10 lg:flex-row">
+              <div className="flex-1 space-y-8">
                 <PortfolioOverviewChart
                   period={period}
                   data={overviewByPeriod[period]}
+                  onPeriodChange={setPeriod}
                 />
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 <PositionsList rows={rows as any} />
               </div>
-
-              <div className="space-y-8">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                <AccountSummary rows={rows as any} />
-
-                <Card className="border-white/40 bg-white/60 p-6 backdrop-blur-2xl">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="typo-section-h">Actions</h3>
+              <aside className="lg:w-[360px] lg:shrink-0 lg:pl-6">
+                <div className="space-y-6 lg:sticky lg:top-24">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  <AccountSummary rows={rows as any} />
+                  <div className="rounded-[24px] border border-white/10 bg-[#121214] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)]">
+                    <p className="text-[12px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+                      Actions
+                    </p>
+                    <p className="mt-2 text-sm text-[#D8D9DE]/70">
+                      Export ledger lines or refresh the mock environment for a
+                      new scenario.
+                    </p>
+                    <div className="mt-6 space-y-3">
+                      <button
+                        onClick={exportCSV}
+                        className="w-full rounded-xl border border-white/15 bg-transparent px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#D8D9DE] transition hover:border-[#F3A233]/50 hover:text-white"
+                      >
+                        Export CSV
+                      </button>
+                      <button
+                        onClick={clear}
+                        className="w-full rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-red-200 transition hover:border-red-400 hover:bg-red-500/20"
+                      >
+                        Clear Data
+                      </button>
+                    </div>
                   </div>
-                  <div className="space-y-3">
-                    <Button
-                      variant="outline"
-                      onClick={exportCSV}
-                      className={`w-full border-[${colors.zinc[300]}]`}
-                    >
-                      Export CSV
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={clear}
-                      className={`w-full border-[${colors.zinc[300]}]`}
-                    >
-                      Clear Data
-                    </Button>
-                  </div>
-                </Card>
-              </div>
+                </div>
+              </aside>
             </div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </>
   );
