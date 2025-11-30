@@ -3,6 +3,7 @@
 import React, { useCallback, useRef, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { StepCard } from "./StepCard";
+import { RiskStep } from "./RiskStep";
 
 type Side = "left" | "right";
 
@@ -128,17 +129,33 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
 
   // Render individual step cards
   const renderStepCards = useCallback(() => {
-    return STEP_DATA.map((step, index) => (
-      <StepCard
-        key={step.badge}
-        id={`step-card-${index}`}
-        index={index}
-        step={step}
-        total={STEP_DATA.length}
-        progress={easedProgress}
-        cardsOffset={cardsOffset}
-      />
-    ));
+    return STEP_DATA.map((step, index) => {
+      if (index === 0) {
+        return (
+          <RiskStep
+            key={step.badge}
+            id={`step-card-${index}`}
+            index={index}
+            step={step}
+            total={STEP_DATA.length}
+            progress={easedProgress}
+            cardsOffset={cardsOffset}
+          />
+        );
+      }
+
+      return (
+        <StepCard
+          key={step.badge}
+          id={`step-card-${index}`}
+          index={index}
+          step={step}
+          total={STEP_DATA.length}
+          progress={easedProgress}
+          cardsOffset={cardsOffset}
+        />
+      );
+    });
   }, [easedProgress, cardsOffset]);
 
   return (
@@ -241,7 +258,7 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
         </div>
 
         {/* Cards section */}
-        <div className="relative h-[55vh] flex items-center overflow-visible -mt-8">
+        <div className="relative h-[55vh] flex items-center overflow-visible -mt-32">
           <div className="relative w-full h-[600px] md:h-[700px]">
             {renderStepCards()}
           </div>

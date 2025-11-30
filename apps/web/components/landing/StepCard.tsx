@@ -2,8 +2,6 @@
 
 import React, { memo, useMemo } from "react";
 import { motion, useTransform, MotionValue, type Variants } from "framer-motion";
-import { OpportunityScatter } from "./visuals/OpportunityScatter";
-import { RiskRadar } from "./visuals/RiskRadar";
 import { InsuranceCoverage } from "./visuals/InsuranceCoverage";
 import { WithdrawWidget } from "./visuals/WithdrawWidget";
 
@@ -59,8 +57,6 @@ const innerVariants: Variants = {
 // Memoize visual card factory
 const VisualCard = memo(({ index }: { index: number }) => {
   switch (index) {
-    case 0:
-      return <RiskRadar />;
     case 1:
       return <InsuranceCoverage />;
     case 2:
