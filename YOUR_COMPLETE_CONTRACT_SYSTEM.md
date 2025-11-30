@@ -10,7 +10,7 @@ Your smart contract development platform is **fully operational** with deployed 
 
 | Component | Status | Contract ID | Details |
 |-----------|---------|-------------|---------|
-| **SimpleInsurance** | ✅ **DEPLOYED & WORKING** | `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP` | Production-ready insurance policies |
+| **SimpleInsurance** | ✅ **DEPLOYED & WORKING** | `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD` | Production-ready insurance policies |
 | **TypeScript SDK** | ✅ **WORKING** | N/A | Full SDK with contract integration |
 | **Hello Contract** | 🟡 **READY TO DEPLOY** | N/A | Simple greeting contract |
 | **Test Suite** | ✅ **PASSING** | N/A | 9/9 contract tests passing |
@@ -23,7 +23,7 @@ Your smart contract development platform is **fully operational** with deployed 
 ## 🚀 **What You Have Right Now**
 
 ### 1. **✅ Deployed Insurance Contract**
-- **Live on Stellar Testnet**: `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP`
+- **Live on Stellar Testnet**: `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD`
 - **Working Functions**: `create_policy`, `get_policy`, `get_user_policies`, `deactivate_policy`
 - **Status**: Production-ready and tested
 
@@ -52,7 +52,7 @@ const { SmartContractSDK } = require('./packages/sdk/src/index.js');
 
 // Initialize with your deployed insurance contract
 const insuranceSDK = new SmartContractSDK(
-  "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+  "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
   "testnet"
 );
 
@@ -76,7 +76,7 @@ function InsuranceDApp() {
 
   useEffect(() => {
     const sdk = new SmartContractSDK(
-      "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+      "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
       "testnet"
     );
     setInsuranceSDK(sdk);
@@ -253,7 +253,7 @@ cd packages/sdk && node test-all-contracts.js
 cat PRODUCTION_READY_GUIDE.md
 
 # View your deployed contract
-echo "Contract ID: CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP"
+echo "Contract ID: CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD"
 ```
 
 **Your smart contract development journey is complete!** 🌟✨

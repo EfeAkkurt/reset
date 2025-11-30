@@ -35,7 +35,7 @@
 
 ## Smart-Contract + SDK Track
 - Current status: compilation/tests are ✅, but `soroban contract install/deploy` hits an `xdr processing error` tied to CLI version 21.3.0 (see CURRENT_STATUS.md). Options include Soroban Laboratory deployments, CLI upgrades, or testnet deployment flows.
-- Production assets: Contract `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP` lives on Stellar testnet, and the TypeScript SDK in `packages/sdk/src/index.js` is verified (PRODUCTION_READY_GUIDE.md).
+- Production assets: Contract `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD` lives on Stellar testnet, and the TypeScript SDK in `packages/sdk/src/index.js` is verified (PRODUCTION_READY_GUIDE.md).
 - Implementation blueprint: docs/SMART_CONTRACTS_IMPLEMENTATION_PLAN.md covers phased delivery for insurance, yield aggregator, and treasury modules plus SDK + deployment automation. CONTRACTS_SUMMARY.md and DEVELOPMENT_GUIDE.md include API + struct references.
 
 ## Research & Strategy Resources

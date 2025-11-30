@@ -24,8 +24,13 @@ export function validateContractId(contractId: string): boolean {
     return false;
   }
 
-  // Contract IDs are hex strings, typically 64 characters
-  return /^[a-fA-F0-9]{64}$/.test(contractId);
+  // Soroban contract IDs can be:
+  // - 56-char base32 (often starting with C)
+  // - 64-char hex strings
+  return (
+    /^[A-Z0-9]{56}$/.test(contractId) ||
+    /^[a-fA-F0-9]{64}$/.test(contractId)
+  );
 }
 
 /**

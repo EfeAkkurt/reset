@@ -16,7 +16,7 @@ const {
 } = require('@stellar/stellar-sdk');
 
 // Your deployed contract ID
-const CONTRACT_ID = "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP";
+const CONTRACT_ID = "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD";
 
 // Testnet configuration
 const TESTNET_RPC_URL = 'https://soroban-testnet.stellar.org';

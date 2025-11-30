@@ -1,6 +1,6 @@
 # 🧪 TypeScript SDK Testing Guide
 
-Your TypeScript SDK with contract ID `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP` is ready for testing!
+Your TypeScript SDK with contract ID `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD` is ready for testing!
 
 ## 🚀 Quick Test Methods
 
@@ -17,7 +17,7 @@ const { SmartContractSDK } = require('./src/index.js');
 
 async function test() {
   const sdk = new SmartContractSDK(
-    "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+    "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
     "testnet"
   );
 
@@ -57,7 +57,7 @@ async function testWithNewAccount() {
     console.log('✅ Account funded:', address);
 
     const sdk = new SmartContractSDK(
-      "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+      "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
       "testnet"
     );
 
@@ -122,7 +122,7 @@ node test-sdk-methods.js --quick
 ```
 🧪 Testing Your Deployed Contract
 ================================
-✅ Contract ID: CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP
+✅ Contract ID: CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD
 ✅ Account found, sequence: 5719955840434226
 ✅ create_policy simulation: SUCCESS
 ✅ get_user_policies simulation: SUCCESS
@@ -142,7 +142,7 @@ const { SmartContractSDK } = require('./src/index.js');
 
 // Initialize with your contract
 const sdk = new SmartContractSDK(
-  "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+  "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
   "testnet" // Change to "mainnet" for production
 );
 
@@ -162,7 +162,7 @@ function InsuranceApp() {
 
   useEffect(() => {
     const insuranceSDK = new SmartContractSDK(
-      "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+      "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
       "testnet"
     );
     setSdk(insuranceSDK);

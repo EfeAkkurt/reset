@@ -31,10 +31,10 @@ node test-sdk-methods.js
 
 ## 💻 Your Contract Information
 
-- **Contract ID**: `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP`
+- **Contract ID**: `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD`
 - **Network**: Stellar Testnet
 - **Status**: ✅ Deployed and working
-- **Explorer**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP)
+- **Explorer**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD)
 
 ---
 
@@ -46,7 +46,7 @@ const { SmartContractSDK } = require('./packages/sdk/src/index.js');
 
 // Initialize with your deployed contract
 const sdk = new SmartContractSDK(
-  "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+  "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
   "testnet"
 );
 
@@ -70,7 +70,7 @@ function InsuranceDApp() {
 
   useEffect(() => {
     const insuranceSDK = new SmartContractSDK(
-      "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+      "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
       "testnet"
     );
     setSdk(insuranceSDK);
@@ -91,7 +91,7 @@ const express = require('express');
 const { SmartContractSDK } = require('./packages/sdk/src/index.js');
 
 const sdk = new SmartContractSDK(
-  "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+  "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
   "testnet"
 );
 

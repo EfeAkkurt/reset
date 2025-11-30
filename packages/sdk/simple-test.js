@@ -16,7 +16,7 @@ async function testContract() {
   console.log('🧪 Testing Your Deployed Contract');
   console.log('================================');
 
-  const CONTRACT_ID = "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP";
+  const CONTRACT_ID = "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD";
   const TESTNET_RPC_URL = 'https://soroban-testnet.stellar.org';
   const TEST_ADDRESS = "GAM5TWLK6TMPCVXOGOXER5KSFV4XDVFHBQZQSAAAGUZCMBDCEM3GCQ3A";
 

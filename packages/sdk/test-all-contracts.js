@@ -18,7 +18,7 @@ console.log('=================================');
 
 // Contract IDs
 const CONTRACTS = {
-  simpleInsurance: "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+  simpleInsurance: "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
   helloContract: null // Will be set after deployment
 };
 

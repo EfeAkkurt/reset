@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { RiskLevel } from "../../../packages/sdk/src/types";
-import { getResetSdk } from "@/lib/sdk/resetSdk";
 import { useStellarWallet } from "@/components/providers/StellarWalletProvider";
+import { getResetSdk } from "@/lib/sdk/resetSdk";
 
 type OpportunityLike = {
   id: string;
@@ -83,10 +83,15 @@ export function useInsurance() {
             riskLevel: RiskLevel.Low,
           });
 
-          if (result.success) {
+          if ((result as any).transactionHash && !(result as any).xdr) {
             txHash = result.transactionHash || txHash;
+          } else if ((result as any).hash || (result as any).xdr) {
+            const signed = await signAndSend({
+              xdr: (result as any).xdr,
+              rpcUrl: "https://soroban-testnet.stellar.org",
+            });
+            txHash = signed.hash || txHash;
           } else if (result.error) {
-            // Even if the mock client fails, we still mark the demo so UX continues
             txHash = `fallback-${Date.now().toString(16)}`;
           }
         } else {

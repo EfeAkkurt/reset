@@ -29,6 +29,9 @@ import {
   TransactionError,
   NetworkError
 } from '../errors';
+import SorobanClient from 'soroban-client';
+import { assembleTransaction } from 'soroban-client';
+import { Address, Account, Operation, TimeoutInfinite, nativeToScVal } from '@stellar/stellar-base';
 
 export interface SimpleInsuranceConfig {
   contractAddress: ContractAddress;
@@ -62,7 +65,10 @@ export class SimpleInsurance {
   }
 
   private validateConfig(): void {
-    if (!validateStellarAddress(this.config.contractAddress.address)) {
+    const addr = this.config.contractAddress.address;
+    const isStellar = validateStellarAddress(addr);
+    const isContract = /^[A-Z0-9]{56}$/.test(addr) || /^[a-fA-F0-9]{64}$/.test(addr);
+    if (!isStellar && !isContract) {
       throw new ValidationError('Invalid contract address', 'contractAddress');
     }
 
@@ -86,9 +92,6 @@ export class SimpleInsurance {
       this.validateCreatePolicyParams(params);
 
       const coverageAmount = validateAmount(params.coverageAmount);
-      const premiumAmount = validateAmount(params.premiumAmount);
-      const startDate = BigInt(Math.floor(Date.now() / 1000));
-      const endDate = startDate + BigInt(params.duration);
 
       const operation = {
         contract: this.config.contractAddress.address,
@@ -96,11 +99,8 @@ export class SimpleInsurance {
         args: [
           params.holder,
           coverageAmount.toString(),
-          premiumAmount.toString(),
-          startDate.toString(),
-          endDate.toString(),
-          params.riskLevel
-        ]
+        ],
+        source: params.holder,
       };
 
       if (options?.simulate) {
@@ -108,6 +108,15 @@ export class SimpleInsurance {
       }
 
       const result = await this.executeOperation(operation, options);
+
+      if ((result as any).xdr) {
+        // Return XDR for external signing path
+        return {
+          success: true,
+          result: { policyId: '' },
+          transactionHash: (result as any).hash,
+        };
+      }
 
       return {
         success: true,
@@ -434,18 +443,20 @@ export class SimpleInsurance {
   }
 
   private async executeOperation(operation: any, options?: TransactionOptions): Promise<any> {
-    return await retry(async () => {
-      try {
-        const timeout = options?.timeout || 30000;
-        return await this.client.sendTransaction(operation, { timeout });
-      } catch (error) {
-        throw new TransactionError(
-          `Failed to execute contract operation: ${this.formatError(error)}`,
-          undefined,
-          error
-        );
-      }
-    }, 3, 1000);
+    // Build Soroban invoke transaction XDR for signing
+    try {
+      const tx = await this.buildInvokeTransaction(operation);
+      return {
+        xdr: tx.toXDR(),
+        hash: tx.hash().toString('hex'),
+      };
+    } catch (error) {
+      throw new TransactionError(
+        `Failed to execute contract operation: ${this.formatError(error)}`,
+        undefined,
+        error
+      );
+    }
   }
 
   private async readOperation(operation: any): Promise<any> {
@@ -486,5 +497,69 @@ export class SimpleInsurance {
       return error;
     }
     return 'Unknown error occurred';
+  }
+
+  private async buildInvokeTransaction(operation: { contract: string; method: string; args: any[]; source?: string }) {
+    const server = this.client as SorobanClient.Server;
+    const sourceAddress = operation.source || operation.args?.[0];
+    if (!sourceAddress) {
+      throw new Error('Source address is required to build transaction');
+    }
+    const account = await this.fetchAccountFromHorizon(sourceAddress);
+
+    // Validate that we have the required arguments
+    if (!operation.args || operation.args.length === 0) {
+      throw new Error('No arguments provided for contract invocation');
+    }
+
+    // Convert arguments to proper ScVal format
+    const scArgs = operation.args.map((arg, index) => {
+      if (typeof arg === 'string' && arg.startsWith('G')) {
+        // Stellar address - convert to Address ScVal
+        return Address.fromString(arg).toScVal();
+      } else if (typeof arg === 'string' || typeof arg === 'number' || typeof arg === 'bigint') {
+        // Numeric value - convert to i128
+        return nativeToScVal(arg, { type: 'i128' });
+      } else {
+        throw new Error(`Unsupported argument type at index ${index}: ${typeof arg}`);
+      }
+    });
+
+    // Use the 2025 recommended approach: Operation.invokeContractFunction
+    // with properly formatted ScVal arguments
+    const invokeOp = Operation.invokeContractFunction({
+      contractId: operation.contract,
+      functionName: operation.method,
+      args: scArgs
+    });
+
+    const built = new SorobanClient.TransactionBuilder(account, {
+      fee: '100',
+      networkPassphrase: this.config.network.networkPassphrase,
+    })
+      .addOperation(invokeOp)
+      .setTimeout(SorobanClient.TimeoutInfinite)
+      .build();
+
+    const sim = await server.simulateTransaction(built);
+    if (sim.error) {
+      throw new Error(sim.error);
+    }
+
+    return assembleTransaction(built, this.config.network.networkPassphrase, sim);
+  }
+
+  private async fetchAccountFromHorizon(address: string): Promise<Account> {
+    const horizon = this.config.network.horizonUrl;
+    const resp = await fetch(`${horizon}/accounts/${address}`);
+    if (!resp.ok) {
+      throw new Error(`Failed to load account: ${resp.status}`);
+    }
+    const json = await resp.json();
+    const seq = json?.sequence;
+    if (!seq) {
+      throw new Error('Account sequence missing');
+    }
+    return new Account(address, seq);
   }
 }

@@ -22,6 +22,15 @@ import {
   TransactionError,
   NetworkError
 } from '../errors';
+import SorobanClient from 'soroban-client';
+import { assembleTransaction } from 'soroban-client';
+import {
+  Address,
+  Account,
+  Operation,
+  TimeoutInfinite,
+  nativeToScVal,
+} from '@stellar/stellar-base';
 
 export interface YieldAggregatorConfig {
   contractAddress: ContractAddress;
@@ -31,7 +40,7 @@ export interface YieldAggregatorConfig {
 export interface DepositParams {
   user: string;
   amount: string | bigint | number;
-  poolId?: string;
+  insurancePercentage?: number;
 }
 
 export interface WithdrawParams {
@@ -64,7 +73,10 @@ export class YieldAggregator {
   }
 
   private validateConfig(): void {
-    if (!validateStellarAddress(this.config.contractAddress.address)) {
+    const addr = this.config.contractAddress.address;
+    const isStellar = validateStellarAddress(addr);
+    const isContract = /^[A-Z0-9]{56}$/.test(addr) || /^[a-fA-F0-9]{64}$/.test(addr);
+    if (!isStellar && !isContract) {
       throw new ValidationError('Invalid contract address', 'contractAddress');
     }
 
@@ -84,12 +96,13 @@ export class YieldAggregator {
       this.validateDepositParams(params);
 
       const amount = validateAmount(params.amount);
-      const poolId = params.poolId || 'default';
+      const insurancePercentage = params.insurancePercentage ?? 0;
 
       const operation = {
         contract: this.config.contractAddress.address,
         method: 'deposit',
-        args: [params.user, amount.toString(), poolId]
+        args: [params.user, amount.toString(), insurancePercentage],
+        source: params.user,
       };
 
       if (options?.simulate) {
@@ -101,11 +114,11 @@ export class YieldAggregator {
       return {
         success: true,
         result: {
-          shareAmount: BigInt(result.shareAmount),
-          poolId: result.poolId || poolId
+          shareAmount: BigInt(result?.shareAmount ?? 0),
+          poolId: result?.poolId || 'default'
         },
-        transactionHash: result.hash,
-        gasUsed: result.gasUsed
+        transactionHash: result?.hash,
+        gasUsed: result?.gasUsed
       };
 
     } catch (error) {
@@ -144,11 +157,11 @@ export class YieldAggregator {
       return {
         success: true,
         result: {
-          amount: BigInt(result.amount),
-          poolId: result.poolId || poolId
+          amount: BigInt(result?.amount ?? 0),
+          poolId: result?.poolId || poolId
         },
-        transactionHash: result.hash,
-        gasUsed: result.gasUsed
+        transactionHash: result?.hash,
+        gasUsed: result?.gasUsed
       };
 
     } catch (error) {
@@ -210,16 +223,17 @@ export class YieldAggregator {
 
       const result = await this.readOperation(operation);
 
-      const pools: PoolInfo[] = result.map((pool: any) => ({
-        id: pool.id,
-        name: pool.name,
-        tokenAddress: pool.tokenAddress,
-        totalLiquidity: BigInt(pool.totalLiquidity),
-        apy: Number(pool.apy),
-        isActive: pool.isActive,
-        minDeposit: BigInt(pool.minDeposit),
-        maxDeposit: pool.maxDeposit ? BigInt(pool.maxDeposit) : undefined,
-        withdrawalFee: Number(pool.withdrawalFee)
+      const arr = Array.isArray(result) ? result : [];
+      const pools: PoolInfo[] = arr.map((pool: any) => ({
+        id: pool?.id ?? 'default',
+        name: pool?.name ?? 'Default Pool',
+        tokenAddress: pool?.tokenAddress ?? '',
+        totalLiquidity: BigInt(pool?.totalLiquidity ?? 0),
+        apy: Number(pool?.apy ?? 0),
+        isActive: Boolean(pool?.isActive ?? true),
+        minDeposit: BigInt(pool?.minDeposit ?? 0),
+        maxDeposit: pool?.maxDeposit ? BigInt(pool.maxDeposit) : undefined,
+        withdrawalFee: Number(pool?.withdrawalFee ?? 0)
       }));
 
       return {
@@ -253,15 +267,15 @@ export class YieldAggregator {
       const result = await this.readOperation(operation);
 
       const pool: PoolInfo = {
-        id: result.id,
-        name: result.name,
-        tokenAddress: result.tokenAddress,
-        totalLiquidity: BigInt(result.totalLiquidity),
-        apy: Number(result.apy),
-        isActive: result.isActive,
-        minDeposit: BigInt(result.minDeposit),
-        maxDeposit: result.maxDeposit ? BigInt(result.maxDeposit) : undefined,
-        withdrawalFee: Number(result.withdrawalFee)
+        id: result?.id ?? poolId,
+        name: result?.name ?? 'Default Pool',
+        tokenAddress: result?.tokenAddress ?? '',
+        totalLiquidity: BigInt(result?.totalLiquidity ?? 0),
+        apy: Number(result?.apy ?? 0),
+        isActive: Boolean(result?.isActive ?? true),
+        minDeposit: BigInt(result?.minDeposit ?? 0),
+        maxDeposit: result?.maxDeposit ? BigInt(result.maxDeposit) : undefined,
+        withdrawalFee: Number(result?.withdrawalFee ?? 0)
       };
 
       return {
@@ -303,18 +317,18 @@ export class YieldAggregator {
       const result = await this.executeOperation(operation, options);
 
       const rewards = result.rewards.map((reward: any) => ({
-        poolId: reward.poolId,
-        amount: BigInt(reward.amount)
+        poolId: reward?.poolId || '',
+        amount: BigInt(reward?.amount ?? 0)
       }));
 
       return {
         success: true,
         result: {
-          totalRewards: BigInt(result.totalRewards),
+          totalRewards: BigInt(result?.totalRewards ?? 0),
           rewards
         },
-        transactionHash: result.hash,
-        gasUsed: result.gasUsed
+        transactionHash: result?.hash,
+        gasUsed: result?.gasUsed
       };
 
     } catch (error) {
@@ -381,7 +395,7 @@ export class YieldAggregator {
 
       return {
         success: true,
-        result: BigInt(result)
+        result: BigInt(result ?? 0)
       };
 
     } catch (error) {
@@ -422,8 +436,8 @@ export class YieldAggregator {
       return {
         success: true,
         result: {
-          estimatedEarnings: BigInt(result.estimatedEarnings),
-          apy: Number(result.apy)
+          estimatedEarnings: BigInt(result?.estimatedEarnings ?? 0),
+          apy: Number(result?.apy ?? 0)
         }
       };
 
@@ -479,18 +493,20 @@ export class YieldAggregator {
   }
 
   private async executeOperation(operation: any, options?: TransactionOptions): Promise<any> {
-    return await retry(async () => {
-      try {
-        const timeout = options?.timeout || 30000;
-        return await this.client.sendTransaction(operation, { timeout });
-      } catch (error) {
-        throw new TransactionError(
-          `Failed to execute yield operation: ${this.formatError(error)}`,
-          undefined,
-          error
-        );
-      }
-    }, 3, 1000);
+    // Build Soroban invoke transaction XDR and return it for signing
+    try {
+      const tx = await this.buildInvokeTransaction(operation);
+      return {
+        xdr: tx.toXDR(),
+        hash: tx.hash().toString('hex'),
+      };
+    } catch (error) {
+      throw new TransactionError(
+        `Failed to build yield operation: ${this.formatError(error)}`,
+        undefined,
+        error
+      );
+    }
   }
 
   private async readOperation(operation: any): Promise<any> {
@@ -531,5 +547,66 @@ export class YieldAggregator {
       return error;
     }
     return 'Unknown error occurred';
+  }
+
+  private async buildInvokeTransaction(operation: { contract: string; method: string; args: any[]; source?: string }) {
+    const server = this.client as SorobanClient.Server;
+    const source = operation.source || operation.args?.[0] || this.config.contractAddress.address;
+    const account = await this.fetchAccountFromHorizon(source);
+
+    // Validate that we have the required arguments
+    if (!operation.args || operation.args.length === 0) {
+      throw new Error('No arguments provided for contract invocation');
+    }
+
+    // Convert arguments to proper ScVal format
+    const scArgs = operation.args.map((arg, index) => {
+      if (typeof arg === 'string' && arg.startsWith('G')) {
+        // Stellar address - convert to Address ScVal
+        return Address.fromString(arg).toScVal();
+      } else if (typeof arg === 'string' || typeof arg === 'number' || typeof arg === 'bigint') {
+        // Numeric value - convert to i128
+        return nativeToScVal(arg, { type: 'i128' });
+      } else {
+        throw new Error(`Unsupported argument type at index ${index}: ${typeof arg}`);
+      }
+    });
+
+    // Use the 2025 recommended approach: Operation.invokeContractFunction
+    // with properly formatted ScVal arguments
+    const invokeOp = Operation.invokeContractFunction({
+      contractId: operation.contract,
+      functionName: operation.method,
+      args: scArgs
+    });
+
+    const built = new SorobanClient.TransactionBuilder(account, {
+      fee: '100',
+      networkPassphrase: this.config.network.networkPassphrase,
+    })
+      .addOperation(invokeOp)
+      .setTimeout(SorobanClient.TimeoutInfinite)
+      .build();
+
+    const sim = await server.simulateTransaction(built);
+    if (sim.error) {
+      throw new Error(sim.error);
+    }
+
+    return assembleTransaction(built, this.config.network.networkPassphrase, sim);
+  }
+
+  private async fetchAccountFromHorizon(address: string): Promise<Account> {
+    const horizon = this.config.network.horizonUrl;
+    const resp = await fetch(`${horizon}/accounts/${address}`);
+    if (!resp.ok) {
+      throw new Error(`Failed to load account: ${resp.status}`);
+    }
+    const json = await resp.json();
+    const seq = json?.sequence;
+    if (!seq) {
+      throw new Error('Account sequence missing');
+    }
+    return new Account(address, seq);
   }
 }
