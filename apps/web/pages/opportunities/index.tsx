@@ -43,13 +43,13 @@ export default function OpportunitiesPage() {
         setError(null);
 
         Logger.info(
-          "🚀 Loading opportunities via API bridge (/api/opportunities)...",
+          "🚀 Loading real Stellar opportunities from DeFiLlama API (/api/opportunities-stellar)...",
         );
 
-        const resp = await fetch("/api/opportunities");
+        const resp = await fetch("/api/opportunities-stellar");
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const json = await resp.json();
-        const realOpportunities: CardOpportunity[] = (json.items || []).map(
+        const realOpportunities: CardOpportunity[] = (json.data || []).map(
           (it: CardOpportunity) => ({
             ...it,
             source: it.source ?? "live",
@@ -169,22 +169,22 @@ export default function OpportunitiesPage() {
   return (
     <>
       <Head>
-        <title>Yield Opportunities | Reset</title>
+        <title>Stellar Yield Opportunities | Reset</title>
         <meta
           name="description"
-          content="Explore the best yield farming opportunities across Stellar. Find the highest APR/APY rates live today."
+          content="Explore the best Stellar yield farming opportunities with $75M+ TVL from Blend protocol. Live APR/APY rates, risk analysis, and insurance-optimized DeFi opportunities."
         />
-        <meta property="og:title" content="Yield Opportunities | Reset" />
+        <meta property="og:title" content="Stellar Yield Opportunities | Reset" />
         <meta
           property="og:description"
-          content="Explore the best yield farming opportunities across Stellar. Find the highest APR/APY rates live today."
+          content="Discover premium Stellar DeFi yield opportunities with institutional-grade risk analysis. Real-time data from Blend protocol with $75M+ TVL and low-risk profiles perfect for insurance products."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Yield Opportunities | Reset" />
+        <meta name="twitter:title" content="Stellar Yield Opportunities | Reset" />
         <meta
           name="twitter:description"
-          content="Explore the best yield farming opportunities across Stellar. Find the highest APR/APY rates live today."
+          content="Live Stellar DeFi yields from Blend protocol. $75M+ TVL, low-risk profiles, institutional-grade analysis. Perfect for insurance and risk management."
         />
       </Head>
       <main className="relative overflow-hidden bg-[#050505] pb-20 text-white">
@@ -206,9 +206,9 @@ export default function OpportunitiesPage() {
           }}
         />
         <HeroHeader
-          title="Explore Yield Opportunities"
+          title="Stellar Yield Opportunities"
           size="standard"
-          // Multi-chain support enabled
+          // Stellar-focused yield opportunities
           kpis={<HeroKpiBar kpis={displayStats} />}
         />
 

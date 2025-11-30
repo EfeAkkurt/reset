@@ -214,31 +214,31 @@ export default function OpportunityDetailPage() {
       <Head>
         <title>
           {data
-            ? `${data.protocol} ${data.pair} | Reset UI`
-            : "Opportunity Details | Reset UI"}
+            ? `${data.protocol} ${data.pair} | Stellar DeFi | Reset`
+            : "Stellar Opportunity Details | Reset"}
         </title>
         <meta
           name="description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield opportunity on Stacks.`
-              : "View detailed information about yield opportunities on Reset."
+              ? `Detailed analysis of ${data.protocol} ${data.pair} yield opportunity on Stellar. Risk assessment, insurance compatibility, and performance metrics for ${data.chain} DeFi.`
+              : "View detailed information about Stellar yield opportunities with risk analysis and insurance optimization."
           }
         />
         <meta
           property="og:title"
           content={
             data
-              ? `${data.protocol} ${data.pair} | Reset UI`
-              : "Opportunity Details | Reset UI"
+              ? `${data.protocol} ${data.pair} | Stellar DeFi | Reset`
+              : "Stellar Opportunity Details | Reset"
           }
         />
         <meta
           property="og:description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield opportunity on Stacks.`
-              : "View detailed information about yield opportunities on Reset."
+              ? `Comprehensive analysis of ${data.protocol} ${data.pair} on Stellar. Risk score: ${data?.risk || 'Low'}. TVL: $${(data?.tvlUsd / 1000000).toFixed(1)}M. Optimized for DeFi insurance.`
+              : "Stellar DeFi opportunities with institutional-grade risk analysis and insurance optimization."
           }
         />
         <meta property="og:type" content="website" />
@@ -255,8 +255,8 @@ export default function OpportunityDetailPage() {
           name="twitter:description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield Reset opportunity on Stacks.`
-              : "View detailed information about yield opportunities on Reset."
+              ? `${data.protocol} ${data.pair} on Stellar - ${data.apr}% APR, $${(data.tvlUsd / 1000000).toFixed(1)}M TVL, ${data.risk} risk. Insurance-optimized yield opportunity.`
+              : "Stellar DeFi opportunities with institutional risk analysis and insurance optimization."
           }
         />
       </Head>

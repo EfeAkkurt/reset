@@ -1,0 +1,755 @@
+{
+  "startTime": "2025-11-29T17:15:14.289Z",
+  "testType": "stellar-connectivity",
+  "description": "Stellar-specific DeFiLlama API validation and data availability testing",
+  "endpoints": [
+    {
+      "test": "Stellar Chain Validation",
+      "url": "https://api.llama.fi/chains",
+      "status": 200,
+      "responseTime": 466,
+      "success": true,
+      "validation": {
+        "found": true,
+        "chain": {
+          "gecko_id": "stellar",
+          "tvl": 172136146.62791178,
+          "tokenSymbol": "XLM",
+          "cmcId": "512",
+          "name": "Stellar",
+          "chainId": null
+        },
+        "tokenSymbol": "XLM"
+      },
+      "dataSize": 47760,
+      "timestamp": "2025-11-29T17:15:14.756Z"
+    },
+    {
+      "test": "Stellar Protocols Support",
+      "url": "https://api.llama.fi/protocols",
+      "status": 200,
+      "responseTime": 899,
+      "success": true,
+      "validation": {
+        "count": 3,
+        "protocols": [
+          {
+            "id": "5035",
+            "name": "Aquarius Stellar",
+            "address": "stellar:GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA",
+            "symbol": "AQUA",
+            "url": "https://aqua.network",
+            "description": "Aquarius is a novel AMM protocol and a liquidity management layer to Stellar. It offers stable and volatile pools with multihop swaps on top, and a community governance tool to distribute rewards between pool liquidity providers based on voting and bribing.",
+            "chain": "Stellar",
+            "logo": "https://icons.llama.fi/aquarius-stellar.png",
+            "audits": "2",
+            "audit_note": null,
+            "gecko_id": "aquarius",
+            "cmcId": "14112",
+            "category": "Dexs",
+            "chains": [
+              "Stellar"
+            ],
+            "module": "aqua-network/index.js",
+            "twitter": "aqua_token",
+            "audit_links": [
+              "https://www.coinfabrik.com/blog/aquarius-audit-report"
+            ],
+            "github": [
+              "AquaToken"
+            ],
+            "listedAt": 1724320620,
+            "dimensions": {
+              "fees": "aqua-network",
+              "dexs": "aqua-network"
+            },
+            "methodology": "counts the liquidity of the Pools on AMM, data is pulled from the Aquarius API.",
+            "misrepresentedTokens": true,
+            "slug": "aquarius-stellar",
+            "tvl": 35854060.9668486,
+            "chainTvls": {
+              "Stellar": 35854060.9668486
+            },
+            "change_1h": 0.02917673730757997,
+            "change_1d": -1.3770218071209115,
+            "change_7d": 7.121250523614762,
+            "tokenBreakdowns": {},
+            "mcap": 21252216.74549136
+          },
+          {
+            "id": "6267",
+            "name": "Stellar DEX",
+            "address": null,
+            "symbol": "XLM",
+            "url": "https://developers.stellar.org/docs/learn/encyclopedia/sdex/liquidity-on-stellar-sdex-liquidity-pools#sdex",
+            "description": "The Stellar network acts as a decentralized distributed exchange that allows users to trade and convert assets with the network's Offer operations",
+            "chain": "Stellar",
+            "logo": "https://icons.llama.fi/stellar-dex.jpg",
+            "audits": "0",
+            "audit_note": null,
+            "gecko_id": null,
+            "cmcId": null,
+            "category": "Dexs",
+            "chains": [
+              "Stellar"
+            ],
+            "forkedFrom": [],
+            "module": "stellar-dex/index.js",
+            "twitter": "StellarOrg",
+            "listedAt": 1749018753,
+            "methodology": "Total value of all sell offers in the built-in Stellar Decentralized exchange. This includes XLM and assets issued on the network, converting to USD.",
+            "misrepresentedTokens": true,
+            "slug": "stellar-dex",
+            "tvl": 20823424.417443674,
+            "chainTvls": {
+              "Stellar": 20823424.417443674
+            },
+            "change_1h": -0.0014773972942236924,
+            "change_1d": -0.8387345069539407,
+            "change_7d": 8.83235468125902,
+            "tokenBreakdowns": {},
+            "mcap": null
+          },
+          {
+            "id": "3811",
+            "name": "Stellaris Finance",
+            "address": "scroll:0x6767f2f2d8c0a63a7a1b3ad2bb890fdc125ccab7",
+            "symbol": "STE",
+            "url": "",
+            "description": "Stellaris is a native yield aggregator for Scroll. Depositors can maximize crypto earnings by auto-compounding.",
+            "chain": "Scroll",
+            "logo": "https://icons.llama.fi/stellaris-finance.jpg",
+            "audits": "0",
+            "audit_note": null,
+            "gecko_id": null,
+            "cmcId": null,
+            "category": "Yield Aggregator",
+            "chains": [
+              "Scroll"
+            ],
+            "forkedFromIds": [
+              "113"
+            ],
+            "module": "StellarisFinance/index.js",
+            "twitter": "StellarisYields",
+            "listedAt": 1700488025,
+            "deadUrl": true,
+            "misrepresentedTokens": false,
+            "slug": "stellaris-finance",
+            "tvl": 0,
+            "chainTvls": {
+              "Scroll-staking": 0,
+              "Scroll": 0,
+              "Scroll-pool2": 6.659474013070119,
+              "staking": 0,
+              "pool2": 6.659474013070119
+            },
+            "change_1h": null,
+            "change_1d": null,
+            "change_7d": null,
+            "tokenBreakdowns": {},
+            "mcap": null,
+            "staking": 0,
+            "pool2": 6.659474013070119
+          }
+        ],
+        "hasBlend": false
+      },
+      "dataSize": 6687516,
+      "timestamp": "2025-11-29T17:15:15.667Z"
+    },
+    {
+      "test": "Stellar Yields Data",
+      "url": "https://api.llama.fi/yields",
+      "status": 404,
+      "responseTime": 160,
+      "success": false,
+      "validation": {
+        "success": false,
+        "data": null
+      },
+      "dataSize": 2,
+      "timestamp": "2025-11-29T17:15:15.827Z"
+    },
+    {
+      "test": "Alternative Yields API",
+      "url": "https://yields.llama.fi/pools",
+      "status": 200,
+      "responseTime": 1852,
+      "success": false,
+      "validation": {
+        "success": false,
+        "data": null
+      },
+      "dataSize": 12346996,
+      "timestamp": "2025-11-29T17:15:17.693Z"
+    }
+  ],
+  "dashboardFiltering": [
+    {
+      "url": "https://api.llama.fi/yields?chain=stellar",
+      "parameters": "chain=stellar",
+      "statusCode": 404,
+      "responseTime": 146,
+      "dataCount": 0,
+      "hasStellarData": false,
+      "success": false,
+      "sampleData": null
+    },
+    {
+      "url": "https://api.llama.fi/yields?chain=Stellar",
+      "parameters": "chain=Stellar",
+      "statusCode": 404,
+      "responseTime": 204,
+      "dataCount": 0,
+      "hasStellarData": false,
+      "success": false,
+      "sampleData": null
+    },
+    {
+      "url": "https://yields.llama.fi/pools?chain=stellar",
+      "parameters": "chain=stellar",
+      "statusCode": 200,
+      "responseTime": 1787,
+      "dataCount": 9,
+      "hasStellarData": true,
+      "success": true,
+      "sampleData": [
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 55017747,
+          "apyBase": 0.0001,
+          "apyReward": 0.09491,
+          "apy": 0.09501,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+          "apyPct1D": -0.0055,
+          "apyPct7D": -0.01364,
+          "apyPct30D": -0.05098,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 88,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 0.20002,
+          "sigma": 0.0051,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.14131,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        }
+      ]
+    },
+    {
+      "url": "https://yields.llama.fi/pools?chain=Stellar",
+      "parameters": "chain=Stellar",
+      "statusCode": 200,
+      "responseTime": 1958,
+      "dataCount": 9,
+      "hasStellarData": true,
+      "success": true,
+      "sampleData": [
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 55017747,
+          "apyBase": 0.0001,
+          "apyReward": 0.09491,
+          "apy": 0.09501,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+          "apyPct1D": -0.0055,
+          "apyPct7D": -0.01364,
+          "apyPct30D": -0.05098,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 88,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 0.20002,
+          "sigma": 0.0051,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.14131,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        }
+      ]
+    },
+    {
+      "url": "https://api.llama.fi/pools?chain=stellar&project=blend",
+      "parameters": "chain=stellar&project=blend",
+      "statusCode": 404,
+      "responseTime": 122,
+      "dataCount": 0,
+      "hasStellarData": false,
+      "success": false,
+      "sampleData": null
+    },
+    {
+      "url": "https://api.llama.fi/pools?chain=stellar&limit=50",
+      "parameters": "chain=stellar&limit=50",
+      "statusCode": 404,
+      "responseTime": 217,
+      "dataCount": 0,
+      "hasStellarData": false,
+      "success": false,
+      "sampleData": null
+    },
+    {
+      "url": "https://yields.llama.fi/pools?chains=stellar",
+      "parameters": "chains=stellar",
+      "statusCode": 200,
+      "responseTime": 2149,
+      "dataCount": 9,
+      "hasStellarData": true,
+      "success": true,
+      "sampleData": [
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 55017747,
+          "apyBase": 0.0001,
+          "apyReward": 0.09491,
+          "apy": 0.09501,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+          "apyPct1D": -0.0055,
+          "apyPct7D": -0.01364,
+          "apyPct30D": -0.05098,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 88,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 0.20002,
+          "sigma": 0.0051,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.14131,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        }
+      ]
+    },
+    {
+      "url": "https://yields.llama.fi/pools?filter[chain]=stellar",
+      "parameters": "filter[chain]=stellar",
+      "statusCode": 200,
+      "responseTime": 2407,
+      "dataCount": 9,
+      "hasStellarData": true,
+      "success": true,
+      "sampleData": [
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 55017747,
+          "apyBase": 0.0001,
+          "apyReward": 0.09491,
+          "apy": 0.09501,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+          "apyPct1D": -0.0055,
+          "apyPct7D": -0.01364,
+          "apyPct30D": -0.05098,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 88,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 0.20002,
+          "sigma": 0.0051,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.14131,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        }
+      ]
+    }
+  ],
+  "blendData": [
+    {
+      "test": "Blend in Yields",
+      "url": "https://api.llama.fi/yields",
+      "status": 404,
+      "responseTime": 62,
+      "blendData": {
+        "count": 0,
+        "items": [],
+        "stellarCount": 0
+      },
+      "success": false,
+      "timestamp": "2025-11-29T17:15:26.750Z"
+    },
+    {
+      "test": "Blend in Protocols",
+      "url": "https://api.llama.fi/protocols",
+      "status": 200,
+      "responseTime": 1500,
+      "blendData": {
+        "count": 7,
+        "items": [
+          {
+            "id": "6122",
+            "name": "Blend Pools V2",
+            "address": null,
+            "symbol": "-",
+            "url": "https://www.blend.capital",
+            "description": "Lending markets created with Blend.",
+            "chain": "Stellar",
+            "logo": "https://icons.llama.fi/blend-pools-v2.jpg",
+            "audits": "2",
+            "audit_note": null,
+            "gecko_id": null,
+            "cmcId": null,
+            "category": "Lending",
+            "chains": [
+              "Stellar"
+            ],
+            "module": "blend-pools-v2/index.js",
+            "twitter": null,
+            "forkedFrom": [],
+            "parentProtocol": "parent#blend",
+            "audit_links": [
+              "https://github.com/blend-capital/blend-contracts-v2/tree/main/audits"
+            ],
+            "listedAt": 1746030822,
+            "oraclesBreakdown": [
+              {
+                "name": "Reflector",
+                "type": "Primary",
+                "proof": [
+                  "https://docs.blend.capital/pool-creators/selecting-an-oracle#well-known-oracles",
+                  "https://github.com/blend-capital/oracle-aggregator#supported-oracles"
+                ]
+              }
+            ],
+            "methodology": "Counts the tokens locked in the contracts to be used as collateral to borrow or to earn yield. Borrowed coins are not counted towards the TVL, so only the coins actually locked in the contracts are counted. There's multiple reasons behind this but one of the main ones is to avoid inflating the TVL through cycled lending.. TVL is calculated and totaled for all Blend V2 pools in the Blend reward zone.",
+            "misrepresentedTokens": false,
+            "slug": "blend-pools-v2",
+            "tvl": 75743018.18272753,
+            "chainTvls": {
+              "Stellar": 75743018.18272753,
+              "Stellar-borrowed": 25325081.62105437,
+              "borrowed": 25325081.62105437
+            },
+            "change_1h": 1.0835250203213604,
+            "change_1d": -0.9000634239200309,
+            "change_7d": 10.699497178083561,
+            "tokenBreakdowns": {},
+            "mcap": null,
+            "parentProtocolSlug": "blend"
+          },
+          {
+            "id": "6787",
+            "name": "Blend Money",
+            "address": null,
+            "symbol": "-",
+            "url": "https://blend.money/",
+            "description": "Blend is the programmable savings layer for DeFi, powering safe, sustainable yield for chains, wallets, stablecoins, and on-chain apps. Every deposit lives in a signer-bound Safe with automated risk protections. There are no pooled vaults, no custodial risk, and no lockups. Just real-time routing, real yield, and full control. Curators plug in capital strategies through a modular strategy layer, and Blend orchestrates allocation across chains and protocols.",
+            "chain": "Multi-Chain",
+            "logo": "https://icons.llama.fi/blend-money.jpg",
+            "audits": "2",
+            "audit_note": null,
+            "gecko_id": null,
+            "cmcId": null,
+            "category": "Onchain Capital Allocator",
+            "chains": [
+              "Botanix",
+              "Scroll"
+            ],
+            "module": "blend/index.js",
+            "twitter": "blend_money",
+            "forkedFromIds": [],
+            "oraclesBreakdown": [
+              {
+                "name": "Chainlink",
+                "type": "Primary",
+                "proof": [
+                  "https://github.com/blendmoney/blend-contracts/blob/main/contracts/oracles/MorphoChainlinkOracleV2.sol"
+                ]
+              }
+            ],
+            "audit_links": [
+              "https://docs.blend.money/static/audits/cantinacode-blend-25-08-10-0.pdf",
+              "https://docs.blend.money/static/audits/cantinacode-blend-25-09-29-0.pdf",
+              "https://docs.blend.money/static/audits/cantinacode-blend-25-09-29-1.pdf"
+            ],
+            "github": [
+              "blendmoney"
+            ],
+            "listedAt": 1759246067,
+            "methodology": "Count all assets are deposited in all vaults allocated by Blend Protocol.",
+            "misrepresentedTokens": false,
+            "slug": "blend-money",
+            "tvl": 3650534.8521404886,
+            "chainTvls": {
+              "Scroll": 111.39865051228637,
+              "Botanix": 3650423.4534899765
+            },
+            "change_1h": 0.6864765712569181,
+            "change_1d": -1.103328932200327,
+            "change_7d": 5.004894522635993,
+            "tokenBreakdowns": {},
+            "mcap": null
+          },
+          {
+            "id": "4727",
+            "name": "Blend Pools",
+            "address": null,
+            "symbol": "-",
+            "url": "https://www.blend.capital",
+            "description": "Lending markets created with Blend.",
+            "chain": "Stellar",
+            "logo": "https://icons.llama.fi/blend-pools.jpg",
+            "audits": "2",
+            "audit_note": null,
+            "gecko_id": null,
+            "cmcId": null,
+            "category": "Lending",
+            "chains": [
+              "Stellar"
+            ],
+            "module": "blend-pools/index.js",
+            "twitter": null,
+            "forkedFrom": [],
+            "parentProtocol": "parent#blend",
+            "audit_links": [
+              "https://github.com/blend-capital/blend-contracts/blob/main/audits/BlendCertoraReport.pdf",
+              "https://github.com/blend-capital/blend-contracts/blob/main/audits/blend_capital_final.pdf"
+            ],
+            "listedAt": 1717598971,
+            "methodology": "Counts the tokens locked in the contracts to be used as collateral to borrow or to earn yield. Borrowed coins are not counted towards the TVL, so only the coins actually locked in the contracts are counted. There's multiple reasons behind this but one of the main ones is to avoid inflating the TVL through cycled lending.. TVL is calculated and totaled for all Blend pools in the Blend reward zone.",
+            "misrepresentedTokens": false,
+            "slug": "blend-pools",
+            "tvl": 104840.31213090279,
+            "chainTvls": {
+              "Stellar-borrowed": 20741.42783683863,
+              "Stellar": 104840.31213090279,
+              "borrowed": 20741.42783683863
+            },
+            "change_1h": 0.3929030208166324,
+            "change_1d": -0.8291487935233874,
+            "change_7d": 9.28547874357352,
+            "tokenBreakdowns": {},
+            "mcap": null,
+            "parentProtocolSlug": "blend"
+          }
+        ],
+        "stellarCount": 4
+      },
+      "success": true,
+      "timestamp": "2025-11-29T17:15:28.252Z"
+    },
+    {
+      "test": "Blend Pools via Yields API",
+      "url": "https://yields.llama.fi/pools?project=blend",
+      "status": 200,
+      "responseTime": 2532,
+      "blendData": {
+        "count": 9,
+        "items": [
+          {
+            "chain": "Stellar",
+            "project": "blend-pools-v2",
+            "symbol": "XLM",
+            "tvlUsd": 55017747,
+            "apyBase": 0.0001,
+            "apyReward": 0.09491,
+            "apy": 0.09501,
+            "rewardTokens": [
+              "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+            ],
+            "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+            "apyPct1D": -0.0055,
+            "apyPct7D": -0.01364,
+            "apyPct30D": -0.05098,
+            "stablecoin": false,
+            "ilRisk": "no",
+            "exposure": "single",
+            "predictions": {
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 88,
+              "binnedConfidence": 3
+            },
+            "poolMeta": "Fixed Pool",
+            "mu": 0.20002,
+            "sigma": 0.0051,
+            "count": 155,
+            "outlier": false,
+            "underlyingTokens": [
+              "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+            ],
+            "il7d": null,
+            "apyBase7d": null,
+            "apyMean30d": 0.14131,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null,
+            "apyBaseInception": null
+          },
+          {
+            "chain": "Stellar",
+            "project": "blend-pools-v2",
+            "symbol": "XLM",
+            "tvlUsd": 15331949,
+            "apyBase": 0.01982,
+            "apyReward": 0.10809,
+            "apy": 0.12791,
+            "rewardTokens": [
+              "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+            ],
+            "pool": "2d401ed8-2ced-4116-bda9-deb9058d423d",
+            "apyPct1D": -0.0072,
+            "apyPct7D": -0.02344,
+            "apyPct30D": -0.07418,
+            "stablecoin": false,
+            "ilRisk": "no",
+            "exposure": "single",
+            "predictions": {
+              "predictedClass": "Stable/Up",
+              "predictedProbability": 85,
+              "binnedConfidence": 3
+            },
+            "poolMeta": "YieldBlox Pool",
+            "mu": 0.21511,
+            "sigma": 0.0045,
+            "count": 155,
+            "outlier": false,
+            "underlyingTokens": [
+              "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+            ],
+            "il7d": null,
+            "apyBase7d": null,
+            "apyMean30d": 0.16369,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null,
+            "apyBaseInception": null
+          },
+          {
+            "chain": "Stellar",
+            "project": "blend-pools-v2",
+            "symbol": "USDC",
+            "tvlUsd": 3757429,
+            "apyBase": 13.16968,
+            "apyReward": null,
+            "apy": 13.16968,
+            "rewardTokens": [
+              "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+            ],
+            "pool": "ecf788e3-d2ef-4fdd-9ece-8a2d96226ddf",
+            "apyPct1D": -2.02013,
+            "apyPct7D": 1.21099,
+            "apyPct30D": -2.7906,
+            "stablecoin": true,
+            "ilRisk": "no",
+            "exposure": "single",
+            "predictions": {
+              "predictedClass": "Down",
+              "predictedProbability": 68,
+              "binnedConfidence": 2
+            },
+            "poolMeta": "Fixed Pool",
+            "mu": 12.60919,
+            "sigma": 0.11432,
+            "count": 155,
+            "outlier": false,
+            "underlyingTokens": [
+              "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+            ],
+            "il7d": null,
+            "apyBase7d": null,
+            "apyMean30d": 14.11194,
+            "volumeUsd1d": null,
+            "volumeUsd7d": null,
+            "apyBaseInception": null
+          }
+        ],
+        "stellarCount": 9
+      },
+      "success": true,
+      "timestamp": "2025-11-29T17:15:30.787Z"
+    }
+  ],
+  "endTime": "2025-11-29T17:15:30.787Z",
+  "recommendations": {
+    "connectivity": {
+      "status": "PARTIAL",
+      "message": "Limited Stellar endpoint access, need fallback strategies",
+      "priority": 3
+    },
+    "dataQuality": {
+      "status": "GOOD",
+      "message": "Partial Stellar data available, may need supplementation",
+      "priority": 2
+    },
+    "implementation": {
+      "status": "READY",
+      "message": "4 working chain filters found - ready for production",
+      "priority": 1
+    }
+  },
+  "summary": {
+    "totalTests": 15,
+    "successfulEndpoints": 2,
+    "workingFilters": 4,
+    "blendPoolsFound": 16,
+    "stellarBlendPools": 13,
+    "overallStatus": "PARTIAL"
+  }
+}

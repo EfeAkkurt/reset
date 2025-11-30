@@ -1,0 +1,463 @@
+{
+  "startTime": "2025-11-29T14:06:05.133Z",
+  "description": "DeFiLlama API Stellar and Blend protocol discovery tests",
+  "stellarChainSupport": [
+    {
+      "chainIdentifier": "stellar",
+      "error": "chain.chainId?.toLowerCase is not a function",
+      "hasData": false
+    },
+    {
+      "chainIdentifier": "Stellar",
+      "error": "chain.chainId?.toLowerCase is not a function",
+      "hasData": false
+    },
+    {
+      "chainIdentifier": "STELLAR",
+      "error": "chain.chainId?.toLowerCase is not a function",
+      "hasData": false
+    },
+    {
+      "chainIdentifier": "xlm",
+      "error": "chain.chainId?.toLowerCase is not a function",
+      "hasData": false
+    },
+    {
+      "chainIdentifier": "XLM",
+      "error": "chain.chainId?.toLowerCase is not a function",
+      "hasData": false
+    },
+    {
+      "chainIdentifier": "stellar-network",
+      "error": "chain.chainId?.toLowerCase is not a function",
+      "hasData": false
+    }
+  ],
+  "blendProjectSupport": [
+    {
+      "projectIdentifier": "blend",
+      "poolsStatus": 404,
+      "poolCount": 0,
+      "projectFoundInList": false,
+      "responseTime": 987,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "projectIdentifier": "blend-protocol",
+      "poolsStatus": 404,
+      "poolCount": 0,
+      "projectFoundInList": false,
+      "responseTime": 603,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "projectIdentifier": "blend_protocol",
+      "poolsStatus": 404,
+      "poolCount": 0,
+      "projectFoundInList": false,
+      "responseTime": 1293,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "projectIdentifier": "blend-stellar",
+      "poolsStatus": 404,
+      "poolCount": 0,
+      "projectFoundInList": false,
+      "responseTime": 1260,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "projectIdentifier": "blend-lending",
+      "poolsStatus": 404,
+      "poolCount": 0,
+      "projectFoundInList": false,
+      "responseTime": 992,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "projectIdentifier": "blend-finance",
+      "poolsStatus": 404,
+      "poolCount": 0,
+      "projectFoundInList": true,
+      "responseTime": 817,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "projectIdentifier": "stellar-blend",
+      "poolsStatus": 404,
+      "poolCount": 0,
+      "projectFoundInList": false,
+      "responseTime": 899,
+      "hasData": false,
+      "samplePools": []
+    }
+  ],
+  "combinedFilters": [
+    {
+      "chain": "stellar",
+      "project": "blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar",
+      "project": "blend-protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar",
+      "project": "blend_protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar",
+      "project": "blend-stellar",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar",
+      "project": "blend-lending",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar",
+      "project": "blend-finance",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar",
+      "project": "stellar-blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "Stellar",
+      "project": "blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "Stellar",
+      "project": "blend-protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "Stellar",
+      "project": "blend_protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "Stellar",
+      "project": "blend-stellar",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "Stellar",
+      "project": "blend-lending",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "Stellar",
+      "project": "blend-finance",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "Stellar",
+      "project": "stellar-blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "STELLAR",
+      "project": "blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "STELLAR",
+      "project": "blend-protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "STELLAR",
+      "project": "blend_protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "STELLAR",
+      "project": "blend-stellar",
+      "error": "Request timeout",
+      "hasData": false
+    },
+    {
+      "chain": "STELLAR",
+      "project": "blend-lending",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "STELLAR",
+      "project": "blend-finance",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "STELLAR",
+      "project": "stellar-blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "xlm",
+      "project": "blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "xlm",
+      "project": "blend-protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "xlm",
+      "project": "blend_protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "xlm",
+      "project": "blend-stellar",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "xlm",
+      "project": "blend-lending",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "xlm",
+      "project": "blend-finance",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "xlm",
+      "project": "stellar-blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "XLM",
+      "project": "blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "XLM",
+      "project": "blend-protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "XLM",
+      "project": "blend_protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "XLM",
+      "project": "blend-stellar",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "XLM",
+      "project": "blend-lending",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "XLM",
+      "project": "blend-finance",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "XLM",
+      "project": "stellar-blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar-network",
+      "project": "blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar-network",
+      "project": "blend-protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar-network",
+      "project": "blend_protocol",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar-network",
+      "project": "blend-stellar",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar-network",
+      "project": "blend-lending",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar-network",
+      "project": "blend-finance",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    },
+    {
+      "chain": "stellar-network",
+      "project": "stellar-blend",
+      "statusCode": 404,
+      "poolCount": 0,
+      "hasData": false,
+      "samplePools": []
+    }
+  ],
+  "yieldsEndpoints": [
+    {
+      "endpoint": "yields",
+      "totalYields": 0,
+      "stellarPools": 0,
+      "stellarYields": []
+    }
+  ],
+  "lendingProtocolSearch": {
+    "totalPools": 0,
+    "stellarPools": 0,
+    "stellarLendingPools": [],
+    "blendPoolsFound": 0,
+    "blendPools": [],
+    "blendChains": []
+  },
+  "endTime": "2025-11-29T14:06:35.118Z",
+  "analysis": {
+    "stellarSupported": false,
+    "blendSupported": false,
+    "stellarPoolCount": 0,
+    "blendPoolCount": 0,
+    "stellarIdentifiers": [],
+    "blendIdentifiers": [],
+    "recommendation": "❌ NO SUPPORT: Neither Stellar nor Blend found on DeFiLlama. Use direct protocol APIs or alternative analytics platforms."
+  }
+}

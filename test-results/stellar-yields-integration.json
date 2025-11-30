@@ -1,0 +1,1448 @@
+{
+  "startTime": "2025-11-29T17:15:30.825Z",
+  "testType": "stellar-yields-integration",
+  "description": "Production-ready Stellar and Blend yield data integration testing",
+  "strategies": [
+    {
+      "success": false,
+      "error": "HTTP 404",
+      "data": [],
+      "strategy": "Direct Yields Filtering",
+      "priority": 1,
+      "description": "Filter main yields endpoint for Stellar data"
+    },
+    {
+      "success": true,
+      "strategy": "Alternative Yields API",
+      "workingUrl": "https://yields.llama.fi/pools?chain=stellar",
+      "parameters": "chain=stellar",
+      "totalPools": 9,
+      "blendPools": 9,
+      "data": [
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 55017747,
+          "apyBase": 0.0001,
+          "apyReward": 0.09491,
+          "apy": 0.09501,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+          "apyPct1D": -0.0055,
+          "apyPct7D": -0.01364,
+          "apyPct30D": -0.05098,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 88,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 0.20002,
+          "sigma": 0.0051,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.14131,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 15331949,
+          "apyBase": 0.01982,
+          "apyReward": 0.10809,
+          "apy": 0.12791,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "2d401ed8-2ced-4116-bda9-deb9058d423d",
+          "apyPct1D": -0.0072,
+          "apyPct7D": -0.02344,
+          "apyPct30D": -0.07418,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 85,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 0.21511,
+          "sigma": 0.0045,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.16369,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "USDC",
+          "tvlUsd": 3757429,
+          "apyBase": 13.16968,
+          "apyReward": null,
+          "apy": 13.16968,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "ecf788e3-d2ef-4fdd-9ece-8a2d96226ddf",
+          "apyPct1D": -2.02013,
+          "apyPct7D": 1.21099,
+          "apyPct30D": -2.7906,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 68,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 12.60919,
+          "sigma": 0.11432,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 14.11194,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "USDC",
+          "tvlUsd": 889620,
+          "apyBase": 15.58453,
+          "apyReward": 0.9001,
+          "apy": 16.48463,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "48c597dc-9367-4b4a-aa10-49b9755c4c2e",
+          "apyPct1D": -0.01678,
+          "apyPct7D": 1.43879,
+          "apyPct30D": -0.61254,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 66,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 15.90622,
+          "sigma": 0.13645,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 16.5937,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "EURC",
+          "tvlUsd": 191042,
+          "apyBase": 10.62609,
+          "apyReward": null,
+          "apy": 10.62609,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "3a61420f-6f6e-45f9-accc-8d23f5a32d33",
+          "apyPct1D": 0.01061,
+          "apyPct7D": 0.26993,
+          "apyPct30D": 1.31277,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 66,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 11,
+          "sigma": 0.09079,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 10.37453,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "EURC",
+          "tvlUsd": 140872,
+          "apyBase": 6.11259,
+          "apyReward": 4.01667,
+          "apy": 10.12926,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "9a2f1f81-0a6e-441d-8219-c13b3520bd57",
+          "apyPct1D": -0.32652,
+          "apyPct7D": -1.30093,
+          "apyPct30D": -1.03495,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 66,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 11.67091,
+          "sigma": 0.05957,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 11.86266,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools",
+          "symbol": "XLM",
+          "tvlUsd": 79471,
+          "apyBase": 0.00008,
+          "apyReward": 0,
+          "apy": 0.00008,
+          "rewardTokens": [],
+          "pool": "5ce8b527-3b4d-4790-8091-aae6c051bd92",
+          "apyPct1D": 0,
+          "apyPct7D": 0,
+          "apyPct30D": -0.0002,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 56.99999999999999,
+            "binnedConfidence": 1
+          },
+          "poolMeta": "Fixed XLM-USDC Pool",
+          "mu": 2.43212,
+          "sigma": 0.23361,
+          "count": 348,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.00012,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "AQUA",
+          "tvlUsd": 14069,
+          "apyBase": 2.88458,
+          "apyReward": null,
+          "apy": 2.88458,
+          "rewardTokens": [],
+          "pool": "799fd51e-bd83-4a75-8ace-1f33d7e7ffc0",
+          "apyPct1D": 0,
+          "apyPct7D": null,
+          "apyPct30D": null,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 73,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 0.38911,
+          "sigma": 0.03581,
+          "count": 45,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAUIKL3IYGMERDRUN6YSCLWVAKIFG5Q4YJHUKM4S4NJZQIA3BAS6OJPK"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 1.83175,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools",
+          "symbol": "USDC",
+          "tvlUsd": 11382,
+          "apyBase": 0.39551,
+          "apyReward": 0,
+          "apy": 0.39551,
+          "rewardTokens": [],
+          "pool": "51134fc4-19d5-44d2-b4eb-b7215c51a48a",
+          "apyPct1D": 0.00106,
+          "apyPct7D": 0.00642,
+          "apyPct30D": 0.35478,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 63,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "Fixed XLM-USDC Pool",
+          "mu": 6.69442,
+          "sigma": 0.35509,
+          "count": 348,
+          "outlier": false,
+          "underlyingTokens": [
+            "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.27334,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        }
+      ],
+      "blendData": [
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 55017747,
+          "apyBase": 0.0001,
+          "apyReward": 0.09491,
+          "apy": 0.09501,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+          "apyPct1D": -0.0055,
+          "apyPct7D": -0.01364,
+          "apyPct30D": -0.05098,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 88,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 0.20002,
+          "sigma": 0.0051,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.14131,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "XLM",
+          "tvlUsd": 15331949,
+          "apyBase": 0.01982,
+          "apyReward": 0.10809,
+          "apy": 0.12791,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "2d401ed8-2ced-4116-bda9-deb9058d423d",
+          "apyPct1D": -0.0072,
+          "apyPct7D": -0.02344,
+          "apyPct30D": -0.07418,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 85,
+            "binnedConfidence": 3
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 0.21511,
+          "sigma": 0.0045,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.16369,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "USDC",
+          "tvlUsd": 3757429,
+          "apyBase": 13.16968,
+          "apyReward": null,
+          "apy": 13.16968,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "ecf788e3-d2ef-4fdd-9ece-8a2d96226ddf",
+          "apyPct1D": -2.02013,
+          "apyPct7D": 1.21099,
+          "apyPct30D": -2.7906,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 68,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 12.60919,
+          "sigma": 0.11432,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 14.11194,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "USDC",
+          "tvlUsd": 889620,
+          "apyBase": 15.58453,
+          "apyReward": 0.9001,
+          "apy": 16.48463,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "48c597dc-9367-4b4a-aa10-49b9755c4c2e",
+          "apyPct1D": -0.01678,
+          "apyPct7D": 1.43879,
+          "apyPct30D": -0.61254,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 66,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 15.90622,
+          "sigma": 0.13645,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 16.5937,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "EURC",
+          "tvlUsd": 191042,
+          "apyBase": 10.62609,
+          "apyReward": null,
+          "apy": 10.62609,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "3a61420f-6f6e-45f9-accc-8d23f5a32d33",
+          "apyPct1D": 0.01061,
+          "apyPct7D": 0.26993,
+          "apyPct30D": 1.31277,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 66,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "Fixed Pool",
+          "mu": 11,
+          "sigma": 0.09079,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 10.37453,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "EURC",
+          "tvlUsd": 140872,
+          "apyBase": 6.11259,
+          "apyReward": 4.01667,
+          "apy": 10.12926,
+          "rewardTokens": [
+            "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+          ],
+          "pool": "9a2f1f81-0a6e-441d-8219-c13b3520bd57",
+          "apyPct1D": -0.32652,
+          "apyPct7D": -1.30093,
+          "apyPct30D": -1.03495,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 66,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 11.67091,
+          "sigma": 0.05957,
+          "count": 155,
+          "outlier": false,
+          "underlyingTokens": [
+            "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 11.86266,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools",
+          "symbol": "XLM",
+          "tvlUsd": 79471,
+          "apyBase": 0.00008,
+          "apyReward": 0,
+          "apy": 0.00008,
+          "rewardTokens": [],
+          "pool": "5ce8b527-3b4d-4790-8091-aae6c051bd92",
+          "apyPct1D": 0,
+          "apyPct7D": 0,
+          "apyPct30D": -0.0002,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 56.99999999999999,
+            "binnedConfidence": 1
+          },
+          "poolMeta": "Fixed XLM-USDC Pool",
+          "mu": 2.43212,
+          "sigma": 0.23361,
+          "count": 348,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.00012,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools-v2",
+          "symbol": "AQUA",
+          "tvlUsd": 14069,
+          "apyBase": 2.88458,
+          "apyReward": null,
+          "apy": 2.88458,
+          "rewardTokens": [],
+          "pool": "799fd51e-bd83-4a75-8ace-1f33d7e7ffc0",
+          "apyPct1D": 0,
+          "apyPct7D": null,
+          "apyPct30D": null,
+          "stablecoin": false,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Down",
+            "predictedProbability": 73,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "YieldBlox Pool",
+          "mu": 0.38911,
+          "sigma": 0.03581,
+          "count": 45,
+          "outlier": false,
+          "underlyingTokens": [
+            "CAUIKL3IYGMERDRUN6YSCLWVAKIFG5Q4YJHUKM4S4NJZQIA3BAS6OJPK"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 1.83175,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        },
+        {
+          "chain": "Stellar",
+          "project": "blend-pools",
+          "symbol": "USDC",
+          "tvlUsd": 11382,
+          "apyBase": 0.39551,
+          "apyReward": 0,
+          "apy": 0.39551,
+          "rewardTokens": [],
+          "pool": "51134fc4-19d5-44d2-b4eb-b7215c51a48a",
+          "apyPct1D": 0.00106,
+          "apyPct7D": 0.00642,
+          "apyPct30D": 0.35478,
+          "stablecoin": true,
+          "ilRisk": "no",
+          "exposure": "single",
+          "predictions": {
+            "predictedClass": "Stable/Up",
+            "predictedProbability": 63,
+            "binnedConfidence": 2
+          },
+          "poolMeta": "Fixed XLM-USDC Pool",
+          "mu": 6.69442,
+          "sigma": 0.35509,
+          "count": 348,
+          "outlier": false,
+          "underlyingTokens": [
+            "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+          ],
+          "il7d": null,
+          "apyBase7d": null,
+          "apyMean30d": 0.27334,
+          "volumeUsd1d": null,
+          "volumeUsd7d": null,
+          "apyBaseInception": null
+        }
+      ],
+      "metadata": {
+        "apiVersion": "success",
+        "totalPools": 18349,
+        "stellarPercentage": "0.05"
+      },
+      "priority": 2,
+      "description": "Use yields.llama.fi domain with potential chain filtering"
+    }
+  ],
+  "primaryStrategy": {
+    "success": true,
+    "strategy": "Alternative Yields API",
+    "workingUrl": "https://yields.llama.fi/pools?chain=stellar",
+    "parameters": "chain=stellar",
+    "totalPools": 9,
+    "blendPools": 9,
+    "data": [
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "XLM",
+        "tvlUsd": 55017747,
+        "apyBase": 0.0001,
+        "apyReward": 0.09491,
+        "apy": 0.09501,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+        "apyPct1D": -0.0055,
+        "apyPct7D": -0.01364,
+        "apyPct30D": -0.05098,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 88,
+          "binnedConfidence": 3
+        },
+        "poolMeta": "Fixed Pool",
+        "mu": 0.20002,
+        "sigma": 0.0051,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.14131,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "XLM",
+        "tvlUsd": 15331949,
+        "apyBase": 0.01982,
+        "apyReward": 0.10809,
+        "apy": 0.12791,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "2d401ed8-2ced-4116-bda9-deb9058d423d",
+        "apyPct1D": -0.0072,
+        "apyPct7D": -0.02344,
+        "apyPct30D": -0.07418,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 85,
+          "binnedConfidence": 3
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 0.21511,
+        "sigma": 0.0045,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.16369,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "USDC",
+        "tvlUsd": 3757429,
+        "apyBase": 13.16968,
+        "apyReward": null,
+        "apy": 13.16968,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "ecf788e3-d2ef-4fdd-9ece-8a2d96226ddf",
+        "apyPct1D": -2.02013,
+        "apyPct7D": 1.21099,
+        "apyPct30D": -2.7906,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 68,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "Fixed Pool",
+        "mu": 12.60919,
+        "sigma": 0.11432,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 14.11194,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "USDC",
+        "tvlUsd": 889620,
+        "apyBase": 15.58453,
+        "apyReward": 0.9001,
+        "apy": 16.48463,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "48c597dc-9367-4b4a-aa10-49b9755c4c2e",
+        "apyPct1D": -0.01678,
+        "apyPct7D": 1.43879,
+        "apyPct30D": -0.61254,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 66,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 15.90622,
+        "sigma": 0.13645,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 16.5937,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "EURC",
+        "tvlUsd": 191042,
+        "apyBase": 10.62609,
+        "apyReward": null,
+        "apy": 10.62609,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "3a61420f-6f6e-45f9-accc-8d23f5a32d33",
+        "apyPct1D": 0.01061,
+        "apyPct7D": 0.26993,
+        "apyPct30D": 1.31277,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 66,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "Fixed Pool",
+        "mu": 11,
+        "sigma": 0.09079,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 10.37453,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "EURC",
+        "tvlUsd": 140872,
+        "apyBase": 6.11259,
+        "apyReward": 4.01667,
+        "apy": 10.12926,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "9a2f1f81-0a6e-441d-8219-c13b3520bd57",
+        "apyPct1D": -0.32652,
+        "apyPct7D": -1.30093,
+        "apyPct30D": -1.03495,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 66,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 11.67091,
+        "sigma": 0.05957,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 11.86266,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools",
+        "symbol": "XLM",
+        "tvlUsd": 79471,
+        "apyBase": 0.00008,
+        "apyReward": 0,
+        "apy": 0.00008,
+        "rewardTokens": [],
+        "pool": "5ce8b527-3b4d-4790-8091-aae6c051bd92",
+        "apyPct1D": 0,
+        "apyPct7D": 0,
+        "apyPct30D": -0.0002,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 56.99999999999999,
+          "binnedConfidence": 1
+        },
+        "poolMeta": "Fixed XLM-USDC Pool",
+        "mu": 2.43212,
+        "sigma": 0.23361,
+        "count": 348,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.00012,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "AQUA",
+        "tvlUsd": 14069,
+        "apyBase": 2.88458,
+        "apyReward": null,
+        "apy": 2.88458,
+        "rewardTokens": [],
+        "pool": "799fd51e-bd83-4a75-8ace-1f33d7e7ffc0",
+        "apyPct1D": 0,
+        "apyPct7D": null,
+        "apyPct30D": null,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 73,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 0.38911,
+        "sigma": 0.03581,
+        "count": 45,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAUIKL3IYGMERDRUN6YSCLWVAKIFG5Q4YJHUKM4S4NJZQIA3BAS6OJPK"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 1.83175,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools",
+        "symbol": "USDC",
+        "tvlUsd": 11382,
+        "apyBase": 0.39551,
+        "apyReward": 0,
+        "apy": 0.39551,
+        "rewardTokens": [],
+        "pool": "51134fc4-19d5-44d2-b4eb-b7215c51a48a",
+        "apyPct1D": 0.00106,
+        "apyPct7D": 0.00642,
+        "apyPct30D": 0.35478,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 63,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "Fixed XLM-USDC Pool",
+        "mu": 6.69442,
+        "sigma": 0.35509,
+        "count": 348,
+        "outlier": false,
+        "underlyingTokens": [
+          "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.27334,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      }
+    ],
+    "blendData": [
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "XLM",
+        "tvlUsd": 55017747,
+        "apyBase": 0.0001,
+        "apyReward": 0.09491,
+        "apy": 0.09501,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "e8a6579f-75bd-4b55-9084-de31affed8e2",
+        "apyPct1D": -0.0055,
+        "apyPct7D": -0.01364,
+        "apyPct30D": -0.05098,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 88,
+          "binnedConfidence": 3
+        },
+        "poolMeta": "Fixed Pool",
+        "mu": 0.20002,
+        "sigma": 0.0051,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.14131,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "XLM",
+        "tvlUsd": 15331949,
+        "apyBase": 0.01982,
+        "apyReward": 0.10809,
+        "apy": 0.12791,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "2d401ed8-2ced-4116-bda9-deb9058d423d",
+        "apyPct1D": -0.0072,
+        "apyPct7D": -0.02344,
+        "apyPct30D": -0.07418,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 85,
+          "binnedConfidence": 3
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 0.21511,
+        "sigma": 0.0045,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.16369,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "USDC",
+        "tvlUsd": 3757429,
+        "apyBase": 13.16968,
+        "apyReward": null,
+        "apy": 13.16968,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "ecf788e3-d2ef-4fdd-9ece-8a2d96226ddf",
+        "apyPct1D": -2.02013,
+        "apyPct7D": 1.21099,
+        "apyPct30D": -2.7906,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 68,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "Fixed Pool",
+        "mu": 12.60919,
+        "sigma": 0.11432,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 14.11194,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "USDC",
+        "tvlUsd": 889620,
+        "apyBase": 15.58453,
+        "apyReward": 0.9001,
+        "apy": 16.48463,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "48c597dc-9367-4b4a-aa10-49b9755c4c2e",
+        "apyPct1D": -0.01678,
+        "apyPct7D": 1.43879,
+        "apyPct30D": -0.61254,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 66,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 15.90622,
+        "sigma": 0.13645,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 16.5937,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "EURC",
+        "tvlUsd": 191042,
+        "apyBase": 10.62609,
+        "apyReward": null,
+        "apy": 10.62609,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "3a61420f-6f6e-45f9-accc-8d23f5a32d33",
+        "apyPct1D": 0.01061,
+        "apyPct7D": 0.26993,
+        "apyPct30D": 1.31277,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 66,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "Fixed Pool",
+        "mu": 11,
+        "sigma": 0.09079,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 10.37453,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "EURC",
+        "tvlUsd": 140872,
+        "apyBase": 6.11259,
+        "apyReward": 4.01667,
+        "apy": 10.12926,
+        "rewardTokens": [
+          "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY"
+        ],
+        "pool": "9a2f1f81-0a6e-441d-8219-c13b3520bd57",
+        "apyPct1D": -0.32652,
+        "apyPct7D": -1.30093,
+        "apyPct30D": -1.03495,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 66,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 11.67091,
+        "sigma": 0.05957,
+        "count": 155,
+        "outlier": false,
+        "underlyingTokens": [
+          "CDTKPWPLOURQA2SGTKTUQOWRCBZEORB4BWBOMJ3D3ZTQQSGE5F6JBQLV"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 11.86266,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools",
+        "symbol": "XLM",
+        "tvlUsd": 79471,
+        "apyBase": 0.00008,
+        "apyReward": 0,
+        "apy": 0.00008,
+        "rewardTokens": [],
+        "pool": "5ce8b527-3b4d-4790-8091-aae6c051bd92",
+        "apyPct1D": 0,
+        "apyPct7D": 0,
+        "apyPct30D": -0.0002,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 56.99999999999999,
+          "binnedConfidence": 1
+        },
+        "poolMeta": "Fixed XLM-USDC Pool",
+        "mu": 2.43212,
+        "sigma": 0.23361,
+        "count": 348,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.00012,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools-v2",
+        "symbol": "AQUA",
+        "tvlUsd": 14069,
+        "apyBase": 2.88458,
+        "apyReward": null,
+        "apy": 2.88458,
+        "rewardTokens": [],
+        "pool": "799fd51e-bd83-4a75-8ace-1f33d7e7ffc0",
+        "apyPct1D": 0,
+        "apyPct7D": null,
+        "apyPct30D": null,
+        "stablecoin": false,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Down",
+          "predictedProbability": 73,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "YieldBlox Pool",
+        "mu": 0.38911,
+        "sigma": 0.03581,
+        "count": 45,
+        "outlier": false,
+        "underlyingTokens": [
+          "CAUIKL3IYGMERDRUN6YSCLWVAKIFG5Q4YJHUKM4S4NJZQIA3BAS6OJPK"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 1.83175,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      },
+      {
+        "chain": "Stellar",
+        "project": "blend-pools",
+        "symbol": "USDC",
+        "tvlUsd": 11382,
+        "apyBase": 0.39551,
+        "apyReward": 0,
+        "apy": 0.39551,
+        "rewardTokens": [],
+        "pool": "51134fc4-19d5-44d2-b4eb-b7215c51a48a",
+        "apyPct1D": 0.00106,
+        "apyPct7D": 0.00642,
+        "apyPct30D": 0.35478,
+        "stablecoin": true,
+        "ilRisk": "no",
+        "exposure": "single",
+        "predictions": {
+          "predictedClass": "Stable/Up",
+          "predictedProbability": 63,
+          "binnedConfidence": 2
+        },
+        "poolMeta": "Fixed XLM-USDC Pool",
+        "mu": 6.69442,
+        "sigma": 0.35509,
+        "count": 348,
+        "outlier": false,
+        "underlyingTokens": [
+          "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75"
+        ],
+        "il7d": null,
+        "apyBase7d": null,
+        "apyMean30d": 0.27334,
+        "volumeUsd1d": null,
+        "volumeUsd7d": null,
+        "apyBaseInception": null
+      }
+    ],
+    "metadata": {
+      "apiVersion": "success",
+      "totalPools": 18349,
+      "stellarPercentage": "0.05"
+    },
+    "priority": 2,
+    "description": "Use yields.llama.fi domain with potential chain filtering"
+  },
+  "dataValidation": {
+    "valid": true,
+    "errors": [],
+    "qualityScore": 80,
+    "qualityGrade": "B",
+    "summary": {
+      "totalPools": 9,
+      "validPools": 9,
+      "averageQuality": "80.0"
+    }
+  },
+  "riskMetrics": {
+    "risk": "LOW",
+    "score": 15,
+    "factors": [
+      "High APY variance"
+    ],
+    "metrics": {
+      "totalTvl": 75433581,
+      "poolCount": 9,
+      "completePools": 9,
+      "averageApy": "5.99"
+    }
+  },
+  "endTime": "2025-11-29T17:15:34.008Z",
+  "recommendations": [
+    {
+      "priority": 1,
+      "category": "Implementation",
+      "message": "Use Alternative Yields API for production data retrieval"
+    },
+    {
+      "priority": 1,
+      "category": "Data Quality",
+      "message": "High quality data (B grade) suitable for production"
+    },
+    {
+      "priority": 1,
+      "category": "Risk Assessment",
+      "message": "Low risk profile - suitable for insurance calculations"
+    }
+  ],
+  "summary": {
+    "strategiesTested": 2,
+    "successfulStrategies": 1,
+    "totalStellarPools": 9,
+    "totalBlendPools": 9,
+    "dataQuality": "B",
+    "riskLevel": "LOW",
+    "readyForProduction": true
+  }
+}

@@ -1,4 +1,5 @@
 import { Adapter, Opportunity, Chain, CacheEntry, AdapterStats } from './types';
+import { DefiLlamaStellarAdapter } from './protocols/defillama-stellar';
 
 export class AdapterManager {
   private adapters: Map<string, Adapter> = new Map();
@@ -15,6 +16,9 @@ export class AdapterManager {
   private initializeAdapters(): void {
     // Multi-chain DeFi aggregator
     // this.adapters.set('defillama', new DefiLlamaAdapter(['uniswap', 'aave', 'curve']));
+
+    // Stellar adapter - Production ready with $75M+ TVL from Blend protocol
+    this.adapters.set('defillama-stellar', new DefiLlamaStellarAdapter(['blend-pools-v2', 'blend-pools']));
 
     // TODO: Add Ethereum adapters in Phase B
     // this.adapters.set('uniswap', new UniswapAdapter());
@@ -67,9 +71,9 @@ export class AdapterManager {
     }
 
     try {
-      // Fetch from DeFiLlama adapter
+      // Fetch from all available adapters
       const results = await Promise.allSettled([
-        this.fetchOpportunities('defillama'),
+        this.fetchOpportunities('defillama-stellar'),
       ]);
 
       const opportunities = results

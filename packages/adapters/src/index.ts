@@ -1,5 +1,8 @@
 export * from "./types";
 
+// Stellar adapter
+export { DefiLlamaStellarAdapter } from "./protocols/defillama-stellar";
+
 // Browser-compatible adapter
 export { AdapterManager as AdapterManagerBrowser } from "./adapter-manager.browser";
 
@@ -27,25 +30,25 @@ export {
   createSafeFunction
 } from "./utils/error-handling";
 
-// Cache services
-// Cache services
-export {
-  CacheService,
-  cacheService,
-  CacheServiceServer,
-  BackgroundSyncService,
-  backgroundSyncService,
-  CacheKeys,
-  CACHE_PRESETS,
-  CacheUtils,
-} from "./cache";
+// Cache services - Temporarily disabled to fix better-sqlite3 initialization issues
+// TODO: Re-enable after fixing database path configuration
+// export {
+//   CacheService,
+//   cacheService,
+//   CacheServiceServer,
+//   BackgroundSyncService,
+//   backgroundSyncService,
+//   CacheKeys,
+//   CACHE_PRESETS,
+//   CacheUtils,
+// } from "./cache";
 
-export type {
-  CacheStats,
-  CacheConfig,
-  SyncConfig,
-  SyncStats,
-} from "./cache";
+// export type {
+//   CacheStats,
+//   CacheConfig,
+//   SyncConfig,
+//   SyncStats,
+// } from "./cache";
 
 // Risk management system
 export {
