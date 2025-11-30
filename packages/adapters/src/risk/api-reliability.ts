@@ -129,7 +129,7 @@ export class APIReliabilityManager {
     const primary = healthyAdapters[0];
     try {
       const result = await this.executeWithRetry<Opportunity>(
-        () => primary.adapter.detail(id),
+        () => primary.adapter.detail(id) as unknown as Promise<Opportunity>,
         primary.name
       );
       this.recordSuccess(primary.name);
@@ -142,7 +142,7 @@ export class APIReliabilityManager {
       for (let i = 1; i < healthyAdapters.length; i++) {
         try {
           const result = await this.executeWithRetry<Opportunity>(
-            () => healthyAdapters[i].adapter.detail(id),
+            () => healthyAdapters[i].adapter.detail(id) as unknown as Promise<Opportunity>,
             healthyAdapters[i].name
           );
           this.recordSuccess(healthyAdapters[i].name);
@@ -164,7 +164,7 @@ export class APIReliabilityManager {
     for (const adapter of adapters) {
       try {
         const result = await this.executeWithRetry<Opportunity[]>(
-          () => method === 'list' ? adapter.adapter.list() : Promise.resolve([]),
+          () => (method === 'list' ? adapter.adapter.list() : Promise.resolve([])) as unknown as Promise<Opportunity[]>,
           adapter.name
         );
         this.recordSuccess(adapter.name);
@@ -188,7 +188,7 @@ export class APIReliabilityManager {
       .map(adapter =>
         this.executeWithTimeout(
           this.executeWithRetry<Opportunity[]>(
-            () => method === 'list' ? adapter.adapter.list() : Promise.resolve([]),
+            () => (method === 'list' ? adapter.adapter.list() : Promise.resolve([])) as unknown as Promise<Opportunity[]>,
             adapter.name
           ),
           this.aggregationStrategy.timeout
@@ -230,7 +230,7 @@ export class APIReliabilityManager {
       .map(adapter =>
         this.executeWithTimeout(
           this.executeWithRetry<Opportunity[]>(
-            () => method === 'list' ? adapter.adapter.list() : Promise.resolve([]),
+            () => (method === 'list' ? adapter.adapter.list() : Promise.resolve([])) as unknown as Promise<Opportunity[]>,
             adapter.name
           ),
           this.aggregationStrategy.timeout

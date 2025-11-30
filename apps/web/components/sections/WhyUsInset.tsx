@@ -115,7 +115,7 @@ export default function WhyUsInset() {
           {/* Top row */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-7">
-              <div className="text-xs uppercase tracking-[0.18em] text-white/60">
+              <div className="text-xs uppercase tracking-[0.01em] text-white/60">
                 Why Reset
               </div>
               <h2

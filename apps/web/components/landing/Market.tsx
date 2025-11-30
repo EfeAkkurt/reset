@@ -1,13 +1,11 @@
 "use client";
-import React, { useRef, useState, useCallback } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import React, { useRef, useState, useCallback, useMemo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import InsetBackgroundFx from "../sections/_fx/InsetBackgroundFx";
 import { LiveMarketData } from "./LiveMarketData";
 
 export function Market({ progress = 0 }: { progress?: number }) {
   const prefersReducedMotion = useReducedMotion();
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(rootRef, { amount: 0.3, once: true });
 
   // Subtle parallax for background fog; disabled on PRM
   const wrapRef = useRef<HTMLDivElement | null>(null);
@@ -28,6 +26,15 @@ export function Market({ progress = 0 }: { progress?: number }) {
     setParallax({ x: 0, y: 0 });
   }, [prefersReducedMotion]);
 
+  // ScrollOrchestrator renders scenes in a fixed stack, so IntersectionObserver never fires.
+  // Instead, derive the reveal animation directly from the orchestrator's progress to avoid extra observers.
+  const reveal = useMemo(() => {
+    if (prefersReducedMotion) return 1;
+    // use local progress directly to avoid animation stalls if observers fail
+    return Math.min(1, Math.max(0, progress));
+  }, [prefersReducedMotion, progress]);
+  const revealY = prefersReducedMotion ? 0 : (1 - reveal) * 18;
+
   return (
     <section className="h-full relative">
       <div className="relative z-10 mx-auto flex h-full max-w-8xl items-center px-6">
@@ -40,7 +47,6 @@ export function Market({ progress = 0 }: { progress?: number }) {
         >
           <motion.div
             ref={(node: HTMLDivElement | null) => {
-              rootRef.current = node;
               wrapRef.current = node;
             }}
             onMouseMove={onMouseMove}
@@ -52,8 +58,11 @@ export function Market({ progress = 0 }: { progress?: number }) {
               "shadow-[inset_0_1px_0_rgba(255,255,255,.06),0_40px_80px_rgba(0,0,0,.35)]",
               "will-change-transform",
             ].join(" ")}
-            initial={prefersReducedMotion ? undefined : { opacity: 0, y: 8 }}
-            animate={inView ? { opacity: 1, y: 0 } : undefined}
+            initial={false}
+            animate={
+              prefersReducedMotion ? undefined : { opacity: reveal, y: revealY }
+            }
+            style={prefersReducedMotion ? { opacity: 1 } : undefined}
             transition={{
               duration: 0.28,
               ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
@@ -69,7 +78,7 @@ export function Market({ progress = 0 }: { progress?: number }) {
             <div className="relative h-[600px] w-full overflow-hidden">
               <div className="relative z-10 h-full w-full">
                 <div className="absolute left-0 top-0 z-20 p-8 md:p-10 lg:p-12">
-                  <h2 className="font-black tracking-[-0.02em] leading-[0.95] text-white"
+                  <h2 className="font-black tracking-[0.01em] leading-[0.95] text-white"
                       style={{ fontSize: 'clamp(3rem,9vw,6rem)' }}>
                     NUMBERS<br/>DON'T LIE
                   </h2>

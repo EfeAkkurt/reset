@@ -54,9 +54,9 @@ export const WithdrawWidget = memo(() => {
             <div className="w-4 h-4 rounded bg-[var(--gold-300)]/20 flex items-center justify-center">
               <span className="text-xs text-[var(--gold-300)]">⭘</span>
             </div>
-            <span className="text-sm text-white/60">Withdraw Widget</span>
+            <span className="text-sm tracking-[0.05em] text-white/60">Withdraw Widget</span>
           </div>
-          <span className="rounded-full bg-green-500/20 px-3 py-1 text-xs text-green-400 border border-green-500/30">
+          <span className="rounded-full bg-green-500/20 px-3 py-1 text-xs tracking-[0.05em] text-green-400 border border-green-500/30">
             live
           </span>
         </div>
@@ -65,7 +65,7 @@ export const WithdrawWidget = memo(() => {
         <div className="relative flex-1 rounded-xl bg-gradient-to-b from-white/5 to-white/0 p-6 mb-6">
           {/* Amount Input */}
           <div className="mb-6">
-            <div className="text-xs text-white/60 mb-2">Amount</div>
+            <div className="text-xs tracking-[0.05em] text-white/60 mb-2">Amount</div>
             <div className="relative bg-white/5/30 border border-white/10 rounded-lg p-3.5 hover:bg-white/5/50 transition-colors">
               <input
                 type="text"
@@ -85,20 +85,20 @@ export const WithdrawWidget = memo(() => {
                 MAX
               </motion.button>
             </div>
-            <div className="text-xs text-white/60 mt-1">USDC Available</div>
+            <div className="text-xs tracking-[0.01em] text-white/60 mt-1">USDC Available</div>
           </div>
 
           {/* Route Visualization - simplified */}
           <div className="mb-6 p-3.5 rounded-lg bg-white/5/30 border border-white/10">
             {/* ETA/Fee with CSS animations */}
             <div className="flex items-center justify-center gap-4 mb-3">
-              <div className="flex items-center gap-1.5 text-sm text-white/80 animate-pulse">
+              <div className="flex items-center gap-1.5 text-sm tracking-[0.01em] text-white/80 animate-pulse">
                 <span>⏱</span>
                 <span>~12s</span>
               </div>
               <div className="w-px h-4 bg-white/20" />
               <div
-                className="flex items-center gap-1.5 text-sm text-white/80 animate-pulse"
+                className="flex items-center gap-1.5 text-sm tracking-[0.01em] text-white/80 animate-pulse"
                 style={{ animationDelay: "1s" }}
               >
                 <span>⚡</span>
@@ -107,7 +107,7 @@ export const WithdrawWidget = memo(() => {
             </div>
 
             {/* Route Flow - CSS animations instead of motion */}
-            <div className="flex items-center justify-center gap-2 text-sm text-white/80">
+            <div className="flex items-center justify-center gap-2 text-sm tracking-[0.01em] text-white/80">
               <span className="flex items-center gap-1.5">
                 <div className="w-2 h-2 bg-white/30 rounded-full" />
                 <span>Wallet</span>
@@ -167,15 +167,15 @@ export const WithdrawWidget = memo(() => {
         {/* Metrics */}
         <div className="flex items-center justify-center gap-3 text-center">
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">Lockup</span>
+            <span className="text-xs uppercase tracking-[0.05em] text-white/55">Lockup</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">None</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">Status</span>
+            <span className="text-xs uppercase tracking-[0.05em] text-white/55">Status</span>
             <span className="text-sm font-semibold text-green-400">Live</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">APY (net)</span>
+            <span className="text-xs uppercase tracking-[0.05em] text-white/55">APY (net)</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">12.4%</span>
           </div>
         </div>

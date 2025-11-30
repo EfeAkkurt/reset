@@ -3,6 +3,9 @@
 import React, { useCallback, useRef, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { StepCard } from "./StepCard";
+import { RiskStep } from "./RiskStep";
+import { InsuranceStep } from "./InsuranceStep";
+import { WithdrawStep } from "./WithdrawStep";
 
 type Side = "left" | "right";
 
@@ -50,27 +53,8 @@ function useThrottledValue(value: number | undefined, delay: number = 16) {
 
 const STEP_DATA: StepData[] = [
   {
-    side: "left",
-    badge: "Step 01",
-    title: (
-      <>
-        Spot the{" "}
-        <span style={{
-          background: "var(--btn-grad)",
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          color: "transparent",
-        }}>
-          signals
-        </span>{" "}
-        before the crowd
-      </>
-    ),
-    body: "Track every pool and protocol with real-time APRs and TVL shifts across chains",
-  },
-  {
     side: "right",
-    badge: "Step 02",
+    badge: "Step 01",
     title: (
       <>
         Decode the{" "}
@@ -89,7 +73,7 @@ const STEP_DATA: StepData[] = [
   },
   {
     side: "left",
-    badge: "Step 03",
+    badge: "Step 02",
     title: (
       <>
         Shield your{" "}
@@ -108,7 +92,7 @@ const STEP_DATA: StepData[] = [
   },
   {
     side: "right",
-    badge: "Step 04",
+    badge: "Step 03",
     title: (
       <>
         Earn, withdraw, repeat — all in your{" "}
@@ -147,17 +131,61 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
 
   // Render individual step cards
   const renderStepCards = useCallback(() => {
-    return STEP_DATA.map((step, index) => (
-      <StepCard
-        key={step.badge}
-        id={`step-card-${index}`}
-        index={index}
-        step={step}
-        total={STEP_DATA.length}
-        progress={easedProgress}
-        cardsOffset={cardsOffset}
-      />
-    ));
+    return STEP_DATA.map((step, index) => {
+      if (index === 0) {
+        return (
+          <RiskStep
+            key={step.badge}
+            id={`step-card-${index}`}
+            index={index}
+            step={step}
+            total={STEP_DATA.length}
+            progress={easedProgress}
+            cardsOffset={cardsOffset}
+          />
+        );
+      }
+
+      if (index === 1) {
+        return (
+          <InsuranceStep
+            key={step.badge}
+            id={`step-card-${index}`}
+            index={index}
+            step={step}
+            total={STEP_DATA.length}
+            progress={easedProgress}
+            cardsOffset={cardsOffset}
+          />
+        );
+      }
+
+      if (index === 2) {
+        return (
+          <WithdrawStep
+            key={step.badge}
+            id={`step-card-${index}`}
+            index={index}
+            step={step}
+            total={STEP_DATA.length}
+            progress={easedProgress}
+            cardsOffset={cardsOffset}
+          />
+        );
+      }
+
+      return (
+        <StepCard
+          key={step.badge}
+          id={`step-card-${index}`}
+          index={index}
+          step={step}
+          total={STEP_DATA.length}
+          progress={easedProgress}
+          cardsOffset={cardsOffset}
+        />
+      );
+    });
   }, [easedProgress, cardsOffset]);
 
   return (
@@ -195,7 +223,7 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
               willChange: "transform, opacity",
             }}
           >
-            <p className="mb-4 text-sm uppercase tracking-[0.2em] text-white/50">
+            <p className="mb-4 text-sm uppercase tracking-[0.01em] text-white/50">
               The Reset Mechanism
             </p>
             <h2 className="text-4xl font-bold leading-[1.06] md:text-6xl">
@@ -260,7 +288,7 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
         </div>
 
         {/* Cards section */}
-        <div className="relative h-[55vh] flex items-center overflow-visible -mt-8">
+        <div className="relative h-[55vh] flex items-center overflow-visible -mt-32">
           <div className="relative w-full h-[600px] md:h-[700px]">
             {renderStepCards()}
           </div>

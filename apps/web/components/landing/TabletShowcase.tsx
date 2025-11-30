@@ -41,14 +41,15 @@ export function TabletShowcase({ progress }: TabletShowcaseProps) {
         className="relative w-full max-w-[1200px] will-change-transform"
       >
         <div className="relative aspect-[1.38696] w-full overflow-hidden rounded-[32px] border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-          <div className="absolute inset-x-[4.2%] top-[11%] bottom-[11%] z-10">
+          <div className="absolute inset-x-[4.2%] top-[4%] bottom-[19%] z-10">
             <div className="relative h-full w-full overflow-hidden rounded-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
               <Image
-                src="/backgrounds/tabletBG.png"
+                src="/backgrounds/tabletBG.png?v=2"
                 alt="Reset Explore Yield Opportunities interface"
                 fill
                 className="object-cover"
                 priority
+                unoptimized
               />
             </div>
           </div>

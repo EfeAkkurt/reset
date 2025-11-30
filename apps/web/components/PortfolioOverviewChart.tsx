@@ -128,7 +128,7 @@ export default function PortfolioOverviewChart({
       <div className="relative flex flex-col gap-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.55em] text-[#D8D9DE]/70">
+            <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
               Reset Portfolio
             </p>
             <h3 className="mt-2 font-display text-3xl font-black">
@@ -173,7 +173,7 @@ export default function PortfolioOverviewChart({
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:40px_40px]" />
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4 text-sm text-[#CED1DB]">
             <span>TVL (area) • Net PnL (line) • 24H Change (bars)</span>
-            <span className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+            <span className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/70">
               Live charting
             </span>
           </div>
@@ -284,7 +284,7 @@ function MetricBadge({
         : "text-white";
   return (
     <div className="group rounded-3xl border border-white/10 bg-[#17181D] px-5 py-4 shadow-inner shadow-black/30">
-      <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+      <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
         {label}
       </p>
       <p className={clsx("mt-2 font-mono text-3xl", toneClass)}>
@@ -311,7 +311,7 @@ function TimeframeButton({
       type="button"
       onClick={onClick}
       className={clsx(
-        "rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.4em] transition",
+        "rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.05em] transition",
         active
           ? "bg-[#F3A233] text-black shadow-[0_0_30px_rgba(243,162,51,0.35)]"
           : "text-[#D8D9DE]/70 hover:text-white",
@@ -336,7 +336,7 @@ function Tip({
   payload.forEach((p) => (row[p.dataKey] = p.value));
   return (
     <div className="rounded-2xl border border-[rgba(255,182,72,0.3)] bg-[#0B0B0E]/95 px-4 py-3 text-sm text-white shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
-      <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+      <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/60">
         {label}
       </p>
       {"total" in row && (
@@ -389,7 +389,7 @@ function ProjectionCard({
         : "text-rose-200";
   return (
     <div className="rounded-3xl border border-white/10 bg-[#101115] px-5 py-4 shadow-inner shadow-black/40">
-      <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+      <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
         {horizon}d Projection
       </p>
       <div className="mt-3 flex items-center justify-between text-sm">
@@ -404,7 +404,7 @@ function ProjectionCard({
           ${gain.toFixed(2)}
         </span>
       </div>
-      <p className={clsx("mt-2 text-xs uppercase tracking-[0.35em]", confidenceTone)}>
+      <p className={clsx("mt-2 text-xs uppercase tracking-[0.01em]", confidenceTone)}>
         {confidence} confidence
       </p>
     </div>

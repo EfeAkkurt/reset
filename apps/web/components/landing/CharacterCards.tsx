@@ -155,7 +155,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({
           transition: 0.4s ease-in-out;
         }
         .card:hover .heading {
-          letter-spacing: 0.025em;
+          letter-spacing: 0.05em;
         }
 
         .heading::before {

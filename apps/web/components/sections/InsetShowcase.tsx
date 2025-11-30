@@ -98,7 +98,7 @@ export default function InsetShowcase({
             {kicker && (
               <div
                 className={[
-                  "text-sm uppercase tracking-[.18em] text-white/60",
+                  "text-sm uppercase tracking-[0.01em] text-white/60",
                   prefersReducedMotion ? "" : fadeInCls,
                   "transition-all duration-300",
                 ].join(" ")}

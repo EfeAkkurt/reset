@@ -26,19 +26,19 @@ export function LiveMarketData() {
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div>
             <NumberBadge value={25} suffix="M" />
-            <p className="mt-2 text-xs uppercase tracking-wider text-white/40">Principal Protected</p>
+            <p className="mt-2 text-xs uppercase tracking-[0.01em]r text-white/40">Principal Protected</p>
           </div>
           <div>
             <NumberBadge value={300} suffix="+" delay={120} />
-            <p className="mt-2 text-xs uppercase tracking-wider text-white/40">Daily Scans</p>
+            <p className="mt-2 text-xs uppercase tracking-[0.01em]r text-white/40">Daily Scans</p>
           </div>
           <div>
             <NumberBadge value={99.9} suffix="%" decimals={1} delay={220} />
-            <p className="mt-2 text-xs uppercase tracking-wider text-white/40">Uptime</p>
+            <p className="mt-2 text-xs uppercase tracking-[0.01em]r text-white/40">Uptime</p>
           </div>
           <div>
             <NumberBadge value={12} delay={320} />
-            <p className="mt-2 text-xs uppercase tracking-wider text-white/40">Chains</p>
+            <p className="mt-2 text-xs uppercase tracking-[0.01em]r text-white/40">Chains</p>
           </div>
         </div>
       </div>

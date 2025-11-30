@@ -1,9 +1,7 @@
 "use client";
 
 import React, { memo, useMemo } from "react";
-import { motion, useTransform, MotionValue } from "framer-motion";
-import { OpportunityScatter } from "./visuals/OpportunityScatter";
-import { RiskRadar } from "./visuals/RiskRadar";
+import { motion, useTransform, MotionValue, type Variants } from "framer-motion";
 import { InsuranceCoverage } from "./visuals/InsuranceCoverage";
 import { WithdrawWidget } from "./visuals/WithdrawWidget";
 
@@ -27,7 +25,7 @@ interface StepCardProps {
 
 // Memoize the badge component to prevent unnecessary re-renders
 const Badge = memo(({ children }: { children: React.ReactNode }) => (
-  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs tracking-wide uppercase text-white/80">
+  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs tracking-[0.05em] uppercase text-white/80">
     <span className="inline-block h-2 w-2 rounded-full bg-[var(--gold-300)]" />
     {children}
   </div>
@@ -35,16 +33,33 @@ const Badge = memo(({ children }: { children: React.ReactNode }) => (
 
 Badge.displayName = "Badge";
 
+// HeroStats variants for animation
+const cardVariants: Variants = {
+  rest: { scale: 1, rotateZ: 0, y: 0 },
+  hover: (wobble: number) => ({
+    scale: 1.03,
+    rotateZ: wobble,
+    y: -2,
+    transition: { type: "spring", stiffness: 260, damping: 18 },
+  }),
+  tap: { scale: 0.98 },
+};
+
+const innerVariants: Variants = {
+  rest: { scale: 1, y: 0 },
+  hover: {
+    scale: 1.03,
+    y: -4,
+    transition: { type: "spring", stiffness: 320, damping: 16, delay: 0.03 },
+  },
+};
+
 // Memoize visual card factory
 const VisualCard = memo(({ index }: { index: number }) => {
   switch (index) {
-    case 0:
-      return <OpportunityScatter />;
     case 1:
-      return <RiskRadar />;
-    case 2:
       return <InsuranceCoverage />;
-    case 3:
+    case 2:
       return <WithdrawWidget />;
     default:
       return <DefaultVisualCard />;
@@ -134,7 +149,7 @@ export const StepCard = memo<StepCardProps>(({
   );
 
   const visualOrderClasses = useMemo(() =>
-    step.side === "right" ? "lg:order-1 lg:self-start lg:-mt-6 xl:-mt-10 2xl:-mt-12" : "",
+    step.side === "right" ? "lg:order-1 lg:self-start lg:-mt-6 xl:-mt-10 2xl:-mt-12" : "lg:self-start lg:-mt-12 xl:-mt-16 2xl:-mt-20",
     [step.side]
   );
 
@@ -162,10 +177,10 @@ export const StepCard = memo<StepCardProps>(({
         }}
       >
         <Badge>{step.badge}</Badge>
-        <h3 className="text-[32px] font-semibold leading-[1.07] md:text-[40px] lg:text-[44px] lg:leading-[1.04] text-white">
+        <h3 className="text-[32px] font-semibold leading-[1.07] tracking-[0.05em] md:text-[40px] lg:text-[44px] lg:leading-[1.04] text-white">
           {step.title}
         </h3>
-        <p className="mt-3 text-[17px] leading-[1.55] text-white/70 md:text-[18px] line-clamp-2">
+        <p className="mt-3 text-[17px] leading-[1.55] tracking-[0.01em] text-white/70 md:text-[18px] line-clamp-2">
           {step.body}
         </p>
       </motion.div>

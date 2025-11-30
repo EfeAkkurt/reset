@@ -48,24 +48,24 @@ export default async function handler(
       testDb.close();
 
       // Now try to import the CacheService
-      console.log("📦 Importing CacheService...");
-      const { CacheServiceServer } = await import("@adapters/core");
-      console.log("✅ CacheService imported successfully");
+      // console.log("📦 Importing CacheService...");
+      // const { CacheServiceServer } = await import("@adapters/core");
+      // console.log("✅ CacheService imported successfully");
 
-      // Create cache service instance
-      console.log("🚀 Creating CacheService instance...");
-      const cacheService = new CacheServiceServer({
-        dbPath: dbPath,
-        defaultTTL: 5 * 60 * 1000,
-        enableStats: true
-      });
-      console.log("✅ CacheService instance created successfully");
+      // // Create cache service instance
+      // console.log("🚀 Creating CacheService instance...");
+      // const cacheService = new CacheServiceServer({
+      //   dbPath: dbPath,
+      //   defaultTTL: 5 * 60 * 1000,
+      //   enableStats: true
+      // });
+      // console.log("✅ CacheService instance created successfully");
 
-      // Try to get cache stats to see if it's working
-      const stats = await cacheService.getStats();
-      result.cacheStats = stats;
-      result.cacheInitialized = true;
-      console.log("✅ Cache stats retrieved:", stats);
+      // // Try to get cache stats to see if it's working
+      // const stats = await cacheService.getStats();
+      // result.cacheStats = stats;
+      // result.cacheInitialized = true;
+      // console.log("✅ Cache stats retrieved:", stats);
 
       // Check if database file exists
       if (fs.existsSync(dbPath)) {
@@ -84,10 +84,11 @@ export default async function handler(
 
     // Test background sync service
     try {
-      const { backgroundSyncService } = await import("@adapters/core");
-      const syncStats = backgroundSyncService.getStats();
-      result.syncStats = syncStats;
-      result.backgroundSyncRunning = true;
+      // const { backgroundSyncService } = await import("@adapters/core");
+      // const syncStats = backgroundSyncService.getStats();
+      // result.syncStats = syncStats;
+      // result.backgroundSyncRunning = true;
+      console.log("Background sync service temporarily disabled");
     } catch (error) {
       console.warn("Background sync not available:", error.message);
     }

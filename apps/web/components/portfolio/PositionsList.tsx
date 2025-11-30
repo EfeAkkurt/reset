@@ -218,13 +218,13 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
                     {l.letter}
                   </div>
                   <div>
-                    <p className="text-[11px] uppercase tracking-[0.45em] text-[#D8D9DE]/70">
+                    <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
                       {p.protocol} Strategy
                     </p>
                     <p className="mt-1 text-2xl font-semibold text-white">
                       {p.pair}
                     </p>
-                    <p className="text-xs uppercase tracking-[0.3em] text-[#D8D9DE]/60">
+                    <p className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/60">
                       {chainLabel} · TVL {(p.tvlUsd / 1_000_000).toFixed(2)}M
                     </p>
                   </div>
@@ -284,7 +284,7 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
                 <div className="mt-3 h-px w-full bg-gradient-to-r from-transparent via-[#F3A233]/35 to-transparent" />
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-2 text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+              <div className="mt-6 flex flex-wrap gap-2 text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/60">
                 Reward schedule aligned with ZEST incentives.
               </div>
 
@@ -306,7 +306,7 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
                     exit={{ opacity: 0, height: 0 }}
                     className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-[#0B0B0D] p-4 text-sm text-[#D8D9DE]"
                   >
-                    <div className="text-[11px] uppercase tracking-[0.4em] text-[#F3A233]">
+                    <div className="text-[11px] uppercase tracking-[0.01em] text-[#F3A233]">
                       Transaction History
                     </div>
                     <div className="mt-3 space-y-2 text-[13px]">
@@ -354,7 +354,7 @@ function Metric({
 }) {
   return (
     <div className={`group ${className}`}>
-      <div className="text-[11px] uppercase tracking-[0.4em] text-[#D8D9DE]/60">
+      <div className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/60">
         {label}
       </div>
       <div className="mt-1 font-mono text-lg tabular-nums text-white">
@@ -368,7 +368,7 @@ function Metric({
 function RiskBadge({ level }: { level: "Low" | "Medium" | "High" }) {
   return (
     <span
-      className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] ${RISK_COLORS[level]}`}
+      className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.01em] ${RISK_COLORS[level]}`}
       style={{ borderWidth: '0.7px' }}
     >
       {level} Risk
@@ -390,7 +390,7 @@ function ActionButton({
   ...props
 }: ActionButtonProps) {
   const base =
-    "flex-1 rounded-xl border px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] transition disabled:pointer-events-none disabled:opacity-40 text-center inline-flex items-center justify-center";
+    "flex-1 rounded-xl border px-4 py-2 text-xs font-semibold uppercase tracking-[0.01em] transition disabled:pointer-events-none disabled:opacity-40 text-center inline-flex items-center justify-center";
   const variants: Record<string, string> = {
     ghost:
       "border-white/10 bg-transparent text-white hover:border-[#F3A233]/40",

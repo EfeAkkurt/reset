@@ -32,7 +32,7 @@ export const AccountSummary: React.FC<{ rows: RedirectEntry[] }> = ({
       <div className="relative overflow-hidden rounded-[28px] border border-[rgba(255,182,72,0.25)] bg-gradient-to-b from-[#151518] to-[#0A0A0B] p-6 shadow-[0_25px_60px_rgba(0,0,0,0.65)]">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 via-white/5 to-transparent opacity-40" />
         <div className="relative">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.55em] text-[#D8D9DE]/70">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#D8D9DE]/70">
             Account Summary
           </p>
           <div className="mt-6 grid gap-5">
@@ -65,14 +65,14 @@ function KPI({
 }) {
   return (
     <div className="group">
-      <div className="text-[12px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+      <div className="text-[12px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
         {label}
       </div>
       <div className="mt-2 font-mono text-3xl font-black tabular-nums text-white">
         {value}
       </div>
       {muted && (
-        <div className="text-xs uppercase tracking-[0.4em] text-[#D8D9DE]/40">
+        <div className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/40">
           {muted}
         </div>
       )}

@@ -73,7 +73,7 @@ function KPI({
 }) {
   return (
     <div>
-      <div className="text-[11px] uppercase tracking-wide text-zinc-500">
+      <div className="text-[11px] uppercase tracking-[0.01em] text-zinc-500">
         {label}
       </div>
       <div className={`tabular-nums font-semibold ${color}`}>{children}</div>

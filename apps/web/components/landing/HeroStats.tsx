@@ -79,7 +79,7 @@ export function HeroStats({ className }: HeroStatsProps) {
             variants={innerVariants}
             className="relative z-10 flex flex-1 flex-col gap-4"
           >
-            <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-[rgba(216,217,222,0.8)]">
+            <span className="text-[11px] font-medium uppercase tracking-[0.01em] text-[rgba(216,217,222,0.8)]">
               {stat.label}
             </span>
             <div className="space-y-2">

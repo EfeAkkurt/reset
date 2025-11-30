@@ -393,7 +393,7 @@ function MetricCard({
     >
       <div className="flex items-center justify-between mb-1">
         <span
-          className={`text-[10px] uppercase tracking-wide ${highlight ? "text-white/80" : "text-zinc-500"}`}
+          className={`text-[10px] uppercase tracking-[0.01em] ${highlight ? "text-white/80" : "text-zinc-500"}`}
         >
           {label}
         </span>

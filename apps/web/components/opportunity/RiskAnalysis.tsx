@@ -237,7 +237,7 @@ export function RiskAnalysis({ data }: RiskAnalysisProps) {
       className="space-y-6 rounded-[32px] border border-[rgba(255,182,72,0.16)] bg-[#070708]/95 p-6 text-white shadow-[0_35px_90px_rgba(0,0,0,0.6)]"
     >
       <div className="flex flex-col gap-2">
-        <p className="text-[11px] uppercase tracking-[0.45em] text-[#D8D9DE]/70">
+        <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
           Risk Analysis
         </p>
         <h2 className="text-2xl font-black">Institutional risk engine</h2>
@@ -254,7 +254,7 @@ export function RiskAnalysis({ data }: RiskAnalysisProps) {
         <>
           <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
             <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-b from-[#121214] to-[#070708] p-6 text-center shadow-inner shadow-black/50">
-              <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+              <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/60">
                 Global Risk Score
               </p>
               <GaugeChart score={riskScore} />
@@ -304,7 +304,7 @@ export function RiskAnalysis({ data }: RiskAnalysisProps) {
                 key={factor.label}
                 className="rounded-2xl border border-white/10 bg-[#101215] px-4 py-3 shadow-inner shadow-black/40"
               >
-                <p className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+                <p className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/70">
                   {factor.label}
                 </p>
                 <p className={clsx("mt-2 font-mono text-xl", factor.color)}>
@@ -322,15 +322,12 @@ export function RiskAnalysis({ data }: RiskAnalysisProps) {
               <Gauge size={16} />
               Market Conditions:
             </div>
-            <span className="rounded-full border border-white/20 bg-black/40 px-3 py-1 text-xs uppercase tracking-[0.35em] text-[#D8D9DE]">
+            <span className="rounded-full border border-white/20 bg-black/40 px-3 py-1 text-xs uppercase tracking-[0.01em] text-[#D8D9DE]">
               {riskData?.marketRegime?.toUpperCase() ?? "LOW VOLATILITY"} —{" "}
               {Math.round(
                 (riskData?.marketVolatility?.daily ?? 0.32) * 100,
               )}
               %
-            </span>
-            <span className="text-xs text-[#A2A7B5]">
-              Transparent oracle-backed signals
             </span>
           </div>
         </>
@@ -372,7 +369,7 @@ function GaugeChart({ score }: { score: number }) {
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+        <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
           Score
         </p>
         <p className="font-mono text-5xl text-white">{score}</p>
