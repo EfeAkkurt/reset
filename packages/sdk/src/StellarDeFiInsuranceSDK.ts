@@ -3,8 +3,10 @@
  * Provides a unified interface for interacting with all contracts in the ecosystem
  */
 
-import { Server, Networks, TransactionBuilder, Keypair } from '@stellar/stellar-sdk';
-import { xdr } from '@stellar/stellar-base';
+// Avoid static imports of @stellar/stellar-sdk in browser bundles to bypass sodium-native/Node polyfills.
+// We'll lazy-require when needed; xdr is lightweight enough to require directly.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { xdr } = require('@stellar/stellar-base');
 
 import {
   NetworkConfig,
@@ -55,7 +57,7 @@ export interface SDKContracts {
 
 export class StellarDeFiInsuranceSDK {
   private config: SDKConfig;
-  private server: Server;
+  private server: any;
   private sorobanClient: any; // Soroban RPC client
   private wallet?: WalletConfig;
   private contracts: SDKContracts;
@@ -78,13 +80,13 @@ export class StellarDeFiInsuranceSDK {
         network: 'mainnet',
         sorobanRpcUrl: 'https://soroban.stellar.org',
         horizonUrl: 'https://horizon.stellar.org',
-        networkPassphrase: Networks.PUBLIC
+        networkPassphrase: 'Public Global Stellar Network ; September 2015'
       },
       testnet: {
         network: 'testnet',
         sorobanRpcUrl: 'https://soroban-testnet.stellar.org',
         horizonUrl: 'https://horizon-testnet.stellar.org',
-        networkPassphrase: Networks.TESTNET
+        networkPassphrase: 'Test SDF Network ; September 2015'
       },
       futurenet: {
         network: 'futurenet',
@@ -111,7 +113,7 @@ export class StellarDeFiInsuranceSDK {
   /**
    * Get the Stellar Horizon server instance
    */
-  getServer(): Server {
+  getServer(): any {
     return this.server;
   }
 
@@ -244,61 +246,11 @@ export class StellarDeFiInsuranceSDK {
     assetCode: string = 'XLM',
     memo?: string
   ): Promise<ContractCallResult<{ transactionHash: string }>> {
-    try {
-      if (!validateStellarAddress(toAddress)) {
-        throw new ConfigurationError('Invalid recipient address');
-      }
-
-      const keypair = Keypair.fromSecret(fromSecret);
-      const sourceAccount = await this.server.loadAccount(keypair.publicKey());
-
-      let transactionBuilder = new TransactionBuilder(sourceAccount, {
-        fee: '100',
-        networkPassphrase: this.config.network.networkPassphrase
-      });
-
-      if (memo) {
-        transactionBuilder = transactionBuilder.addMemo(xdr.Memo.text(memo));
-      }
-
-      let payment;
-      if (assetCode === 'XLM') {
-        payment = {
-          destination: toAddress,
-          asset: xdr.Asset.native(),
-          amount: amount
-        };
-      } else {
-        // For non-native assets, you would need to implement asset creation
-        throw new ConfigurationError('Non-native assets not yet implemented');
-      }
-
-      const transaction = transactionBuilder
-        .addOperation(xdr.Operation.payment(payment))
-        .setTimeout(30)
-        .build();
-
-      transaction.sign(keypair);
-
-      const result = await this.server.submitTransaction(transaction);
-
-      if (result.successful) {
-        return {
-          success: true,
-          result: { transactionHash: result.hash }
-        };
-      } else {
-        return {
-          success: false,
-          error: result.resultMetaXdr?.toString() || 'Transaction failed'
-        };
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : String(error)
-      };
-    }
+    // Browser/demo stub: disabled to avoid sodium-native/Server issues
+    return {
+      success: false,
+      error: 'sendPayment is disabled in browser demo mode',
+    };
   }
 
   /**
@@ -440,7 +392,28 @@ export class StellarDeFiInsuranceSDK {
 
   private initializeClients(): void {
     try {
-      this.server = new Server(this.config.network.horizonUrl);
+      let ServerCtor: any;
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const stellar = require('@stellar/stellar-sdk');
+        ServerCtor = stellar.Server || (stellar.default && stellar.default.Server);
+      } catch {
+        ServerCtor = undefined;
+      }
+
+      if (ServerCtor) {
+        this.server = new ServerCtor(this.config.network.horizonUrl);
+      } else {
+        // Browser/demo stub
+        this.server = {
+          loadAccount: async () => {
+            throw new Error('Horizon client unavailable in browser stub');
+          },
+          ledgers: () => ({ limit: () => ({ call: async () => ({}) }) }),
+          transactions: () => ({ transaction: () => ({ call: async () => ({}) }) }),
+          submitTransaction: async () => ({ successful: false, hash: '' }),
+        };
+      }
 
       // Initialize Soroban RPC client
       // Note: You would need to import the actual Soroban client here

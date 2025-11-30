@@ -10,7 +10,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  transpilePackages: ['@adapters/core'],
+  transpilePackages: ['@adapters/core', '@stellar-defi-insurance/sdk'],
 };
 
 module.exports = nextConfig;

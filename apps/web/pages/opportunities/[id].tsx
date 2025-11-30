@@ -18,6 +18,9 @@ import {
 } from "@/components/ui/ErrorNotification";
 import { getTestNetOpportunities } from "@/lib/mock/testnet-opportunities";
 import type { OpportunityDetail } from "@shared/core";
+import { useInsurance } from "@/hooks/useInsurance";
+import { toast } from "sonner";
+import { TestnetYieldDemo } from "@/components/opportunity/TestnetYieldDemo";
 
 export default function OpportunityDetailPage() {
   const router = useRouter();
@@ -30,6 +33,7 @@ export default function OpportunityDetailPage() {
   const [errorType, setErrorType] = React.useState<
     "chart-data" | "general" | null
   >(null);
+  const { insure, isInsured, insuring } = useInsurance();
 
   // Retry function for data loading
   const handleRetry = React.useCallback(() => {
@@ -261,7 +265,35 @@ export default function OpportunityDetailPage() {
             </div>
           )}
 
-          {data && <OpportunityHero data={data} />}
+          {data && (
+            <OpportunityHero
+              data={data}
+              insured={isInsured(data.id)}
+              insuring={insuring}
+              onInsure={async () => {
+                const result = await insure({
+                  id: data.id,
+                  protocol: data.protocol,
+                  pair: data.pair,
+                  tvlUsd: data.tvlUsd,
+                });
+
+                if (result?.success) {
+                  toast.success("Policy activated", {
+                    description: result.txHash
+                      ? `Tx hash: ${result.txHash}`
+                      : undefined,
+                  });
+                } else if (result?.connected === false) {
+                  toast("Connect your Stellar wallet to continue");
+                } else if (result?.error) {
+                  toast.error("Insurance failed", {
+                    description: result.error,
+                  });
+                }
+              }}
+            />
+          )}
 
           {data && (
             <div className="mt-6 flex items-center justify-end">
@@ -301,6 +333,9 @@ export default function OpportunityDetailPage() {
                   coverageCapUSD={100000}
                   riskScore={32}
                 />
+              )}
+              {data && data.id === "testnet-mock-yield-stellar" && (
+                <TestnetYieldDemo />
               )}
             </div>
           </div>

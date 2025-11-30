@@ -2,6 +2,21 @@ import { CardOpportunity } from "@/lib/types";
 
 const STELLAR_MOCK_OPPORTUNITIES: CardOpportunity[] = [
   {
+    id: "testnet-mock-yield-stellar",
+    protocol: "Reset (Testnet)",
+    pair: "XLM Yield (Aggregator)",
+    chain: "Stellar",
+    apr: 2.5,
+    apy: 2.6,
+    risk: "Low",
+    tvlUsd: 50_000,
+    rewardToken: "XLM",
+    lastUpdated: "live",
+    originalUrl: "https://soroban-testnet.stellar.org",
+    summary: "Live demo against the deployed YieldAggregator contract on Soroban testnet. Deposit and add yield in the UI to see it update.",
+    source: "demo",
+  },
+  {
     id: "stellar-aqua-xlm-usdc",
     protocol: "Aqua",
     pair: "XLM / USDC",

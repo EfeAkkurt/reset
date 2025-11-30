@@ -21,9 +21,12 @@ type Opportunity = {
 
 interface OpportunityHeroProps {
   data: Opportunity;
+  insured?: boolean;
+  insuring?: boolean;
+  onInsure?: () => void;
 }
 
-export function OpportunityHero({ data }: OpportunityHeroProps) {
+export function OpportunityHero({ data, insured, insuring, onInsure }: OpportunityHeroProps) {
   const { protocol, pair, risk, chain, lastUpdated, apr, apy, tvlUsd, summary } =
     data;
 
@@ -105,6 +108,25 @@ export function OpportunityHero({ data }: OpportunityHeroProps) {
             <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(255,182,72,0.16)] bg-[#1A1B1E]/80 px-3 py-[6px] text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]">
               Updated {lastUpdated || "4m"}
             </span>
+            {insured ? (
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-[6px] text-[11px] font-semibold uppercase tracking-[0.01em] text-emerald-200">
+                <span role="img" aria-label="Protected">
+                  🔒
+                </span>
+                Protected by RESET Insurance
+              </span>
+            ) : (
+              onInsure && (
+                <button
+                  type="button"
+                  onClick={onInsure}
+                  className="inline-flex items-center gap-2 rounded-full border border-[#F3A233]/60 bg-[#F3A233]/10 px-4 py-[6px] text-[11px] font-semibold uppercase tracking-[0.01em] text-white transition hover:border-[#F3A233]/80"
+                  disabled={insuring}
+                >
+                  {insuring ? "Insuring..." : "Insure"}
+                </button>
+              )
+            )}
           </div>
 
           <p className="mt-4 max-w-xl text-[14px] leading-relaxed text-[#D8D9DE]">

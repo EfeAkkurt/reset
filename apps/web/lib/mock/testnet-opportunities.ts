@@ -24,15 +24,4 @@ export const TESTNET_OPPORTUNITIES: Opportunity[] = [
   TESTNET_MOCK_YIELD_OPPORTUNITY,
 ];
 
-export const isTestNetMode = (): boolean => {
-  // Check both server-side and client-side environment variables
-  return process.env.STELLAR_NETWORK === 'testnet' ||
-         process.env.NEXT_PUBLIC_STELLAR_NETWORK === 'testnet';
-};
-
-export const getTestNetOpportunities = (): Opportunity[] => {
-  if (!isTestNetMode()) {
-    return [];
-  }
-  return TESTNET_OPPORTUNITIES;
-};
+export const getTestNetOpportunities = (): Opportunity[] => TESTNET_OPPORTUNITIES;

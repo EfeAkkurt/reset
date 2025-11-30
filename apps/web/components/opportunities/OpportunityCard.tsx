@@ -57,8 +57,13 @@ const getTokenName = (address: string): string => {
 };
 
 export const OpportunityCard: React.FC<
-  { data: Opportunity } & { disabled?: boolean } & { onClick?: () => void }
-> = ({ data, disabled, onClick }) => {
+  {
+    data: Opportunity;
+    insured?: boolean;
+    insuring?: boolean;
+    onInsure?: () => void;
+  } & { disabled?: boolean } & { onClick?: () => void }
+> = ({ data, insured, insuring, onInsure, disabled, onClick }) => {
   const router = useRouter();
 
   const handleNavigate = React.useCallback(() => {
@@ -123,17 +128,27 @@ export const OpportunityCard: React.FC<
 
 
         </div>
-        <span
-          className={clsx(
-            "inline-flex items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.01em] transition-colors",
-            riskStyles[data.risk].badge,
-          )}
-        >
+        <div className="flex flex-col items-end gap-2">
           <span
-            className={clsx("h-2 w-1.5 rounded-full", riskStyles[data.risk].dot)}
-          />
-          {data.risk}
-        </span>
+            className={clsx(
+              "inline-flex items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.01em] transition-colors",
+              riskStyles[data.risk].badge,
+            )}
+          >
+            <span
+              className={clsx("h-2 w-1.5 rounded-full", riskStyles[data.risk].dot)}
+            />
+            {data.risk}
+          </span>
+          {insured ? (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-1 text-[11px] font-semibold text-emerald-200">
+              <span role="img" aria-label="Protected">
+                🔒
+              </span>
+              Protected by RESET Insurance
+            </span>
+          ) : null}
+        </div>
       </div>
       {/* Token Information */}
       <div className="space-y-1 flex items-center w-full">
@@ -191,12 +206,32 @@ export const OpportunityCard: React.FC<
       </div>
 
       <div className="mt-8 flex items-center justify-between text-gold-400">
-        <span className="text-sm font-medium tracking-[0.01em] text-white/70">
-          View details
-        </span>
-        <span className="rounded-full border border-gold-500/50 bg-gold-500/10 p-2 transition group-hover:bg-gold-500/30 group-hover:text-white">
-          <ArrowUpRight className="h-4 w-4" />
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium tracking-[0.01em] text-white/70">
+            View details
+          </span>
+          <span className="rounded-full border border-gold-500/50 bg-gold-500/10 p-2 transition group-hover:bg-gold-500/30 group-hover:text-white">
+            <ArrowUpRight className="h-4 w-4" />
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            if (disabled || !onInsure) return;
+            onInsure();
+          }}
+          className={clsx(
+            "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.2em]",
+            insured
+              ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-100"
+              : "border-[#F3A233]/60 bg-[#F3A233]/10 text-white hover:border-[#F3A233]/80",
+            insuring && "opacity-70",
+          )}
+          disabled={disabled || insuring}
+        >
+          {insured ? "Insured" : insuring ? "Insuring..." : "Insure"}
+        </button>
       </div>
     </article>
   );

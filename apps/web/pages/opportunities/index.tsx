@@ -13,6 +13,9 @@ import type { CardOpportunity } from "@/lib/types";
 import OpportunityCardPlaceholder from "@/components/OpportunityCardPlaceholder";
 // Enhanced components temporarily removed due to TypeScript errors
 // import { ChartTimeSelector } from "@/components/enhanced/TimeSelector";
+import { useInsurance } from "@/hooks/useInsurance";
+import { toast } from "sonner";
+import { getTestNetOpportunities } from "@/lib/mock/testnet-opportunities";
 
 export default function OpportunitiesPage() {
   const [risk, setRisk] = React.useState<"all" | "Low" | "Medium" | "High">(
@@ -32,6 +35,7 @@ export default function OpportunitiesPage() {
     [],
   );
   const [error, setError] = React.useState<string | null>(null);
+  const { insure, isInsured, insuring } = useInsurance();
 
   // Load opportunities data from real APIs only
   React.useEffect(() => {
@@ -56,6 +60,25 @@ export default function OpportunitiesPage() {
           }),
         );
 
+        // Always add the testnet mock aggregator card so it appears in the list
+        const testnet = getTestNetOpportunities().map((it) => ({
+          id: it.id,
+          protocol: "Reset (Testnet)",
+          pair: it.pool || `${it.tokens?.join(" / ") || "XLM"} Yield`,
+          chain: "Stellar",
+          apr: it.apr,
+          apy: it.apy,
+          risk: (it.risk || "low").charAt(0).toUpperCase() + (it.risk || "low").slice(1),
+          tvlUsd: it.tvlUsd,
+          rewardToken: Array.isArray(it.rewardToken) ? it.rewardToken[0] : it.rewardToken,
+          lastUpdated: "live",
+          originalUrl: "https://soroban-testnet.stellar.org",
+          summary: "Live Soroban testnet demo for the deployed YieldAggregator contract.",
+          source: "demo" as const,
+          tokens: it.tokens,
+          poolId: it.poolId,
+        })) as CardOpportunity[];
+
         // Basic stats (client-side)
         const realStats = {
           avgApr7d: realOpportunities.length
@@ -63,7 +86,7 @@ export default function OpportunitiesPage() {
               realOpportunities.length
             : 0,
           totalTvlUsd: realOpportunities.reduce((a, o) => a + o.tvlUsd, 0),
-          results: realOpportunities.length,
+          results: realOpportunities.length + testnet.length,
         };
 
         if (!mounted) return;
@@ -75,7 +98,7 @@ export default function OpportunitiesPage() {
           `📊 Stats: ${realStats.avgApr7d.toFixed(1)}% avg APR, $${(realStats.totalTvlUsd / 1_000_000).toFixed(1)}M TVL`,
         );
 
-        setOpportunities(realOpportunities);
+        setOpportunities([...realOpportunities, ...testnet]);
       } catch (error) {
         Logger.error(
           "❌ FAILED to load real data - this should not happen in production!",
@@ -288,6 +311,30 @@ export default function OpportunitiesPage() {
                   <OpportunityCard
                     key={o.id}
                     data={o}
+                    insured={isInsured(o.id)}
+                    insuring={insuring}
+                    onInsure={async () => {
+                      const result = await insure({
+                        id: o.id,
+                        protocol: o.protocol,
+                        pair: o.pair,
+                        tvlUsd: o.tvlUsd,
+                      });
+
+                      if (result?.success) {
+                        toast.success("Policy activated", {
+                          description: result.txHash
+                            ? `Tx hash: ${result.txHash}`
+                            : undefined,
+                        });
+                      } else if (result?.connected === false) {
+                        toast("Connect your Stellar wallet to continue");
+                      } else if (result?.error) {
+                        toast.error("Insurance failed", {
+                          description: result.error,
+                        });
+                      }
+                    }}
                     disabled={false}
                   />
                 );
