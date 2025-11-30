@@ -43,13 +43,13 @@ export default function OpportunitiesPage() {
         setError(null);
 
         Logger.info(
-          "🚀 Loading real Stellar opportunities from DeFiLlama API (/api/opportunities-stellar)...",
+          "🚀 Loading real Stellar opportunities from real data adapter (/api/opportunities)...",
         );
 
-        const resp = await fetch("/api/opportunities-stellar");
+        const resp = await fetch("/api/opportunities");
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const json = await resp.json();
-        const realOpportunities: CardOpportunity[] = (json.data || []).map(
+        const realOpportunities: CardOpportunity[] = (json.items || []).map(
           (it: CardOpportunity) => ({
             ...it,
             source: it.source ?? "live",

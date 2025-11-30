@@ -95,8 +95,12 @@ function transformDefiLlamaPool(pool: DefiLlamaPool): Opportunity | null {
   const rewardTokens = pool.rewardTokens || [];
   const primaryRewardToken = rewardTokens[0] || "XLM";
 
-  // Generate unique ID
-  const id = `${pool.chain}-${pool.project}-${pool.pool || pool.symbol}`.toLowerCase().replace(/\s+/g, '-');
+  // Generate ID that matches real data adapter format
+  // Create cleaner IDs like "blend-pools-v2-xlm" instead of "stellar-blend-pools-v2-uuid"
+  const primaryToken = underlyingTokens.length > 0 ? underlyingTokens[0].slice(-4).toLowerCase() :
+                      pool.symbol?.slice(-4).toLowerCase() || 'pool';
+
+  const id = `${pool.project.toLowerCase()}-${primaryToken}`;
 
   return {
     id,

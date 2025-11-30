@@ -25,6 +25,7 @@ const nextConfig = {
         'better-sqlite3': 'commonjs better-sqlite3',
       };
     }
+
     return config;
   },
 };

@@ -12,8 +12,9 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-} from "recharts";
+} from "@/components/charts/DynamicRecharts";
 import clsx from "clsx";
+import { ChartWrapper } from "@/components/ui/ChartWrapper";
 
 type Period = "24H" | "7D" | "30D" | "90D";
 type Row = { t: string; total: number; pnl: number; chg24h: number };
@@ -177,7 +178,8 @@ export default function PortfolioOverviewChart({
             </span>
           </div>
           <div className="h-80">
-            <ResponsiveContainer width="100%" height="100%">
+            <ChartWrapper>
+              <ResponsiveContainer width="100%" height="100%">
               <ComposedChart
                 data={chartData}
                 margin={{ top: 10, right: 20, bottom: 0, left: -10 }}
@@ -242,6 +244,7 @@ export default function PortfolioOverviewChart({
                 />
               </ComposedChart>
             </ResponsiveContainer>
+            </ChartWrapper>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-[#A2A8B7]">
             <LegendSwatch color="#F3A233" label="Total Value" />

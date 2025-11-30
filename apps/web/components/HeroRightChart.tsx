@@ -18,7 +18,8 @@ import {
   Tooltip,
   ReferenceDot,
   CartesianGrid,
-} from "recharts";
+} from "@/components/charts/DynamicRechartsExtended";
+import { ChartWrapper } from "@/components/ui/ChartWrapper";
 import SoftParticles from "@/components/particles/SoftParticles";
 import { compactCurrency, percent1, SeriesPoint } from "@/lib/mock/series";
 // Enhanced components temporarily removed due to TypeScript errors
@@ -244,7 +245,8 @@ export default function HeroRightChart(props: HeroRightChartProps) {
           }}
         >
           {series.length > 0 && (
-            <ResponsiveContainer width="100%" height="100%">
+            <ChartWrapper>
+              <ResponsiveContainer width="100%" height="100%">
               <ComposedChart
                 data={derivedSeries}
                 margin={{ top: 24, right: 12, bottom: 26, left: 0 }}
@@ -352,6 +354,7 @@ export default function HeroRightChart(props: HeroRightChartProps) {
                 )}
               </ComposedChart>
             </ResponsiveContainer>
+            </ChartWrapper>
           )}
         </motion.div>
 
