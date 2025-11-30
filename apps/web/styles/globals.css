@@ -597,11 +597,14 @@ h1, h2, h3, .font-display {
 }
 
 @keyframes logoClick {
-  0% { transform: scale(1) rotate(0deg); }
-  25% { transform: scale(0.9) rotate(-5deg); }
-  50% { transform: scale(0.8) rotate(5deg); }
-  75% { transform: scale(0.9) rotate(-2deg); }
-  100% { transform: scale(0) rotate(0deg); opacity: 0; }
+  0% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(1080deg); /* 3 full rotations */
+    opacity: 0;
+  }
 }
 
 /* Header scroll hide/show animations */

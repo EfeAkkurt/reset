@@ -31,18 +31,19 @@ type RedirectEntry = {
 export default function PortfolioPage() {
   // const [positions, setPositions] = React.useState<UserPosition[]>([]); // TODO: Use when wallet integration ready
   const [rows, setRows] = React.useState<RedirectEntry[]>([]);
-  const [period, setPeriod] = React.useState<"24H" | "7D" | "30D">("30D");
+  const [period, setPeriod] = React.useState<"24H" | "7D" | "30D" | "90D">("30D");
   const [loading, setLoading] = React.useState(true);
   const [error] = React.useState<string | null>(null);
 
   // Overview chart row type for explicit shape
   type OverviewRow = { t: string; total: number; pnl: number; chg24h: number };
   const [overviewByPeriod, setOverviewByPeriod] = React.useState<
-    Record<"24H" | "7D" | "30D", OverviewRow[]>
+    Record<"24H" | "7D" | "30D" | "90D", OverviewRow[]>
   >({
     "24H": [],
     "7D": [],
     "30D": [],
+    "90D": [],
   });
   // Rewards chart data
   type RewardPoint = {
@@ -213,10 +214,16 @@ export default function PortfolioPage() {
         seed + 3,
         Math.round(baseTotal * 0.92),
       );
+      const overview90 = genOverview(
+        90,
+        seed + 4,
+        Math.round(baseTotal * 0.85),
+      );
       setOverviewByPeriod({
         "24H": overview24,
         "7D": overview7,
         "30D": overview30,
+        "90D": overview90,
       });
 
       setRows(buildRowsScenario(next));
@@ -229,6 +236,7 @@ export default function PortfolioPage() {
         "24H": genOverview(24, 1, 100_000),
         "7D": genOverview(7, 2, 100_000),
         "30D": genOverview(30, 3, 95_000),
+        "90D": genOverview(90, 4, 90_000),
       });
       setRows(buildRowsScenario("A"));
       setLoading(false);
