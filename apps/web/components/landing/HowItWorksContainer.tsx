@@ -4,6 +4,7 @@ import React, { useCallback, useRef, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { StepCard } from "./StepCard";
 import { RiskStep } from "./RiskStep";
+import { InsuranceStep } from "./InsuranceStep";
 
 type Side = "left" | "right";
 
@@ -133,6 +134,20 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
       if (index === 0) {
         return (
           <RiskStep
+            key={step.badge}
+            id={`step-card-${index}`}
+            index={index}
+            step={step}
+            total={STEP_DATA.length}
+            progress={easedProgress}
+            cardsOffset={cardsOffset}
+          />
+        );
+      }
+
+      if (index === 1) {
+        return (
+          <InsuranceStep
             key={step.badge}
             id={`step-card-${index}`}
             index={index}

@@ -142,10 +142,6 @@ export function InsuranceCard({
               <Activity size={16} />
               <span>Market condition: Low volatility</span>
               <span>Risk cost: {riskScore}%</span>
-              <span className="inline-flex items-center gap-1 text-[#F3A233]">
-                <Zap size={14} />
-                Transparent oracle terms
-              </span>
             </div>
           </motion.div>
         )}

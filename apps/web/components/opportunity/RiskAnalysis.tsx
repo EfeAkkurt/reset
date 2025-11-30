@@ -329,9 +329,6 @@ export function RiskAnalysis({ data }: RiskAnalysisProps) {
               )}
               %
             </span>
-            <span className="text-xs text-[#A2A7B5]">
-              Transparent oracle-backed signals
-            </span>
           </div>
         </>
       )}
