@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useStellarWallet } from "@/components/providers/StellarWalletProvider";
 import { toast } from "sonner";
-import { getResetSdk } from "@/lib/sdk/resetSdk";
+import { TransactionBuilder, Operation, Asset, Account, Memo, TimeoutInfinite } from "@stellar/stellar-sdk";
 
 type DepositState = {
   depositId?: string;
@@ -31,7 +31,7 @@ const persistState = (addr: string, state: DepositState) => {
 };
 
 export function useYieldAggregatorDemo() {
-  const { address, connect } = useStellarWallet();
+  const { address, connect, signAndSend } = useStellarWallet();
   const [state, setState] = useState<DepositState | null>(null);
   const [pending, setPending] = useState(false);
 
@@ -49,38 +49,46 @@ export function useYieldAggregatorDemo() {
       setPending(true);
 
       try {
-        const sdk = getResetSdk();
-        const agg = sdk.getYieldAggregator();
         let txHash = `demo-${Date.now().toString(16)}`;
         let depositId = `demo-${Date.now().toString(16)}`;
 
-        if (agg) {
-          const op = await agg.deposit({
-            user: address,
-            amount: Math.max(1, Math.floor(amount)),
-            insurancePercentage: Math.max(0, Math.min(100, Math.floor(insurancePct))),
-          });
+        // Build a simple self-payment to trigger wallet signing
+        const horizon = "https://horizon-testnet.stellar.org";
+        const resp = await fetch(`${horizon}/accounts/${address}`);
+        if (!resp.ok) throw new Error(`Account fetch failed: ${resp.status}`);
+        const acct = await resp.json();
+        const seq = acct?.sequence;
+        if (!seq) throw new Error("Account sequence missing");
 
-          if ((op as any).xdr) {
-            const signed = await signAndSend({
-              xdr: (op as any).xdr,
-              rpcUrl: "https://soroban-testnet.stellar.org",
-            });
-            txHash = signed.hash || txHash;
-          } else if (op.success) {
-            txHash = op.transactionHash || txHash;
-            depositId = op.result?.poolId || depositId;
-          } else if (op.error) {
-            toast.error("Deposit failed", { description: op.error });
-          }
-        }
+        const account = new Account(address, seq);
+        const networkPassphrase = "Test SDF Network ; September 2015";
+        const tx = new TransactionBuilder(account, {
+          fee: "100",
+          networkPassphrase,
+        })
+          .addMemo(Memo.text("RESET Yield Option"))
+          .addOperation(
+            Operation.payment({
+              destination: address,
+              asset: Asset.native(),
+              amount: String(Math.max(1, Math.floor(amount))),
+            }),
+          )
+          .setTimeout(TimeoutInfinite)
+          .build();
+
+        const xdr = tx.toXDR();
+        const signed = await signAndSend({
+          xdr,
+          rpcUrl: horizon,
+          networkPassphrase,
+        });
+        txHash = signed.hash || txHash;
 
         const next: DepositState = { depositId, amount, insurancePct, txHash };
         setState(next);
         persistState(address, next);
-        toast.success("Deposit submitted", {
-          description: txHash ? `Tx hash: ${txHash}` : undefined,
-        });
+        toast.success("Deposit submitted");
       } catch (error) {
         toast.error("Deposit failed", {
           description: error instanceof Error ? error.message : String(error),

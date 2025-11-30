@@ -9,7 +9,7 @@ interface StellarWalletContextType {
   address: string | null;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  signAndSend: (tx: { xdr: string; rpcUrl?: string } | unknown) => Promise<{ hash: string }>;
+  signAndSend: (tx: { xdr: string; rpcUrl?: string; networkPassphrase?: string } | unknown) => Promise<{ hash: string }>;
 }
 
 const StellarWalletContext = createContext<StellarWalletContextType>({
@@ -110,44 +110,64 @@ export function StellarWalletProvider({ children }: { children: React.ReactNode 
     setAddress(null);
   };
 
-  const signAndSend = async (tx: { xdr: string; rpcUrl?: string } | unknown) => {
+  const signAndSend = async (tx: { xdr: string; rpcUrl?: string; networkPassphrase?: string } | unknown) => {
     const kit = kitRef.current as any;
 
     // If an XDR is provided and the kit exposes sign/submit helpers, try real flow
     if (tx && typeof tx === "object" && "xdr" in (tx as any)) {
-      const { xdr, rpcUrl } = tx as { xdr: string; rpcUrl?: string };
-      if (!kit) throw new Error("Stellar wallet kit not ready");
+        const { xdr, rpcUrl, networkPassphrase } = tx as { xdr: string; rpcUrl?: string; networkPassphrase?: string };
+        if (!kit) throw new Error("Stellar wallet kit not ready");
 
       try {
+        const networkPassphrase = "Test SDF Network ; September 2015";
+
         // Prefer a direct sign + submit helper if exposed by the kit
         if (typeof kit.signAndSubmit === "function") {
-          const res = await kit.signAndSubmit({ xdr, network: "testnet" });
+          const res = await kit.signAndSubmit({
+            xdr,
+            network: "testnet",
+            networkPassphrase: networkPassphrase || "Test SDF Network ; September 2015",
+          });
           const hash = res?.hash || res?.txHash || res?.transactionHash;
           return { hash: hash || "" };
         }
 
-        // Fallback: signTransaction then POST to Soroban RPC sendTransaction
+        // Fallback: signTransaction then POST. If rpcUrl looks like horizon, use /transactions
         if (typeof kit.signTransaction === "function") {
-          const signed = await kit.signTransaction(xdr, { network: "testnet" });
-          const endpoint = rpcUrl || "https://soroban-testnet.stellar.org";
-          const body = {
-            jsonrpc: "2.0",
-            id: 1,
-            method: "sendTransaction",
-            params: { transaction: signed },
-          };
-          const resp = await fetch(endpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
+          const signed = await kit.signTransaction(xdr, {
+            network: "testnet",
+            networkPassphrase: networkPassphrase || "Test SDF Network ; September 2015",
           });
-          const json = await resp.json().catch(() => ({}));
-          const hash =
-            json?.result?.hash ||
-            json?.result?.transactionHash ||
-            json?.hash ||
-            "";
-          if (hash) return { hash };
+          if (rpcUrl && rpcUrl.includes("horizon")) {
+            const resp = await fetch(`${rpcUrl}/transactions`, {
+              method: "POST",
+              headers: { "Content-Type": "application/x-www-form-urlencoded" },
+              body: `tx=${encodeURIComponent(signed)}`,
+            });
+            const json = await resp.json().catch(() => ({}));
+            const hash = json?.hash || json?.result?.hash || "";
+            if (hash) return { hash };
+          } else {
+            const endpoint = rpcUrl || "https://soroban-testnet.stellar.org";
+            const body = {
+              jsonrpc: "2.0",
+              id: 1,
+              method: "sendTransaction",
+              params: { transaction: signed },
+            };
+            const resp = await fetch(endpoint, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body),
+            });
+            const json = await resp.json().catch(() => ({}));
+            const hash =
+              json?.result?.hash ||
+              json?.result?.transactionHash ||
+              json?.hash ||
+              "";
+            if (hash) return { hash };
+          }
         }
       } catch (err) {
         console.error("WalletKit sign/submit failed, falling back to demo hash", err);

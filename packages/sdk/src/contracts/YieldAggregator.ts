@@ -30,6 +30,8 @@ import {
   Operation,
   TimeoutInfinite,
   nativeToScVal,
+  StrKey,
+  xdr,
 } from '@stellar/stellar-base';
 
 export interface YieldAggregatorConfig {
@@ -554,30 +556,32 @@ export class YieldAggregator {
     const source = operation.source || operation.args?.[0] || this.config.contractAddress.address;
     const account = await this.fetchAccountFromHorizon(source);
 
-    // Validate that we have the required arguments
-    if (!operation.args || operation.args.length === 0) {
-      throw new Error('No arguments provided for contract invocation');
+    if (!operation.args || operation.args.length < 3) {
+      throw new Error('Missing arguments for contract invocation');
     }
 
-    // Convert arguments to proper ScVal format
-    const scArgs = operation.args.map((arg, index) => {
-      if (typeof arg === 'string' && arg.startsWith('G')) {
-        // Stellar address - convert to Address ScVal
-        return Address.fromString(arg).toScVal();
-      } else if (typeof arg === 'string' || typeof arg === 'number' || typeof arg === 'bigint') {
-        // Numeric value - convert to i128
-        return nativeToScVal(arg, { type: 'i128' });
-      } else {
-        throw new Error(`Unsupported argument type at index ${index}: ${typeof arg}`);
-      }
-    });
+    const userAddr = operation.args[0];
+    const amount = operation.args[1];
+    const insurancePct = operation.args[2];
 
-    // Use the 2025 recommended approach: Operation.invokeContractFunction
-    // with properly formatted ScVal arguments
-    const invokeOp = Operation.invokeContractFunction({
-      contractId: operation.contract,
-      functionName: operation.method,
-      args: scArgs
+    // Build host function manually to avoid unsupported address parsing
+    const contractRaw = StrKey.decodeContract(operation.contract);
+    const contractScAddress = xdr.ScAddress.scAddressTypeContract(new xdr.Hash(contractRaw));
+    const hf = xdr.HostFunction.hostFunctionTypeInvokeContract(
+      new xdr.InvokeContractArgs({
+        contractAddress: contractScAddress,
+        functionName: xdr.ScSymbol.fromString(operation.method),
+        args: [
+          Address.fromString(userAddr).toScVal(),
+          nativeToScVal(amount, { type: 'i128' }),
+          nativeToScVal(insurancePct ?? 0, { type: 'u32' }),
+        ],
+      })
+    );
+
+    const invokeOp = Operation.invokeHostFunction({
+      hostFunction: hf,
+      auth: [],
     });
 
     const built = new SorobanClient.TransactionBuilder(account, {

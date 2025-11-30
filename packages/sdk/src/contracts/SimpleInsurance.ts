@@ -31,7 +31,7 @@ import {
 } from '../errors';
 import SorobanClient from 'soroban-client';
 import { assembleTransaction } from 'soroban-client';
-import { Address, Account, Operation, TimeoutInfinite, nativeToScVal } from '@stellar/stellar-base';
+import { Address, Account, Operation, TimeoutInfinite, nativeToScVal, StrKey, xdr } from '@stellar/stellar-base';
 
 export interface SimpleInsuranceConfig {
   contractAddress: ContractAddress;
@@ -525,12 +525,32 @@ export class SimpleInsurance {
       }
     });
 
-    // Use the 2025 recommended approach: Operation.invokeContractFunction
-    // with properly formatted ScVal arguments
-    const invokeOp = Operation.invokeContractFunction({
-      contractId: operation.contract,
-      functionName: operation.method,
-      args: scArgs
+    const contractScAddress = (() => {
+      if (/^[A-Z0-9]{56}$/.test(operation.contract) && operation.contract.startsWith('C')) {
+        const raw = StrKey.decodeContract(operation.contract);
+        return xdr.ScAddress.scAddressTypeContract(new xdr.Hash(raw));
+      }
+      if (/^[A-Z0-9]{56}$/.test(operation.contract) && operation.contract.startsWith('G')) {
+        return Address.fromString(operation.contract).toScAddress();
+      }
+      if (/^[a-fA-F0-9]{64}$/.test(operation.contract)) {
+        const raw = Buffer.from(operation.contract, 'hex');
+        return xdr.ScAddress.scAddressTypeContract(new xdr.Hash(raw));
+      }
+      throw new Error('Unsupported contract address format');
+    })();
+
+    const hf = xdr.HostFunction.hostFunctionTypeInvokeContract(
+      new xdr.InvokeContractArgs({
+        contractAddress: contractScAddress,
+        functionName: xdr.ScSymbol.fromString(operation.method),
+        args: scArgs
+      })
+    );
+
+    const invokeOp = Operation.invokeHostFunction({
+      hostFunction: hf,
+      auth: [],
     });
 
     const built = new SorobanClient.TransactionBuilder(account, {
