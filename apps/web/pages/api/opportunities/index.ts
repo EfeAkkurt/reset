@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { realDataAdapter } from "@/lib/adapters/real";
 import { getMockOpportunities } from "@/lib/mock/opportunities";
-import type { CardOpportunity } from "@/lib/types";
+import type { OpportunityDetail, OpportunitySummary } from "@shared/core";
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,12 +36,12 @@ export default async function handler(
   }
 
   try {
-    let rawItems: CardOpportunity[];
+    let rawItems: OpportunityDetail[];
     let dataSource: "live" | "demo" = "live";
 
     try {
       const items = await realDataAdapter.fetchOpportunities();
-      rawItems = items as CardOpportunity[];
+      rawItems = items as OpportunityDetail[];
     } catch (adapterError) {
       console.error(
         "[API /opportunities] Real data fetch failed, using mock data",
@@ -51,8 +51,8 @@ export default async function handler(
       rawItems = getMockOpportunities();
     }
 
-    const withSource: CardOpportunity[] = rawItems.map((it) => ({
-      ...it,
+    const withSource: OpportunitySummary[] = rawItems.map(({ riskAnalysis, insurance, ...rest }) => ({
+      ...rest,
       source: dataSource,
     }));
 

@@ -1,47 +1,33 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { buildOpportunityDetailData } from '@/lib/server/buildOpportunityDetail';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id } = req.query;
+  const { id, timeRange = '30' } = req.query;
+  const oppId = Array.isArray(id) ? id[0] : id;
+  const days = Number(Array.isArray(timeRange) ? timeRange[0] : timeRange) || 30;
 
-  return res.status(200).json({
-    success: true,
-    data: {
-      id,
-      name: "Mock Opportunity",
-      chain: "ethereum",
-      protocol: "Mock Protocol",
-      pool: "Mock Pool",
-      tokens: ["USDC"],
-      apr: 5.0,
-      apy: 5.1,
-      tvlUsd: 1000000,
-      risk: "low",
-      source: "mock",
-      lastUpdated: Date.now(),
-      description: "This is a mock opportunity for testing purposes.",
-      website: "https://example.com",
-      logo: "/logos/ethereum.svg",
-      supportedTokens: ["USDC"],
-      poolId: id,
-      underlyingTokens: ["USDC"],
-      volume24h: 10000,
-      fees24h: 50,
-      exposure: "stablecoin",
-      ilRisk: "none",
-      stablecoin: true,
-      volume7d: 70000,
-      volume30d: 300000,
-      uniqueUsers24h: 100,
-      uniqueUsers7d: 500,
-      uniqueUsers30d: 1500,
-      concentrationRisk: 10,
-      userRetention: 90
-    },
-    requestId: `req_${Date.now()}`,
-    processingTime: 0,
-    dataSize: 0
-  });
+  if (!oppId) {
+    return res.status(400).json({ success: false, error: 'Missing id' });
+  }
+
+  try {
+    const data = await buildOpportunityDetailData(oppId, days);
+    if (!data) {
+      return res.status(404).json({ success: false, error: 'Not found' });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data,
+      timestamp: Date.now(),
+      cached: false,
+      cacheKey: `detail_${oppId}_${days}`
+    });
+  } catch (error) {
+    console.error(`[API /opportunities/${oppId}/detail] failed`, error);
+    return res.status(500).json({ success: false, error: 'Internal error' });
+  }
 }

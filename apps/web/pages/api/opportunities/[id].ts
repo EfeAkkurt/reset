@@ -1,11 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { realDataAdapter } from "@/lib/adapters/real";
 import { getMockOpportunityById } from "@/lib/mock/opportunities";
-import type { CardOpportunity } from "@/lib/types";
-import type { RiskAssessment, RiskMetrics, RiskFactor } from "../../../../packages/shared/src/types";
+import type {
+  OpportunityDetail,
+  RiskAssessment,
+  RiskMetrics,
+  RiskFactor,
+} from "@shared/core";
 
 // Risk analysis calculation functions
-function calculateRiskAssessment(opportunity: CardOpportunity): RiskAssessment {
+function calculateRiskAssessment(opportunity: OpportunityDetail): RiskAssessment {
   const baseRiskScore = opportunity.risk === "Low" ? 25 : opportunity.risk === "Medium" ? 55 : 80;
 
   // Adjust risk score based on protocol and TVL
@@ -50,7 +54,7 @@ function calculateRiskAssessment(opportunity: CardOpportunity): RiskAssessment {
   };
 }
 
-function calculateRiskMetrics(opportunity: CardOpportunity, riskScore: number): RiskMetrics {
+function calculateRiskMetrics(opportunity: OpportunityDetail, riskScore: number): RiskMetrics {
   const riskMultiplier = opportunity.risk === "Low" ? 0.7 : opportunity.risk === "Medium" ? 1 : 1.5;
 
   // Calculate volatility based on APY stability
@@ -87,7 +91,7 @@ function calculateRiskMetrics(opportunity: CardOpportunity, riskScore: number): 
   };
 }
 
-function generateRiskFactors(opportunity: CardOpportunity, riskScore: number): RiskFactor[] {
+function generateRiskFactors(opportunity: OpportunityDetail, riskScore: number): RiskFactor[] {
   const factors: RiskFactor[] = [];
 
   // Smart contract risk factors
@@ -137,7 +141,7 @@ function generateRiskFactors(opportunity: CardOpportunity, riskScore: number): R
   return factors;
 }
 
-function generateRecommendations(opportunity: CardOpportunity, riskScore: number): string[] {
+function generateRecommendations(opportunity: OpportunityDetail, riskScore: number): string[] {
   const recommendations: string[] = [];
 
   if (riskScore > 70) {
@@ -164,7 +168,7 @@ function generateRecommendations(opportunity: CardOpportunity, riskScore: number
 }
 
 interface EnhancedOpportunityResponse {
-  item: CardOpportunity;
+  item: OpportunityDetail;
   riskAnalysis: {
     assessment: RiskAssessment;
     metrics: RiskMetrics;
@@ -193,7 +197,7 @@ export default async function handler(
       if (!item) {
         return res.status(404).json({ error: "Not found" });
       }
-      const typed = item as CardOpportunity;
+      const typed = item as OpportunityDetail;
 
       // Calculate risk analysis
       const riskAssessment = calculateRiskAssessment(typed);
@@ -202,7 +206,16 @@ export default async function handler(
       const recommendations = generateRecommendations(typed, riskAssessment.riskScore);
 
       return res.status(200).json({
-        item: { ...typed, source: "live" },
+        item: {
+          ...typed,
+          source: "live",
+          riskAnalysis: {
+            assessment: riskAssessment,
+            metrics: riskMetrics,
+            factors: riskFactors,
+            recommendations,
+          },
+        },
         riskAnalysis: {
           assessment: riskAssessment,
           metrics: riskMetrics,
@@ -216,7 +229,7 @@ export default async function handler(
         adapterError,
       );
 
-      const mock = getMockOpportunityById(oppId);
+      const mock = getMockOpportunityById(oppId) as OpportunityDetail | undefined;
       if (!mock) {
         // Try to get available opportunities for better error message
         try {
@@ -250,7 +263,16 @@ export default async function handler(
       const mockRecommendations = generateRecommendations(mock, mockRiskAssessment.riskScore);
 
       return res.status(200).json({
-        item: { ...mock, source: "demo" },
+        item: {
+          ...mock,
+          source: "demo",
+          riskAnalysis: {
+            assessment: mockRiskAssessment,
+            metrics: mockRiskMetrics,
+            factors: mockRiskFactors,
+            recommendations: mockRecommendations,
+          },
+        },
         riskAnalysis: {
           assessment: mockRiskAssessment,
           metrics: mockRiskMetrics,

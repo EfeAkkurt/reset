@@ -76,7 +76,7 @@ function transformDefiLlamaPool(pool: DefiLlamaPool): Opportunity | null {
   const apy = pool.apy || pool.apyBase || 0;
   const apyBase = pool.apyBase || 0;
   const apyReward = pool.apyReward || 0;
-  const apr = apy * 0.9; // Rough approximation from APY to APR
+  const apr = apyBase || (apy * 0.95); // Use base APY as APR, or approximate from total APY
 
   // Determine risk level based on APY and pool characteristics
   let risk: "low" | "med" | "high" = "med";

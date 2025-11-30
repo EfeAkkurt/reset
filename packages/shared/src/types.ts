@@ -28,6 +28,71 @@ export interface Opportunity {
   stablecoin?: boolean;    // Whether pool contains stablecoins
 }
 
+// Summary shape used by cards and list views (UI-friendly casing)
+export interface OpportunitySummary {
+  id: string;
+  protocol: string;
+  pair: string;            // pool display label
+  chain: string;
+  apr: number;
+  apy: number;
+  apyBase?: number;
+  apyReward?: number;
+  tvlUsd: number;
+  rewardToken: string | string[];
+  risk: "Low" | "Medium" | "High";
+  lastUpdated: string;     // humanized label like "5m"
+  originalUrl: string;
+  summary: string;
+  source?: "live" | "demo";
+  logoUrl?: string;
+  exposure?: string;
+  ilRisk?: string;
+  stablecoin?: boolean;
+  poolId?: string;
+  tokens?: string[];
+  underlyingTokens?: string[];
+}
+
+// Detail shape extends summary with richer analytics used by detail page
+export interface OpportunityDetail extends OpportunitySummary {
+  volume24h?: number;
+  volume7d?: number;
+  volume30d?: number;
+  fees24h?: number;
+  fees7d?: number;
+  fees30d?: number;
+  uniqueUsers24h?: number;
+  uniqueUsers7d?: number;
+  uniqueUsers30d?: number;
+  concentrationRisk?: number;
+  userRetention?: number;
+  maxDrawdown24h?: number;
+  maxDrawdown7d?: number;
+  sharpeRatio?: number;
+  volatility?: number;
+  feeApr?: number;
+  rewardApr?: number;
+  marketDepth?: number;
+  liquidityRatio?: number;
+  pool?: string;
+  tokens?: string[];
+  poolTokens?: string[];
+  // Attach risk analysis used by UI for risk and insurance cards
+  riskAnalysis?: {
+    assessment: RiskAssessment;
+    metrics: RiskMetrics;
+    factors: RiskFactor[];
+    recommendations: string[];
+  };
+  insurance?: {
+    coverageCapUsd: number;
+    deductiblePct: number;
+    premiumRate30d: number;
+    coverageByTier: { basic: number; standard: number; plus: number };
+  };
+}
+
 export interface ProtocolInfo {
   name: string;
   chain: Chain;

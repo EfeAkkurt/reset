@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { realDataAdapter } from '@/lib/adapters/real';
+import { getMockOpportunityById } from '@/lib/mock/opportunities';
+import type { OpportunityDetail } from '@shared/core';
 
-// Enhanced risk analysis using the advanced financial analysis system
 interface EnhancedRiskAnalysis {
   overallRiskScore: number;
   riskLevel: 'low' | 'medium' | 'high' | 'critical';
@@ -36,43 +38,8 @@ interface EnhancedRiskAnalysis {
   recommendations: string[];
 }
 
-// Mock opportunity data - in production this would come from the opportunity API
-interface OpportunityData {
-  id: string;
-  protocol: string;
-  pair: string;
-  chain: string;
-  apr: number;
-  apy: number;
-  risk: string;
-  tvlUsd: number;
-  rewardToken: string;
-  lastUpdated: string;
-  originalUrl: string;
-  summary: string;
-  pool: string;
-}
-
-function getMockOpportunity(id: string): OpportunityData {
-  return {
-    id,
-    protocol: 'Agoric',
-    pair: 'IST/BLD',
-    chain: 'ethereum',
-    apr: 15.5,
-    apy: 16.8,
-    risk: 'Medium',
-    tvlUsd: 2500000,
-    rewardToken: 'BLD',
-    lastUpdated: '5m',
-    originalUrl: 'https://defillama.com/pool/123',
-    summary: 'IST/BLD liquidity pool on Agoric',
-    pool: 'ist-bld-agoric'
-  };
-}
-
-// Enhanced risk analysis with actual calculated values
-function calculateEnhancedRiskAnalysis(opportunity: OpportunityData): EnhancedRiskAnalysis {
+// Enhanced risk analysis with actual calculated values using live or mock detail
+function calculateEnhancedRiskAnalysis(opportunity: OpportunityDetail): EnhancedRiskAnalysis {
   // Calculate actual risk metrics based on opportunity data
   const tvl = opportunity.tvlUsd || 0;
   const apy = opportunity.apy || 0;
@@ -230,8 +197,28 @@ export default async function handler(
   }
 
   try {
-    // Get opportunity data
-    const opportunity = getMockOpportunity(id);
+    // Get opportunity data (prefer real adapter, fallback to mock)
+    let opportunity: OpportunityDetail | null = null;
+    try {
+      opportunity = await realDataAdapter.fetchOpportunityById(id);
+    } catch (adapterError) {
+      console.warn(`[API /risk] adapter fetch failed for ${id}`, adapterError);
+    }
+
+    if (!opportunity) {
+      const mock = getMockOpportunityById(id);
+      if (mock) {
+        opportunity = mock as unknown as OpportunityDetail;
+      }
+    }
+
+    if (!opportunity) {
+      return res.status(404).json({
+        success: false,
+        error: 'Not found',
+        timestamp: Date.now()
+      });
+    }
 
     // Calculate enhanced risk analysis with actual values
     const enhancedRiskAnalysis = calculateEnhancedRiskAnalysis(opportunity);

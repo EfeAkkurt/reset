@@ -17,33 +17,14 @@ import {
   DataLoadingError,
 } from "@/components/ui/ErrorNotification";
 import { getTestNetOpportunities } from "@/lib/mock/testnet-opportunities";
-
-type CardOpportunity = {
-  id: string;
-  protocol: string;
-  pair: string;
-  chain: string;
-  apr: number; // percent
-  apy: number; // percent
-  risk: "Low" | "Medium" | "High";
-  tvlUsd: number;
-  rewardToken: string;
-  lastUpdated: string; // label like 5m, 2h
-  originalUrl: string;
-  summary: string;
-  logoUrl?: string;
-  // Extended metadata may exist but is not required here
-  ilRisk?: string;
-  exposure?: string;
-  volume24h?: number;
-};
+import type { OpportunityDetail } from "@shared/core";
 
 export default function OpportunityDetailPage() {
   const router = useRouter();
   const { id } = router.query;
   const { addItem } = useCompare();
 
-  const [data, setData] = React.useState<CardOpportunity | null>(null);
+  const [data, setData] = React.useState<OpportunityDetail | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [errorType, setErrorType] = React.useState<
@@ -78,8 +59,8 @@ export default function OpportunityDetailPage() {
           if (testNetOpp && mounted) {
             Logger.info(`Loaded TestNet opportunity detail`, { opportunityId });
 
-            // Transform to CardOpportunity format
-            const cardOpportunity: CardOpportunity = {
+            // Transform to OpportunityDetail format
+            const cardOpportunity: OpportunityDetail = {
               id: testNetOpp.id,
               protocol: testNetOpp.protocol,
               pair: testNetOpp.pool || `${testNetOpp.tokens[0]} Yield`,
@@ -92,6 +73,9 @@ export default function OpportunityDetailPage() {
               lastUpdated: new Date(testNetOpp.lastUpdated).toLocaleDateString(),
               originalUrl: `#`, // No external URL for TestNet
               summary: `Reset Mock Yield Protocol - ${testNetOpp.apr}% APR on XLM`,
+              source: "demo",
+              tokens: testNetOpp.tokens,
+              poolId: testNetOpp.poolId,
             };
 
             setData(cardOpportunity);
@@ -104,7 +88,7 @@ export default function OpportunityDetailPage() {
         const resp = await fetch(`/api/opportunities/${opportunityId}`);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const json = await resp.json();
-        const opportunity: CardOpportunity | null = json.item || null;
+        const opportunity: OpportunityDetail | null = json.item || null;
 
         if (!mounted) return;
 

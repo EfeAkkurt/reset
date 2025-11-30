@@ -84,7 +84,6 @@ lerna-debug.log*
 tmp/
 
 # Documentation build
-claudedocs/
 docs/build/
 
 # Editor directories and files
