@@ -31,6 +31,14 @@ interface LineProps {
   dot?: boolean;
 }
 
+interface BarProps {
+  dataKey: string;
+  fill?: string;
+  radius?: number[] | number;
+  name?: string;
+  barSize?: number;
+}
+
 interface XAxisProps {
   dataKey: string;
   stroke?: string;
@@ -71,6 +79,11 @@ const Line = dynamic<ComponentType<LineProps>>(
   { ssr: false }
 );
 
+const Bar = dynamic<ComponentType<BarProps>>(
+  () => import("recharts").then((mod) => mod.Bar),
+  { ssr: false }
+);
+
 const XAxis = dynamic<ComponentType<XAxisProps>>(
   () => import("recharts").then((mod) => mod.XAxis),
   { ssr: false }
@@ -97,6 +110,7 @@ export {
   ComposedChart,
   Area,
   Line,
+  Bar,
   XAxis,
   YAxis,
   Tooltip,

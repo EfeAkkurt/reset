@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@stellar-defi-insurance/sdk': workspace:*
   three: 0.170.0
   '@types/three': 0.170.0
 
