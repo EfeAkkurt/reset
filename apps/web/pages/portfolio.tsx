@@ -374,32 +374,32 @@ export default function PortfolioPage() {
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 <PositionsList rows={rows as any} />
               </div>
-              <aside className="lg:w-[360px] lg:shrink-0 lg:pl-6">
-                <div className="space-y-6 lg:sticky lg:top-24">
+              <aside className="lg:w-[360px] lg:shrink-0 lg:pl-6 space-y-6">
+                <div className="lg:sticky lg:top-24">
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   <AccountSummary rows={rows as any} />
-                  <div className="rounded-[24px] border border-white/10 bg-[#121214] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)]">
-                    <p className="text-[12px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
-                      Actions
-                    </p>
-                    <p className="mt-2 text-sm text-[#D8D9DE]/70">
-                      Export ledger lines or refresh the mock environment for a
-                      new scenario.
-                    </p>
-                    <div className="mt-6 space-y-3">
-                      <button
-                        onClick={exportCSV}
-                        className="w-full rounded-xl border border-white/15 bg-transparent px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#D8D9DE] transition hover:border-[#F3A233]/50 hover:text-white"
-                      >
-                        Export CSV
-                      </button>
-                      <button
-                        onClick={clear}
-                        className="w-full rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-red-200 transition hover:border-red-400 hover:bg-red-500/20"
-                      >
-                        Clear Data
-                      </button>
-                    </div>
+                </div>
+                <div className="rounded-[24px] border border-white/10 bg-[#121214] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)] lg:sticky lg:top-[calc(24px+320px)]">
+                  <p className="text-[12px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+                    Actions
+                  </p>
+                  <p className="mt-2 text-sm text-[#D8D9DE]/70">
+                    Export ledger lines or refresh the mock environment for a
+                    new scenario.
+                  </p>
+                  <div className="mt-6 space-y-3">
+                    <button
+                      onClick={exportCSV}
+                      className="w-full rounded-xl border border-white/15 bg-transparent px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#D8D9DE] transition hover:border-[#F3A233]/50 hover:text-white"
+                    >
+                      Export CSV
+                    </button>
+                    <button
+                      onClick={clear}
+                      className="w-full rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-red-200 transition hover:border-red-400 hover:bg-red-500/20"
+                    >
+                      Clear Data
+                    </button>
                   </div>
                 </div>
               </aside>

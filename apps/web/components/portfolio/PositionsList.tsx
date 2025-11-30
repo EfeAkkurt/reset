@@ -209,7 +209,6 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
               transition={{ delay: 0.05 * idx }}
               className="relative overflow-hidden rounded-[28px] border border-[rgba(255,182,72,0.12)] bg-gradient-to-b from-[#191A1E] via-[#111215] to-[#090909] p-6 text-white shadow-[0_30px_70px_rgba(0,0,0,0.65)]"
             >
-              <div className="absolute inset-x-6 top-6 h-px bg-gradient-to-r from-transparent via-[#F3A233]/40 to-transparent" />
               <div className="relative flex items-start justify-between gap-3">
                 <div className="flex items-center gap-4">
                   <div
@@ -369,7 +368,8 @@ function Metric({
 function RiskBadge({ level }: { level: "Low" | "Medium" | "High" }) {
   return (
     <span
-      className={`rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] ${RISK_COLORS[level]}`}
+      className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] ${RISK_COLORS[level]}`}
+      style={{ borderWidth: '0.7px' }}
     >
       {level} Risk
     </span>

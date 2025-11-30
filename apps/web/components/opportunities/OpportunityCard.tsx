@@ -73,8 +73,8 @@ export const OpportunityCard: React.FC<
       }}
       aria-label={`View ${data.protocol} ${data.pair}`}
       className={clsx(
-        "group relative flex flex-col overflow-hidden rounded-[28px] border border-[rgba(255,182,72,0.16)] bg-gradient-to-b from-[#16171B] via-[#0E0F12] to-[#050506] p-6 text-left transition duration-300",
-        "shadow-[0_25px_65px_rgba(0,0,0,0.6)] hover:-translate-y-1 hover:border-[#F3A233]/70 hover:shadow-[0_35px_80px_rgba(0,0,0,0.65)]",
+        "group relative flex flex-col overflow-hidden rounded-[28px] border border-[rgba(255,182,72,0.18)] bg-[#121214] p-6 text-left transition duration-300",
+        "shadow-[0_40px_100px_rgba(0,0,0,0.6)] hover:-translate-y-1 hover:border-[#F3A233]/70 hover:shadow-[0_55px_120px_rgba(0,0,0,0.7)]",
         disabled && "cursor-not-allowed opacity-60",
         !disabled && "cursor-pointer",
       )}

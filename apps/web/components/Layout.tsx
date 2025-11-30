@@ -78,10 +78,11 @@ import { YieldBanner } from "@/components/YieldBanner";
 // };
 
 export const Header = () => {
-  // const [isVisible] = React.useState(true); // Unused variable
-  // const [lastScrollY, setLastScrollY] = React.useState(0); // Unused variable
   const router = useRouter();
   const [isClickAnimating, setIsClickAnimating] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(true);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
   const animationTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
@@ -122,37 +123,44 @@ export const Header = () => {
   }, []);
 
   React.useEffect(() => {
-    // const handleScroll = () => {
-    //   const currentScrollY = window.scrollY;
-    //   // Scroll down and past threshold
-    //   if (currentScrollY > lastScrollY && currentScrollY > 100) {
-    //   setIsVisible(false);
-    // }
-    // // Scroll up or at top
-    // else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
-    //   setIsVisible(true);
-    // }
-    //   setLastScrollY(currentScrollY);
-    // };
-    // window.addEventListener("scroll", handleScroll, { passive: true });
-    // return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // lastScrollY removed as it's unused
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Check if scrolled past threshold for background effect
+      setIsScrolled(currentScrollY > 50);
+
+      // Hide/show logic for logo and brand name
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scroll down and past threshold - hide
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
+        // Scroll up or at top - show
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   // useWallet(); // Wallet integration removed
 
   return (
     <header
-      className="site-header sticky top-0 z-40 w-full"
-      style={{
-        background: 'transparent',
-      }}
+      className={`site-header sticky top-0 z-40 w-full transition-all duration-300 ${
+        isScrolled ? 'header-scrolled' : ''
+      }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         <Link
           href="/"
           onClick={handleLogoClick}
           aria-label="Reset home"
-          className="group flex items-center gap-3"
+          className={`group flex items-center gap-3 transition-all duration-300 ${
+            isVisible ? 'header-logo-visible' : 'header-logo-hidden'
+          }`}
         >
           <Image
             src={resetLogo}
@@ -162,7 +170,7 @@ export const Header = () => {
             priority
             className={`h-10 w-auto origin-center ${isClickAnimating ? "animate-logo-click" : "group-hover:animate-logo-hover"}`}
           />
-          <div className="wordmark">
+          <div className={`wordmark transition-all duration-300 ${isVisible ? 'header-logo-visible' : 'header-logo-hidden'}`}>
             <span className="wordmark-text text-[20px]">RESET</span>
           </div>
         </Link>

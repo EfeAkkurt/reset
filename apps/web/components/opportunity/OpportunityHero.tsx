@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { ChevronRight, Clock, Shield, AlertCircle } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { colors } from "@/lib/colors";
+import clsx from "clsx";
 type Opportunity = {
   id: string;
   protocol: string;
@@ -25,160 +25,127 @@ interface OpportunityHeroProps {
 }
 
 export function OpportunityHero({ data }: OpportunityHeroProps) {
-  const {
-    protocol,
-    pair,
-    risk,
-    chain,
-    lastUpdated,
-    apr,
-    apy,
-    tvlUsd,
-    summary,
-  } = data;
-  // Note: Logo badge removed per request (no logo on detail page)
-
-  const riskColors = {
-    Low: {
-      bg: "bg-emerald-50/20",
-      text: "text-emerald-100",
-      ring: "ring-emerald-300/30",
-    },
-    Medium: {
-      bg: "bg-amber-50/20",
-      text: "text-amber-100",
-      ring: "ring-amber-300/30",
-    },
-    High: {
-      bg: "bg-rose-50/20",
-      text: "text-rose-100",
-      ring: "ring-rose-300/30",
-    },
-  };
+  const { protocol, pair, risk, chain, lastUpdated, apr, apy, tvlUsd, summary } =
+    data;
 
   const formatTVL = (value: number) => {
+    if (value >= 1_000_000_000) return `$${(value / 1_000_000_000).toFixed(2)}B`;
     if (value >= 1_000_000) return `$${(value / 1_000_000).toFixed(2)}M`;
     if (value >= 1_000) return `$${(value / 1_000).toFixed(2)}K`;
     return `$${value.toFixed(0)}`;
   };
 
+  const descriptorStack = [
+    chain || "Stellar",
+    `${risk} Risk`,
+    `Updated ${lastUpdated || "—"}`,
+  ];
+
+  const heroStats = [
+    {
+      label: "APR",
+      value: `${apr.toFixed(2)}%`,
+      delta: apr >= 0 ? "+0.42%" : "-0.42%",
+      tone: apr >= 0 ? "positive" : "negative",
+    },
+    {
+      label: "APY",
+      value: `${apy.toFixed(2)}%`,
+      delta: apy >= 0 ? "+0.60%" : "-0.60%",
+      tone: apy >= 0 ? "positive" : "negative",
+    },
+    {
+      label: "TVL",
+      value: formatTVL(tvlUsd),
+      delta: "+$1.2M",
+      tone: "neutral",
+    },
+  ];
+
   return (
-    <section className="graph-bg graph-density-normal relative isolate overflow-hidden rounded-3xl">
-      {/* Gradient overlays */}
-      <div
-        className="absolute -left-24 -top-24 h-96 w-96 rounded-full"
-        style={{ background: colors.radial.purpleGlow }}
-      />
-      <div
-        className="absolute -bottom-16 -right-24 h-80 w-80 rounded-full"
-        style={{ background: colors.radial.darkGlow }}
-      />
+    <section className="relative overflow-hidden rounded-[40px] border border-[rgba(255,182,72,0.18)] bg-[#121214] p-6 md:p-10 text-white shadow-[0_45px_120px_rgba(0,0,0,0.6)]">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/10 via-white/5 to-transparent opacity-70" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(243,162,51,0.25),transparent_60%)]" />
 
-      {/* Logo badge intentionally removed */}
-
-      <div className="relative z-10 p-6 md:p-8">
-        {/* Breadcrumb */}
+      <div className="relative z-10 space-y-6">
         <motion.nav
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="flex items-center gap-1.5 text-xs text-white/70 mb-4"
+          className="flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-[#D8D9DE]/70"
         >
           <Link
             href="/opportunities"
-            className="hover:text-white transition-colors"
+            className="transition hover:text-white"
+            aria-label="Back to opportunities"
           >
             Opportunities
           </Link>
           <ChevronRight size={14} />
-          <span className="text-white/90">{protocol}</span>
+          <span>{protocol}</span>
         </motion.nav>
 
-        {/* Header */}
-        <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex-1">
             <motion.h1
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.05 }}
-              className="font-display text-3xl md:text-4xl tracking-tight text-white"
+              transition={{ duration: 0.4 }}
+              className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-black uppercase tracking-tight"
             >
               {protocol} — {pair}
             </motion.h1>
+            <div className="mt-3 h-px w-24 bg-[rgba(255,182,72,0.4)]" />
+            <div className="mt-3 flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/80">
+              {descriptorStack.map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-[rgba(255,182,72,0.16)] px-3 py-1"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
             {summary && (
-              <motion.p
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: 0.1 }}
-                className="mt-2 max-w-2xl text-sm text-white/80"
-              >
+              <p className="mt-4 max-w-3xl text-sm text-[#D8D9DE]/85">
                 {summary}
-              </motion.p>
+              </p>
             )}
           </div>
 
-          {/* Chips */}
-          <motion.div
-            initial={{ opacity: 0, x: 8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.35, delay: 0.15 }}
-            className="flex flex-wrap items-center gap-2"
-          >
-            <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs bg-white/10 text-white ring-1 ring-white/20 backdrop-blur">
-              <Shield size={12} />
-              {chain}
-            </span>
-            <span
-              className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs ring-1 backdrop-blur ${
-                riskColors[risk].bg
-              } ${riskColors[risk].text} ${riskColors[risk].ring}`}
-            >
-              <AlertCircle size={12} />
-              {risk} Risk
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs bg-white/10 text-white/70 ring-1 ring-white/10">
-              <Clock size={12} />
-              {lastUpdated}
-            </span>
-          </motion.div>
+          <div className="grid flex-1 gap-3">
+            {heroStats.map((stat) => (
+              <motion.div
+                key={stat.label}
+                whileHover={{ y: -4, rotateX: 1.5, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 200, damping: 18 }}
+                className="group rounded-[22px] border border-[rgba(255,182,72,0.2)] bg-[#111214]/80 px-5 py-4 shadow-inner shadow-black/40 backdrop-blur"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+                    {stat.label}
+                  </p>
+                  <span
+                    className={clsx(
+                      "rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em]",
+                      stat.tone === "positive"
+                        ? "bg-emerald-400/20 text-emerald-200"
+                        : stat.tone === "negative"
+                          ? "bg-rose-500/20 text-rose-200"
+                          : "bg-[rgba(255,182,72,0.15)] text-[#F3A233]",
+                    )}
+                  >
+                    {stat.delta}
+                  </span>
+                </div>
+                <p className="mt-3 font-mono text-[2.4rem] leading-none text-white">
+                  {stat.value}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
-
-        {/* KPI Strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, delay: 0.2 }}
-          className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3"
-        >
-          <KpiCard label="APR" value={`${apr.toFixed(2)}%`} trend="+2.3%" />
-          <KpiCard label="APY" value={`${apy.toFixed(2)}%`} />
-          <KpiCard label="TVL" value={formatTVL(tvlUsd)} trend="+$1.2M" />
-        </motion.div>
       </div>
     </section>
-  );
-}
-
-function KpiCard({
-  label,
-  value,
-  trend,
-}: {
-  label: string;
-  value: string;
-  trend?: string;
-}) {
-  return (
-    <div className="rounded-2xl bg-white/10 px-4 py-3 ring-1 ring-white/15 backdrop-blur">
-      <div className="flex items-center justify-between">
-        <div className="text-[11px] uppercase tracking-wide text-white/80">
-          {label}
-        </div>
-        {trend && <span className="text-[10px] text-emerald-300">{trend}</span>}
-      </div>
-      <div className="mt-0.5 font-sans text-lg md:text-xl font-semibold tabular-nums text-white">
-        {value}
-      </div>
-    </div>
   );
 }
