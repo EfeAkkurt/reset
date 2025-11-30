@@ -45,7 +45,7 @@ export class CacheService {
   private userMetricsCache = new Map<string, UserMetricsCacheEntry>();
   private aggregatedMetricsCache = new Map<string, AggregatedMetrics>();
   private config: CacheConfig;
-  private cleanupTimer?: number;
+  private cleanupTimer?: NodeJS.Timeout;
   private hits = 0;
   private misses = 0;
 
@@ -67,7 +67,8 @@ export class CacheService {
       clearInterval(this.cleanupTimer);
     }
 
-    this.cleanupTimer = window.setInterval(() => {
+    // Use setInterval from the global scope (Node.js or browser)
+    this.cleanupTimer = setInterval(() => {
       this.runCleanup();
     }, this.config.cleanupInterval);
 

@@ -22,12 +22,38 @@ type Opportunity = {
   source?: "live" | "demo";
   logoUrl?: string;
 
+  // Enhanced token information
+  protocolPair?: string;
+  rewardTokens?: string[];
+  allTokens?: string[];
+  tokens?: string[];
+
   volume24h?: number;
   volume7d?: number;
   uniqueUsers24h?: number;
   uniqueUsers7d?: number;
   concentrationRisk?: number;
   userRetention?: number;
+};
+
+// Helper function to format token addresses for display
+const formatTokenAddress = (address: string): string => {
+  if (address.length <= 8) return address;
+  return `${address.slice(0, 4)}...${address.slice(-4)}`;
+};
+
+// Helper function to get token name from address
+const getTokenName = (address: string): string => {
+  // Common Stellar token mappings
+  const tokenMap: Record<string, string> = {
+    "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA": "XLM",
+    "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75": "USDC",
+    "CD25MNVTZDL4Y3XBCPCJXGXATV5WUHHOWMYFF4YBEGU5FCPGMYTVG5JY": "BLEND",
+    "GBBD47IFQFT3GABX2GMFIITWL43G3K5ZDYOXGFAEAA3LDR5ATIAPIKOZ": "YXLM",
+    "GA5ZSEJYB37JRC5AVCIA5MOPFZPOMXIE6MMPQ65GWDRPBPE7Y3YPB5FZ": "EURC",
+  };
+
+  return tokenMap[address] || formatTokenAddress(address);
 };
 
 export const OpportunityCard: React.FC<
@@ -84,7 +110,18 @@ export const OpportunityCard: React.FC<
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40">
             {data.protocol}
           </p>
-          <p className="text-xl font-semibold text-white">{data.pair}</p>
+
+          {/* Protocol as Main Title */}
+          <p className="text-xl font-semibold text-white">
+            {data.protocol.split('-').map(word =>
+              word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            ).join(' ')}
+          </p>
+
+          {/* Pair as Subtitle */}
+          <p className="text-sm text-white/80">{data.pair}</p>
+
+
         </div>
         <span
           className={clsx(
@@ -97,6 +134,54 @@ export const OpportunityCard: React.FC<
           />
           {data.risk}
         </span>
+      </div>
+      {/* Token Information */}
+      <div className="space-y-1 flex items-center w-full">
+
+        {/* Token Pair Display */}
+        <div className="flex-1 flex items-center gap-2 text-xs text-white/50">
+
+          <span>Pool:</span>
+          {data.tokens && data.tokens.length > 0 ? (
+            <div className="flex items-center gap-1">
+              {data.tokens.slice(0, 2).map((token, idx) => (
+                <span key={idx} className="px-1.5 py-0.5 bg-white/10 rounded text-white">
+                  {getTokenName(token)}
+                </span>
+              ))}
+              {data.tokens.length > 2 && (
+                <span className="text-white/40">+{data.tokens.length - 2}</span>
+              )}
+            </div>
+          ) : (
+            <span className="px-1.5 py-0.5 bg-white/10 rounded text-white">
+              {getTokenName(data.pair)}
+            </span>
+          )}
+
+        </div>
+
+        <div className="flex-1 flex items-center gap-1">
+
+          {/* Reward Tokens Display */}
+          {data.rewardTokens && data.rewardTokens.length > 0 && (
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-white/50">Rewards:</span>
+              <div className="flex items-center gap-1">
+                {data.rewardTokens.slice(0, 3).map((token, idx) => (
+                  <span key={idx} className="px-1.5 py-0.5 bg-green-500/20 border border-green-500/30 rounded text-green-300">
+                    {getTokenName(token)}
+                  </span>
+                ))}
+                {data.rewardTokens.length > 3 && (
+                  <span className="text-green-300/60">+{data.rewardTokens.length - 3}</span>
+                )}
+              </div>
+            </div>
+          )}
+
+        </div>
+
       </div>
 
       <div className="relative mt-6 grid grid-cols-1 gap-3 md:grid-cols-3">

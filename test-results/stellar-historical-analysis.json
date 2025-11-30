@@ -1,0 +1,149 @@
+{
+  "startTime": "2025-11-29T17:15:34.039Z",
+  "testType": "stellar-historical-analysis",
+  "description": "Stellar historical data analysis for insurance risk calculations",
+  "endpoints": [
+    {
+      "endpoint": "Stellar TVL History",
+      "url": "https://api.llama.fi/v2/historicalChainTvl/stellar",
+      "description": "Historical Total Value Locked for Stellar network",
+      "status": 200,
+      "responseTime": 350,
+      "dataAnalysis": {
+        "dataType": "time_series",
+        "dataPoints": 1471,
+        "timeSpan": 1,
+        "hasStellarData": false,
+        "validationResult": true
+      },
+      "success": true,
+      "sampleData": [
+        {
+          "date": 1637366400,
+          "tvl": 8162022
+        },
+        {
+          "date": 1637452800,
+          "tvl": 8303014
+        }
+      ]
+    },
+    {
+      "endpoint": "Stellar Chain Chart",
+      "url": "https://api.llama.fi/v2/chains/stellar/chart",
+      "description": "Stellar chain performance metrics over time",
+      "status": 404,
+      "responseTime": 137,
+      "dataAnalysis": {
+        "dataType": "unknown",
+        "dataPoints": 0,
+        "timeSpan": 0,
+        "hasStellarData": false,
+        "validationResult": null
+      },
+      "success": false,
+      "sampleData": null
+    },
+    {
+      "endpoint": "Global TVL History",
+      "url": "https://api.llama.fi/v2/historicalChainTvl",
+      "description": "All chains historical TVL (contains Stellar data)",
+      "status": 200,
+      "responseTime": 216,
+      "dataAnalysis": {
+        "dataType": "time_series",
+        "dataPoints": 2986,
+        "timeSpan": 3,
+        "hasStellarData": false,
+        "validationResult": true
+      },
+      "success": true,
+      "sampleData": [
+        {
+          "date": 1506470400,
+          "tvl": 0
+        },
+        {
+          "date": 1506556800,
+          "tvl": 0
+        }
+      ]
+    },
+    {
+      "endpoint": "Alternative Stellar Chart",
+      "url": "https://api.llama.fi/chain/stellar/chart",
+      "description": "Alternative Stellar chart endpoint",
+      "status": 404,
+      "responseTime": 172,
+      "dataAnalysis": {
+        "dataType": "unknown",
+        "dataPoints": 0,
+        "timeSpan": 0,
+        "hasStellarData": false,
+        "validationResult": null
+      },
+      "success": false,
+      "sampleData": null
+    }
+  ],
+  "riskAnalysis": [
+    {
+      "endpoint": "Stellar TVL History",
+      "url": "https://api.llama.fi/v2/historicalChainTvl/stellar",
+      "dataPoints": 1471,
+      "timeSpanDays": 1,
+      "volatility": {
+        "volatility": 0.8960243662753983,
+        "confidence": "HIGH",
+        "dataPoints": 1471,
+        "returnCount": 1470,
+        "maxDrawdown": 0.7551541387594152,
+        "dataQuality": {
+          "confidence": "HIGH",
+          "score": 1000.6802721088436,
+          "completeness": "1000.680",
+          "gapCount": 0,
+          "gapPenalty": "0.000",
+          "timeSpanDays": 1
+        }
+      },
+      "riskMetrics": {
+        "riskLevel": "HIGH",
+        "riskScore": 105,
+        "components": {
+          "volatility": 0.9,
+          "maxDrawdown": 0.76,
+          "dataConfidence": "HIGH",
+          "currentTvl": 0
+        },
+        "insuranceRecommendations": [
+          {
+            "type": "PREMIUM_ADJUSTMENT",
+            "action": "Increase premiums by 25-50%",
+            "reason": "High volatility and risk factors detected"
+          },
+          {
+            "type": "COVERAGE_LIMIT",
+            "action": "Limit coverage to 50% of TVL",
+            "reason": "High maximum drawdown risk"
+          },
+          {
+            "type": "MONITORING",
+            "action": "Daily monitoring required",
+            "reason": "Rapid changes in risk metrics"
+          }
+        ]
+      },
+      "dataQuality": {
+        "confidence": "HIGH",
+        "score": 1000.6802721088436,
+        "completeness": "1000.680",
+        "gapCount": 0,
+        "gapPenalty": "0.000",
+        "timeSpanDays": 1
+      },
+      "success": true
+    }
+  ],
+  "fatalError": "YIELDS_API_BASE is not defined"
+}

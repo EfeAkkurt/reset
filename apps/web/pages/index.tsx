@@ -12,6 +12,7 @@ import US from "@/components/landing/US";
 import HowItWorks from "@/components/HowItWorks";
 import EndCapFooter from "@/components/EndCapFooter";
 import BackgroundSystem from "@/components/landing/BackgroundSystem";
+import Script from "next/script";
 
 
 export default function Landing() {
@@ -41,6 +42,15 @@ export default function Landing() {
           name="twitter:description"
           content="Production-grade yield tooling across multiple chains. Built with security, transparency and user control at the forefront."
         />
+
+        {/* put this in the <head> */}
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+          />
+        )}
       </Head>
       <div className="relative bg-[var(--bg-deep)]">
         {/* Background System - now provides all background effects */}

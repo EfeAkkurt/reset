@@ -1,0 +1,45 @@
+{
+  "testSuite": "Stellar DeFiLlama Integration Tests",
+  "timestamp": "2025-11-29T17:15:35.3NZ",
+  "environment": {
+    "nodeVersion": "v25.2.1",
+    "platform": "Darwin",
+    "arch": "arm64"
+  },
+  "testResults": {
+    "stellarConnectivity": {
+      "name": "Stellar Connectivity Tests",
+      "status": "false",
+      "resultsFile": "stellar-connectivity.json",
+      "logFile": "logs/stellar-connectivity.log"
+    },
+    "stellarYieldsIntegration": {
+      "name": "Stellar Yields Integration Tests",
+      "status": "true",
+      "resultsFile": "stellar-yields-integration.json",
+      "logFile": "logs/stellar-yields-integration.log"
+    },
+    "stellarHistoricalAnalysis": {
+      "name": "Stellar Historical Analysis Tests",
+      "status": "false",
+      "resultsFile": "stellar-historical-analysis.json",
+      "logFile": "logs/stellar-historical-analysis.log"
+    }
+  },
+  "overallStatus": "PARTIAL",
+  "recommendations": {
+    "implementation": "Need alternative data sources",
+    "nextSteps": [
+      "Review Stellar test results in test-results/",
+      "Check stellar-connectivity.json for API status",
+      "Verify stellar-yields-integration.json for production readiness",
+      "Review stellar-historical-analysis.json for insurance capabilities",
+      "Implement Stellar data service using integration guide"
+    ]
+  },
+  "generatedFiles": {
+    "testResults":        4,
+    "logs":        4,
+    "documentation": "Stellar Integration Guide Available"
+  }
+}

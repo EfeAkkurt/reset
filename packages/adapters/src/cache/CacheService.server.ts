@@ -43,6 +43,11 @@ export class CacheService {
       ...config,
     };
 
+    // Convert relative path to absolute path for Node.js
+    if (this.config.dbPath && !this.config.dbPath.startsWith('/')) {
+      this.config.dbPath = require('path').resolve(this.config.dbPath);
+    }
+
     // Initialize database
     this.db = new Database(this.config.dbPath);
     this.initializeDatabase();
