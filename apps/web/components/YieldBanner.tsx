@@ -84,14 +84,14 @@ export const YieldBanner: React.FC<YieldBannerProps> = ({
         {data.map((item, index) => (
           <div key={index} className="flex items-center gap-4 mx-8">
             <span className="text-white opacity-90">{item.logoSvg}</span>
-            <span className="text-white opacity-90 font-medium text-sm tracking-[-0.01em]">
+            <span className="text-white opacity-90 font-medium text-sm tracking-[0.01em]">
               {item.yieldName}
             </span>
-            <span className="text-white opacity-75 text-sm tracking-[-0.01em]">
+            <span className="text-white opacity-75 text-sm tracking-[0.01em]">
               TVL: {item.tvl}
             </span>
             <span
-              className="text-sm font-medium tracking-[-0.01em]"
+              className="text-sm font-medium tracking-[0.01em]"
               style={{ color: getRiskColor(item.risk) }}
             >
               Risk: {item.risk}
@@ -102,14 +102,14 @@ export const YieldBanner: React.FC<YieldBannerProps> = ({
         {data.map((item, index) => (
           <div key={`duplicate-${index}`} className="flex items-center gap-4 mx-8">
             <span className="text-white opacity-90">{item.logoSvg}</span>
-            <span className="text-white opacity-90 font-medium text-sm tracking-[-0.01em]">
+            <span className="text-white opacity-90 font-medium text-sm tracking-[0.01em]">
               {item.yieldName}
             </span>
-            <span className="text-white opacity-75 text-sm tracking-[-0.01em]">
+            <span className="text-white opacity-75 text-sm tracking-[0.01em]">
               TVL: {item.tvl}
             </span>
             <span
-              className="text-sm font-medium tracking-[-0.01em]"
+              className="text-sm font-medium tracking-[0.01em]"
               style={{ color: getRiskColor(item.risk) }}
             >
               Risk: {item.risk}
@@ -120,14 +120,14 @@ export const YieldBanner: React.FC<YieldBannerProps> = ({
         {data.map((item, index) => (
           <div key={`duplicate2-${index}`} className="flex items-center gap-4 mx-8">
             <span className="text-white opacity-90">{item.logoSvg}</span>
-            <span className="text-white opacity-90 font-medium text-sm tracking-[-0.01em]">
+            <span className="text-white opacity-90 font-medium text-sm tracking-[0.01em]">
               {item.yieldName}
             </span>
-            <span className="text-white opacity-75 text-sm tracking-[-0.01em]">
+            <span className="text-white opacity-75 text-sm tracking-[0.01em]">
               TVL: {item.tvl}
             </span>
             <span
-              className="text-sm font-medium tracking-[-0.01em]"
+              className="text-sm font-medium tracking-[0.01em]"
               style={{ color: getRiskColor(item.risk) }}
             >
               Risk: {item.risk}

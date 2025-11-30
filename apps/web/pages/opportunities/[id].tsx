@@ -292,7 +292,7 @@ export default function OpportunityDetailPage() {
                     data as unknown as import("@/components/opportunity/CompareBar").CompareItem,
                   );
                 }}
-                className="inline-flex items-center gap-2 rounded-full border border-[rgba(243,162,51,0.4)] bg-black/40 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#F3A233] shadow-[0_10px_20px_rgba(0,0,0,0.35)] transition hover:border-[#F3A233] hover:text-white"
+                className="inline-flex items-center gap-2 rounded-full border border-[rgba(243,162,51,0.4)] bg-black/40 px-5 py-2 text-xs font-semibold uppercase tracking-[0.01em] text-[#F3A233] shadow-[0_10px_20px_rgba(0,0,0,0.35)] transition hover:border-[#F3A233] hover:text-white"
               >
                 <GitCompare size={16} />
                 Add to Compare

@@ -184,15 +184,15 @@ export const InsuranceCoverage = memo(() => {
         {/* Metrics */}
         <div className="flex items-center justify-center gap-3 text-center">
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1.15 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-[10.25px] uppercase tracking-wide text-white/55">Coverage</span>
+            <span className="text-[10.25px] uppercase tracking-[0.01em] text-white/55">Coverage</span>
             <span className="text-[13.5px] font-semibold text-[var(--gold-300)]">{coverage}%</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1.15 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-[10.25px] uppercase tracking-wide text-white/55">Premium</span>
+            <span className="text-[10.25px] uppercase tracking-[0.01em] text-white/55">Premium</span>
             <span className="text-[13.5px] font-semibold text-[var(--gold-300)]">{premium}%/mo</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1.15 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-[10.25px] uppercase tracking-wide text-white/55">Claim Window</span>
+            <span className="text-[10.25px] uppercase tracking-[0.01em] text-white/55">Claim Window</span>
             <span className="text-[13.5px] font-semibold text-[var(--gold-300)]">48h</span>
           </div>
         </div>

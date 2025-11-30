@@ -73,7 +73,7 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
     <section className="space-y-5 rounded-[32px] border border-[rgba(255,182,72,0.2)] bg-gradient-to-br from-[#0F1012] via-[#050505] to-[#010101] p-6 text-white shadow-[0_30px_70px_rgba(0,0,0,0.55)]">
       <header className="flex items-center justify-between">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+          <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
             Deposit Simulator
           </p>
           <h3 className="text-xl font-black">
@@ -84,7 +84,7 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
       </header>
 
       <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-        <label className="text-xs uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+        <label className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/70">
           Amount (USD)
         </label>
         <div className="mt-2 flex items-center gap-2">
@@ -112,7 +112,7 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
       </div>
 
       <div>
-        <label className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+        <label className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/70">
           Duration
           <span className="font-mono text-white">{days}d</span>
         </label>
@@ -140,7 +140,7 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
       </div>
 
       <div>
-        <label className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+        <label className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/70">
           Compounding Frequency
         </label>
         <div className="mt-2 grid grid-cols-2 gap-2">
@@ -150,7 +150,7 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
               type="button"
               onClick={() => setFrequency(option)}
               className={clsx(
-                "rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition",
+                "rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.01em] transition",
                 frequency === option
                   ? "bg-[#F3A233] text-black"
                   : "border border-white/15 text-[#D8D9DE]/60 hover:border-[#F3A233]/30",
@@ -163,7 +163,7 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
       </div>
 
       <div className="rounded-[28px] border border-white/10 bg-[#0B0B0E] p-5 shadow-inner shadow-black/50">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+        <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
           Results
         </p>
         <div className="mt-4 space-y-4">
@@ -204,7 +204,7 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
           <button
             key={tab}
             className={clsx(
-              "flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em]",
+              "flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.01em]",
               activeTab === tab
                 ? "bg-[#F3A233] text-black"
                 : "text-[#D8D9DE]/70 hover:text-white",
@@ -219,14 +219,14 @@ export function DepositCalculator({ data }: DepositCalculatorProps) {
       <div className="flex flex-col gap-3">
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#F3A233] bg-[#F3A233] px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-black transition hover:shadow-[0_0_35px_rgba(243,162,51,0.4)]"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#F3A233] bg-[#F3A233] px-4 py-3 text-xs font-semibold uppercase tracking-[0.01em] text-black transition hover:shadow-[0_0_35px_rgba(243,162,51,0.4)]"
         >
           <ArrowUpRight size={16} />
           Initiate {activeTab === "deposit" ? "Deposit" : "Withdraw"}
         </button>
         <button
           type="button"
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white transition hover:border-[#F3A233]/40"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 px-4 py-3 text-xs font-semibold uppercase tracking-[0.01em] text-white transition hover:border-[#F3A233]/40"
         >
           <ArrowDownRight size={16} />
           Ghost Action

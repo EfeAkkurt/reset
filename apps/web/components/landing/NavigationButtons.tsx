@@ -107,7 +107,7 @@ function WalletNavigation() {
           align-items: center;
           font-family: Inter, system-ui, -apple-system, sans-serif;
           font-weight: 600;
-          letter-spacing: 0.14em;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
           font-size: 14px;
           color: #fff;

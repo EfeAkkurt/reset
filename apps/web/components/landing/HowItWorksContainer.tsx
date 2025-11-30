@@ -195,7 +195,7 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
               willChange: "transform, opacity",
             }}
           >
-            <p className="mb-4 text-sm uppercase tracking-[0.2em] text-white/50">
+            <p className="mb-4 text-sm uppercase tracking-[0.01em] text-white/50">
               The Reset Mechanism
             </p>
             <h2 className="text-4xl font-bold leading-[1.06] md:text-6xl">

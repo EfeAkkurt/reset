@@ -195,15 +195,15 @@ export const OpportunityScatter = memo(() => {
         {/* Metrics */}
         <div className="flex items-center justify-center gap-1.5 text-center py-2">
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">Trend</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">Trend</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">↑ Strong</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">Consistency</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">Consistency</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">Low σ</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">Depth</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">Depth</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">$78M</span>
           </div>
         </div>

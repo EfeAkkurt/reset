@@ -204,7 +204,7 @@ export const CardsGrid: React.FC<{ progress?: number }> = ({
                 {/* Metrics */}
                 <div className="mt-4 grid grid-cols-3 gap-4">
                   <div>
-                    <div className="text-[11px] uppercase font-medium text-zinc-500 tracking-wide">
+                    <div className="text-[11px] uppercase font-medium text-zinc-500 tracking-[0.01em]">
                       APR
                     </div>
                     <div className="text-sm md:text-base font-semibold leading-tight text-zinc-900 tabular-nums">
@@ -222,7 +222,7 @@ export const CardsGrid: React.FC<{ progress?: number }> = ({
                     </div>
                   </div>
                   <div>
-                    <div className="text-[11px] uppercase font-medium text-zinc-500 tracking-wide">
+                    <div className="text-[11px] uppercase font-medium text-zinc-500 tracking-[0.01em]">
                       APY
                     </div>
                     <div className="text-sm md:text-base font-semibold leading-tight text-zinc-900 tabular-nums">
@@ -240,7 +240,7 @@ export const CardsGrid: React.FC<{ progress?: number }> = ({
                     </div>
                   </div>
                   <div>
-                    <div className="text-[11px] uppercase font-medium text-zinc-500 tracking-wide">
+                    <div className="text-[11px] uppercase font-medium text-zinc-500 tracking-[0.01em]">
                       TVL
                     </div>
                     <div className="text-sm md:text-base font-semibold leading-tight text-zinc-900 tabular-nums">

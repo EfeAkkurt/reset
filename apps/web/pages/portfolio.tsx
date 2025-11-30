@@ -306,7 +306,7 @@ export default function PortfolioPage() {
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(140deg,rgba(255,255,255,0.02),transparent_45%)]" />
         <div className="relative mx-auto max-w-7xl px-4 py-16">
           <header className="mb-10 space-y-4 text-center md:text-left">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.55em] text-[#D8D9DE]/70">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#D8D9DE]/70">
               Reset / Portfolio
             </p>
             <h1 className="text-4xl font-black md:text-5xl">
@@ -323,7 +323,7 @@ export default function PortfolioPage() {
             <div className="mb-8 flex items-start gap-3 rounded-2xl border border-red-500/40 bg-red-500/10 p-4 text-sm text-red-100">
               <AlertCircle className="mt-1 h-5 w-5 text-red-200" />
               <div>
-                <p className="font-semibold uppercase tracking-[0.3em]">
+                <p className="font-semibold uppercase tracking-[0.01em]">
                   Portfolio loading failed
                 </p>
                 <p className="text-red-100/80">{error}</p>
@@ -334,7 +334,7 @@ export default function PortfolioPage() {
           {loading ? (
             <div className="mt-20 flex flex-col items-center gap-4 text-[#D8D9DE]/70">
               <div className="h-12 w-12 animate-spin rounded-full border-2 border-[#F3A233]/30 border-t-[#F3A233]" />
-              <p className="text-xs uppercase tracking-[0.4em]">
+              <p className="text-xs uppercase tracking-[0.01em]">
                 Syncing ledger...
               </p>
             </div>
@@ -343,7 +343,7 @@ export default function PortfolioPage() {
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_60%)]" />
               <div className="relative grid gap-8 md:grid-cols-2">
                 <div>
-                  <p className="text-[11px] uppercase tracking-[0.55em] text-[#D8D9DE]/70">
+                  <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
                     No active holdings
                   </p>
                   <h3 className="mt-4 text-3xl font-black">
@@ -356,7 +356,7 @@ export default function PortfolioPage() {
                   </p>
                   <Link
                     href="/opportunities"
-                    className="mt-6 inline-flex rounded-full border border-[#F3A233] px-6 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#F3A233] hover:bg-[#F3A233]/10"
+                    className="mt-6 inline-flex rounded-full border border-[#F3A233] px-6 py-3 text-xs font-semibold uppercase tracking-[0.01em] text-[#F3A233] hover:bg-[#F3A233]/10"
                   >
                     Browse opportunities
                   </Link>
@@ -386,7 +386,7 @@ export default function PortfolioPage() {
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 <AccountSummary rows={rows as any} />
                 <div className="rounded-[24px] border border-white/10 bg-[#121214] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)] lg:sticky lg:top-[calc(24px+360px)]">
-                  <p className="text-[12px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+                  <p className="text-[12px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
                     Actions
                   </p>
                   <p className="mt-2 text-sm text-[#D8D9DE]/70">
@@ -396,13 +396,13 @@ export default function PortfolioPage() {
                   <div className="mt-6 space-y-3">
                     <button
                       onClick={exportCSV}
-                      className="w-full rounded-xl border border-white/15 bg-transparent px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-[#D8D9DE] transition hover:border-[#F3A233]/50 hover:text-white"
+                      className="w-full rounded-xl border border-white/15 bg-transparent px-4 py-3 text-xs font-semibold uppercase tracking-[0.01em] text-[#D8D9DE] transition hover:border-[#F3A233]/50 hover:text-white"
                     >
                       Export CSV
                     </button>
                     <button
                       onClick={clear}
-                      className="w-full rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.4em] text-red-200 transition hover:border-red-400 hover:bg-red-500/20"
+                      className="w-full rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.01em] text-red-200 transition hover:border-red-400 hover:bg-red-500/20"
                     >
                       Clear Data
                     </button>

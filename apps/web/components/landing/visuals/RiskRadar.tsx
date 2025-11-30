@@ -190,11 +190,11 @@ export const RiskRadar = memo(() => {
         {/* Metrics */}
         <div className="mt-6 flex items-center justify-center gap-6 text-center">
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">VaR(95%)</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">VaR(95%)</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">−2.1%</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">IL Sensitivity</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">IL Sensitivity</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">Low</span>
           </div>
         </div>

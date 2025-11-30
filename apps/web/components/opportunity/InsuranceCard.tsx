@@ -52,7 +52,7 @@ export function InsuranceCard({
             <ShieldCheckIcon className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-[11px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+            <p className="text-[11px] uppercase tracking-[0.01em] text-[#D8D9DE]/70">
               Yield Insurance
             </p>
             <h3 className="text-xl font-black">
@@ -79,7 +79,7 @@ export function InsuranceCard({
           </motion.span>
         </button>
       </header>
-      <p className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+      <p className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/60">
         Protect principal exposure
       </p>
 
@@ -99,7 +99,7 @@ export function InsuranceCard({
                   key={option}
                   onClick={() => setTier(option)}
                   className={clsx(
-                    "rounded-2xl border px-3 py-3 text-center text-xs uppercase tracking-[0.35em]",
+                    "rounded-2xl border px-3 py-3 text-center text-xs uppercase tracking-[0.01em]",
                     tier === option
                       ? "border-[#F3A233] bg-[#F3A233] text-black"
                       : "border-white/10 text-[#D8D9DE]/70 hover:border-[#F3A233]/30",
@@ -165,7 +165,7 @@ function Stat({
 }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-      <p className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+      <p className="text-xs uppercase tracking-[0.01em] text-[#D8D9DE]/70">
         {label}
       </p>
       <p className="mt-2 font-mono text-xl">

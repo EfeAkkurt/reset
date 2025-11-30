@@ -107,7 +107,7 @@ export const OpportunityCard: React.FC<
     >
       <div className="relative flex items-start justify-between">
         <div className="space-y-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/40">
+          <p className="text-xs font-semibold uppercase tracking-[0.01em] text-white/40">
             {data.protocol}
           </p>
 
@@ -125,7 +125,7 @@ export const OpportunityCard: React.FC<
         </div>
         <span
           className={clsx(
-            "inline-flex items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.3em] transition-colors",
+            "inline-flex items-center gap-1.5 rounded-full border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.01em] transition-colors",
             riskStyles[data.risk].badge,
           )}
         >
@@ -191,7 +191,7 @@ export const OpportunityCard: React.FC<
       </div>
 
       <div className="mt-8 flex items-center justify-between text-gold-400">
-        <span className="text-sm font-medium tracking-[0.3em] text-white/70">
+        <span className="text-sm font-medium tracking-[0.01em] text-white/70">
           View details
         </span>
         <span className="rounded-full border border-gold-500/50 bg-gold-500/10 p-2 transition group-hover:bg-gold-500/30 group-hover:text-white">
@@ -205,7 +205,7 @@ export const OpportunityCard: React.FC<
 function MetricCard({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-white/45">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.01em] text-white/45">
         {label}
       </p>
       <p className="mt-2 font-mono text-xl text-white">{value}</p>

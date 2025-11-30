@@ -167,15 +167,15 @@ export const WithdrawWidget = memo(() => {
         {/* Metrics */}
         <div className="flex items-center justify-center gap-3 text-center">
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">Lockup</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">Lockup</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">None</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">Status</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">Status</span>
             <span className="text-sm font-semibold text-green-400">Live</span>
           </div>
           <div className="rounded-full border border-white/10 bg-white/5 px-2 py-1 flex items-center gap-1 whitespace-nowrap">
-            <span className="text-xs uppercase tracking-wide text-white/55">APY (net)</span>
+            <span className="text-xs uppercase tracking-[0.01em] text-white/55">APY (net)</span>
             <span className="text-sm font-semibold text-[var(--gold-300)]">12.4%</span>
           </div>
         </div>

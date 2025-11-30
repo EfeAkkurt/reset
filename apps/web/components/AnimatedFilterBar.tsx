@@ -183,7 +183,7 @@ function Menu({
               <div className="max-h-[60vh] overflow-auto p-2">
                 {items.map((g) => (
                   <div key={g.group} className="mb-1 last:mb-0">
-                    <div className="px-2 py-1 text-[11px] uppercase tracking-wide text-white/40">
+                    <div className="px-2 py-1 text-[11px] uppercase tracking-[0.01em] text-white/40">
                       {g.group}
                     </div>
                     {g.options.map((opt) => (

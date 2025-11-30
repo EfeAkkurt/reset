@@ -30,7 +30,7 @@ export function EditorialProfile() {
           </p>
 
           <div className="space-y-4 pt-8">
-            <h3 className="text-sm uppercase tracking-[0.2em] text-white/40">Connect</h3>
+            <h3 className="text-sm uppercase tracking-[0.01em] text-white/40">Connect</h3>
             <div className="flex gap-6">
               <SocialLink href="https://x.com/EfeAkkurtOFF" label="Twitter / X" />
               <SocialLink href="https://www.instagram.com/efeakkurtofficial" label="Instagram" />

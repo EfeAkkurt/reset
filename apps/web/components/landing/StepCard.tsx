@@ -27,7 +27,7 @@ interface StepCardProps {
 
 // Memoize the badge component to prevent unnecessary re-renders
 const Badge = memo(({ children }: { children: React.ReactNode }) => (
-  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs tracking-wide uppercase text-white/80">
+  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs tracking-[0.01em] uppercase text-white/80">
     <span className="inline-block h-2 w-2 rounded-full bg-[var(--gold-300)]" />
     {children}
   </div>
