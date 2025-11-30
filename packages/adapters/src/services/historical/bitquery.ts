@@ -43,11 +43,11 @@ export class BitqueryService {
     }
   }
 
-  async getAlgorandDefiVolume(): Promise<VolumeData> {
+  async getStellarDefiVolume(): Promise<VolumeData> {
     try {
-      console.log('🔍 Fetching Algorand DeFi volume data');
+      console.log('🔍 Fetching Stellar DeFi volume data');
       
-      // Mock data for Algorand ecosystem
+      // Mock data for Stellar ecosystem
       return {
         volume24h: Math.random() * 5000000,
         volume7d: Math.random() * 35000000,
@@ -55,7 +55,7 @@ export class BitqueryService {
         concentrationRisk: Math.random() * 40,
       };
     } catch (error) {
-      console.error('❌ Failed to fetch Algorand DeFi volume:', error);
+      console.error('❌ Failed to fetch Stellar DeFi volume:', error);
       throw error;
     }
   }

@@ -74,7 +74,7 @@ export function Market({ progress = 0 }: { progress?: number }) {
                     NUMBERS<br/>DON'T LIE
                   </h2>
                   <p className="mt-6 max-w-[400px] text-base text-white/65 md:text-lg">
-                    With OI, yield isn't guesswork. We surface real signals, quantify risk, and protect
+                    With Reset, yield isn't guesswork. We surface real signals, quantify risk, and protect
                     principal — so performance becomes repeatable.
                   </p>
                 </div>

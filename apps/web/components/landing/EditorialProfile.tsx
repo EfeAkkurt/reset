@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
 
 export function EditorialProfile() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -11,29 +10,13 @@ export function EditorialProfile() {
     offset: ["start end", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <div ref={containerRef} className="relative w-full max-w-6xl mx-auto min-h-[600px] flex flex-col md:flex-row items-center gap-12 md:gap-24">
-      {/* Parallax Image Container */}
-      <div className="relative w-full md:w-1/2 aspect-[3/4] overflow-hidden rounded-sm">
-        <motion.div style={{ y }} className="absolute inset-0 w-full h-[120%] -top-[10%]">
-          <Image
-            src="/efe.png"
-            alt="Efe Akkurt"
-            fill
-            className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
-          />
-        </motion.div>
-        
-        {/* Overlay Texture */}
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay pointer-events-none" />
-        <div className="absolute inset-0 border-[12px] border-white/5 pointer-events-none" />
-      </div>
+    <div ref={containerRef} className="relative w-full max-w-4xl mx-auto min-h-[400px] flex items-center justify-center">
 
       {/* Editorial Content */}
-      <div className="w-full md:w-1/2 flex flex-col items-start">
+      <div className="w-full max-w-3xl flex flex-col items-center text-center">
         <motion.div style={{ opacity }} className="space-y-8">
           <div className="space-y-2">
             <h2 className="font-display text-6xl md:text-8xl font-bold tracking-tighter text-white leading-[0.8]">

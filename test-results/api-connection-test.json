@@ -1,0 +1,363 @@
+{
+  "startTime": "2025-11-29T14:06:02.255Z",
+  "environment": {
+    "nodeVersion": "v25.2.1",
+    "platform": "darwin"
+  },
+  "connectivity": [
+    {
+      "test": "Base URL Test",
+      "url": "https://api.llama.fi",
+      "description": "Test if base API URL is accessible",
+      "status": "SUCCESS",
+      "statusCode": 404,
+      "responseTime": 448,
+      "dataSize": 2,
+      "timestamp": "2025-11-29T14:06:02.704Z"
+    },
+    {
+      "test": "Protocols Endpoint",
+      "url": "https://api.llama.fi/protocols",
+      "description": "Test protocols endpoint availability",
+      "status": "SUCCESS",
+      "statusCode": 200,
+      "responseTime": 1065,
+      "dataSize": 6689103,
+      "timestamp": "2025-11-29T14:06:03.779Z"
+    },
+    {
+      "test": "Chains Endpoint",
+      "url": "https://api.llama.fi/chains",
+      "description": "Test chains endpoint availability",
+      "status": "SUCCESS",
+      "statusCode": 200,
+      "responseTime": 273,
+      "dataSize": 47763,
+      "timestamp": "2025-11-29T14:06:04.053Z"
+    },
+    {
+      "test": "Yields Endpoint",
+      "url": "https://api.llama.fi/yields",
+      "description": "Test yields endpoint availability",
+      "status": "SUCCESS",
+      "statusCode": 404,
+      "responseTime": 224,
+      "dataSize": 2,
+      "timestamp": "2025-11-29T14:06:04.277Z"
+    }
+  ],
+  "rateLimiting": {
+    "totalRequests": 10,
+    "successful": 10,
+    "rateLimited": false,
+    "results": [
+      {
+        "requestNumber": 1,
+        "statusCode": 200,
+        "timestamp": 35
+      },
+      {
+        "requestNumber": 2,
+        "statusCode": 200,
+        "timestamp": 138
+      },
+      {
+        "requestNumber": 3,
+        "statusCode": 200,
+        "timestamp": 136
+      },
+      {
+        "requestNumber": 4,
+        "statusCode": 200,
+        "timestamp": 139
+      },
+      {
+        "requestNumber": 5,
+        "statusCode": 200,
+        "timestamp": 135
+      },
+      {
+        "requestNumber": 6,
+        "statusCode": 200,
+        "timestamp": 137
+      },
+      {
+        "requestNumber": 7,
+        "statusCode": 200,
+        "timestamp": 134
+      },
+      {
+        "requestNumber": 8,
+        "statusCode": 200,
+        "timestamp": 139
+      },
+      {
+        "requestNumber": 9,
+        "statusCode": 200,
+        "timestamp": 133
+      },
+      {
+        "requestNumber": 10,
+        "statusCode": 200,
+        "timestamp": 138
+      }
+    ]
+  },
+  "dataFormat": [
+    {
+      "test": "Chains Format",
+      "status": "VALID",
+      "dataSample": [
+        {
+          "gecko_id": "harmony",
+          "tvl": 659153.0539060291,
+          "tokenSymbol": "ONE",
+          "cmcId": "3945",
+          "name": "Harmony",
+          "chainId": 1666600000
+        },
+        {
+          "gecko_id": null,
+          "tvl": 175028119.9841868,
+          "tokenSymbol": "-",
+          "cmcId": null,
+          "name": "Unichain",
+          "chainId": 130
+        }
+      ]
+    },
+    {
+      "test": "Protocols Format",
+      "status": "VALID",
+      "dataSample": [
+        {
+          "id": "2269",
+          "name": "Binance CEX",
+          "address": null,
+          "symbol": "-",
+          "url": "https://www.binance.com",
+          "description": "Binance is a cryptocurrency exchange which is the largest exchange in the world in terms of daily trading volume of cryptocurrencies",
+          "chain": "Multi-Chain",
+          "logo": "https://icons.llama.fi/binance-cex.jpg",
+          "audits": "0",
+          "audit_note": null,
+          "gecko_id": null,
+          "cmcId": null,
+          "category": "CEX",
+          "chains": [
+            "Ethereum",
+            "Bitcoin",
+            "Binance",
+            "Ripple",
+            "Solana",
+            "Doge",
+            "Tron",
+            "Base",
+            "Litecoin",
+            "Arbitrum",
+            "Avalanche",
+            "Hedera",
+            "TON",
+            "Aptos",
+            "Near",
+            "Optimism",
+            "Polygon",
+            "Algorand",
+            "Plasma",
+            "Sonic",
+            "Stellar",
+            "Op_Bnb",
+            "Chiliz",
+            "Celo",
+            "Ronin",
+            "Sui",
+            "zkSync Era",
+            "Manta",
+            "Starknet",
+            "Scroll",
+            "Polkadot",
+            "Fantom"
+          ],
+          "module": "binance/index.js",
+          "twitter": "binance",
+          "forkedFrom": [],
+          "listedAt": 1668170565,
+          "methodology": "We collect the wallets from this Binance blog post https://www.binance.com/en/blog/community/our-commitment-to-transparency-2895840147147652626. We are not counting the Binance Recovery Fund wallet. On Ethereum, we also include staked ETH tracked via known withdrawal addresses.",
+          "misrepresentedTokens": false,
+          "slug": "binance-cex",
+          "tvl": 170440441291.79706,
+          "chainTvls": {
+            "Fantom": 0,
+            "Op_Bnb": 49004277.78386036,
+            "Solana": 2535687177.2425604,
+            "Base": 672963120.1057785,
+            "Hedera": 385634613.2398348,
+            "Sui": 2227392.9238224844,
+            "Plasma": 95012375.16695161,
+            "Algorand": 103738095.63376561,
+            "Chiliz": 48203590.877934344,
+            "Sonic": 89730427.98558366,
+            "zkSync Era": 2130162.37605114,
+            "Manta": 1854477.937189645,
+            "Starknet": 1763194.0614389544,
+            "Scroll": 3129.4426984515912,
+            "Celo": 24222234.52372127,
+            "Stellar": 88763292.19457817,
+            "Optimism": 152485549.65430352,
+            "Ronin": 5995301.172250779,
+            "Litecoin": 559930361.3887663,
+            "Near": 263218220.86920494,
+            "Polygon": 105059919.41684054,
+            "Arbitrum": 522446470.2175683,
+            "Ethereum": 63990027620.42572,
+            "Polkadot": 950.8045872353705,
+            "Avalanche": 434656953.73120546,
+            "Binance": 36874205678.03054,
+            "Ripple": 5435758762.669515,
+            "Tron": 1294876621.8172424,
+            "Aptos": 332071060.7258264,
+            "TON": 336760702.33378005,
+            "Bitcoin": 53568655099.56238,
+            "Doge": 2463354457.4815745
+          },
+          "change_1h": 0.018650197224360454,
+          "change_1d": -0.7351709559638095,
+          "change_7d": 4.314447294902337,
+          "tokenBreakdowns": {},
+          "mcap": null
+        },
+        {
+          "id": "1599",
+          "name": "Aave V3",
+          "address": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+          "symbol": "AAVE",
+          "url": "https://aave.com",
+          "description": "Earn interest, borrow assets, and build applications",
+          "chain": "Multi-Chain",
+          "logo": "https://icons.llama.fi/aave-v3.png",
+          "audits": "2",
+          "audit_note": null,
+          "gecko_id": null,
+          "cmcId": null,
+          "category": "Lending",
+          "chains": [
+            "Ethereum",
+            "Plasma",
+            "Arbitrum",
+            "Base",
+            "Avalanche",
+            "Binance",
+            "Linea",
+            "Polygon",
+            "Optimism",
+            "xDai",
+            "Sonic",
+            "Scroll",
+            "Celo",
+            "zkSync Era",
+            "Metis",
+            "Soneium",
+            "Fantom",
+            "Harmony"
+          ],
+          "oraclesBreakdown": [
+            {
+              "name": "Chainlink",
+              "type": "Primary",
+              "proof": []
+            }
+          ],
+          "forkedFrom": [],
+          "module": "aave-v3/index.js",
+          "twitter": "aave",
+          "audit_links": [
+            "https://aave.com/security"
+          ],
+          "listedAt": 1648776877,
+          "parentProtocol": "parent#aave",
+          "wrongLiquidity": true,
+          "dimensions": {
+            "fees": {
+              "genuineSpikes": [
+                "1722816000",
+                "1738540800"
+              ],
+              "adapter": "aave-v3"
+            }
+          },
+          "methodology": "Counts the tokens locked in the contracts to be used as collateral to borrow or to earn yield. Borrowed coins are not counted towards the TVL, so only the coins actually locked in the contracts are counted. There's multiple reasons behind this but one of the main ones is to avoid inflating the TVL through cycled lending.",
+          "misrepresentedTokens": false,
+          "hallmarks": [
+            [
+              1650471689,
+              "Start AVAX Rewards"
+            ],
+            [
+              1659630089,
+              "Start OP Rewards"
+            ]
+          ],
+          "slug": "aave-v3",
+          "tvl": 32192423455.63465,
+          "chainTvls": {
+            "Base-borrowed": 583195007.9064633,
+            "Avalanche-borrowed": 310043984.33003205,
+            "Base": 808430748.19873,
+            "Sonic": 43142910.96348401,
+            "Scroll-borrowed": 6389663.3109608395,
+            "Ethereum-borrowed": 17337564587.96525,
+            "Polygon-borrowed": 86804052.63849768,
+            "Sonic-borrowed": 17875652.842580862,
+            "Fantom-borrowed": 2176.520467401735,
+            "Linea-borrowed": 201862002.0082725,
+            "Arbitrum-borrowed": 849815656.0963762,
+            "Metis-borrowed": 3170027.123508345,
+            "Binance": 246159153.71318197,
+            "Soneium-borrowed": 586814.2410878206,
+            "Soneium": 3108173.771184725,
+            "Polygon": 191992280.40036818,
+            "xDai-borrowed": 31072389.641630594,
+            "Ethereum": 26518770848.843117,
+            "Optimism-borrowed": 52584827.756054536,
+            "xDai": 85119061.9893356,
+            "Scroll": 13823058.140691807,
+            "zkSync Era-borrowed": 2978632.4522335534,
+            "Optimism": 95219871.20795128,
+            "Plasma": 2178777258.378486,
+            "Plasma-borrowed": 1709740819.9379117,
+            "Harmony-borrowed": 519000.0796070614,
+            "Harmony": 0,
+            "Fantom": 10172.243977025348,
+            "Metis": 4171268.211164105,
+            "zkSync Era": 7119390.99615305,
+            "Binance-borrowed": 97134579.72487225,
+            "Linea": 241650353.54291055,
+            "Arbitrum": 1124890963.9461532,
+            "Celo-borrowed": 5714696.213908289,
+            "Celo": 13624677.43641062,
+            "Avalanche": 616413263.6513577,
+            "borrowed": 21297054570.789715
+          },
+          "change_1h": 0.02164634296831025,
+          "change_1d": -0.9226852827088976,
+          "change_7d": 8.251755105489082,
+          "tokenBreakdowns": {},
+          "mcap": null,
+          "parentProtocolSlug": "aave"
+        }
+      ]
+    },
+    {
+      "test": "Yields Format",
+      "status": "ERROR",
+      "statusCode": 404
+    }
+  ],
+  "endTime": "2025-11-29T14:06:05.093Z",
+  "summary": {
+    "totalTests": 7,
+    "connectivityPassed": 4,
+    "formatPassed": 2,
+    "rateLimitingDetected": false
+  }
+}

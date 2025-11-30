@@ -3,7 +3,7 @@ import "@/styles/globals.css";
 import { Layout } from "@/components/Layout";
 import { CompareProvider } from "@/components/opportunity/CompareBar";
 import { Toaster } from "sonner";
-import { inter, syne } from "@/fonts";
+import { inter } from "@/fonts";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { useEffect, useRef, useState } from "react";
@@ -58,7 +58,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ErrorBoundary>
-      <div className={`${inter.variable} ${syne.variable} min-h-full`}>
+      <div className={`${inter.variable} min-h-full`}>
         <CompareProvider>
           <StellarWalletProvider>
             <Layout>

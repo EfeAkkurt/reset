@@ -271,7 +271,7 @@ export const CardsGrid: React.FC<{ progress?: number }> = ({
                     )}
                   </div>
                   <div className="rounded-full bg-zinc-100 px-2 py-0.5 text-zinc-700">
-                    Algorand
+                    Stellar
                   </div>
                 </div>
 

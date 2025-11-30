@@ -2,6 +2,8 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import resetLogo from "@/public/logos/resetLogo.png";
 import { useSlowScroll } from "@/hooks/useSlowScroll";
 
 import NavigationButtons from "@/components/landing/NavigationButtons";
@@ -76,44 +78,101 @@ import { YieldBanner } from "@/components/YieldBanner";
 // };
 
 export const Header = () => {
-  // const [isVisible] = React.useState(true); // Unused variable
-  // const [lastScrollY, setLastScrollY] = React.useState(0); // Unused variable
+  const router = useRouter();
+  const [isClickAnimating, setIsClickAnimating] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isVisible, setIsVisible] = React.useState(true);
+  const [lastScrollY, setLastScrollY] = React.useState(0);
+  const animationTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+
+  const handleLogoClick = React.useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.shiftKey
+      ) {
+        return;
+      }
+      if (isClickAnimating) return;
+      event.preventDefault();
+
+      setIsClickAnimating(true);
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+      animationTimeoutRef.current = setTimeout(() => {
+        setIsClickAnimating(false);
+        void router.push("/");
+      }, 1500);
+    },
+    [isClickAnimating, router],
+  );
 
   React.useEffect(() => {
-    // const handleScroll = () => {
-    //   const currentScrollY = window.scrollY;
-    //   // Scroll down and past threshold
-    //   if (currentScrollY > lastScrollY && currentScrollY > 100) {
-    //   setIsVisible(false);
-    // }
-    // // Scroll up or at top
-    // else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
-    //   setIsVisible(true);
-    // }
-    //   setLastScrollY(currentScrollY);
-    // };
-    // window.addEventListener("scroll", handleScroll, { passive: true });
-    // return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // lastScrollY removed as it's unused
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Check if scrolled past threshold for background effect
+      setIsScrolled(currentScrollY > 50);
+
+      // Hide/show logic for logo and brand name
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scroll down and past threshold - hide
+        setIsVisible(false);
+      } else if (currentScrollY < lastScrollY || currentScrollY <= 100) {
+        // Scroll up or at top - show
+        setIsVisible(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   // useWallet(); // Wallet integration removed
 
   return (
     <header
-      className="site-header sticky top-0 z-40 w-full"
-      style={{
-        background: 'transparent',
-      }}
+      className={`site-header sticky top-0 z-40 w-full transition-all duration-300 ${
+        isScrolled ? 'header-scrolled' : ''
+      }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-        <Link href="/" className="flex items-center gap-2">
+        <Link
+          href="/"
+          onClick={handleLogoClick}
+          aria-label="Reset home"
+          className={`group flex items-center gap-3 transition-all duration-300 ${
+            isVisible ? 'header-logo-visible' : 'header-logo-hidden'
+          }`}
+        >
           <Image
-            src="/logo-full.png"
-            alt="reset"
-            width={3547}
-            height={850}
-            className="h-8 w-auto"
+            src={resetLogo}
+            alt="Reset"
+            width={160}
+            height={58}
+            priority
+            className={`h-10 w-auto origin-center ${isClickAnimating ? "animate-logo-click" : "group-hover:animate-logo-hover"}`}
           />
+          <div className={`wordmark transition-all duration-300 ${isVisible ? 'header-logo-visible' : 'header-logo-hidden'}`}>
+            <span className="wordmark-text text-[20px]">RESET</span>
+          </div>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-white">
           {/* Navigation links removed */}

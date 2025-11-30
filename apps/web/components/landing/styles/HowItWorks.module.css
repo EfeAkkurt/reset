@@ -1,0 +1,104 @@
+/* Gradient text styling */
+.textGradient {
+  background: var(--btn-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Performance optimizations */
+.gpuAccelerate {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.containLayout {
+  contain: layout style paint;
+}
+
+/* Animation performance classes */
+.smoothTransition {
+  transition: opacity 120ms linear, transform 120ms linear;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .gpuAccelerate {
+    will-change: auto;
+  }
+
+  .smoothTransition {
+    transition: none;
+  }
+}
+
+/* Card hover states optimized */
+.cardHover {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.cardHover:hover {
+  transform: translateZ(0);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Slider optimizations */
+.sliderThumb {
+  touch-action: none;
+  will-change: transform;
+}
+
+/* Pulse animation for live indicators */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Slide animation for arrows */
+@keyframes slideRight {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}
+
+.slideRight {
+  animation: slideRight 1.5s ease-in-out infinite;
+}
+
+/* Containment for better performance */
+.visualCard {
+  contain: layout paint;
+}
+
+.stepCard {
+  contain: layout style;
+}
+
+/* Grid containment */
+.gridContainer {
+  contain: layout;
+}
+
+/* Blur alternatives (using opacity instead) */
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}

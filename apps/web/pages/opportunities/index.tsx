@@ -2,36 +2,19 @@
 import React from "react";
 import Head from "next/head";
 import { Logger } from "@/lib/adapters/real";
-import { AlertTriangle } from "lucide-react";
 import { OpportunityCard } from "@/components/opportunities/OpportunityCard";
 import AnimatedFilterBar from "@/components/AnimatedFilterBar";
 // import { SkeletonGrid } from "@/components/opportunities/SkeletonGrid";
 import { EmptyState } from "@/components/opportunities/EmptyState";
 import HeroHeader from "@/components/HeroHeader";
 import HeroKpiBar from "@/components/HeroKpiBar";
+import type { CardOpportunity } from "@/lib/types";
 // Removed chain filter pills - only Stacks for now
 import OpportunityCardPlaceholder from "@/components/OpportunityCardPlaceholder";
 // Enhanced components temporarily removed due to TypeScript errors
 // import { ChartTimeSelector } from "@/components/enhanced/TimeSelector";
 
-type CardOpportunity = {
-  id: string;
-  protocol: string;
-  pair: string;
-  chain: string;
-  apr: number; // percent
-  apy: number; // percent
-  risk: "Low" | "Medium" | "High";
-  tvlUsd: number;
-  rewardToken: string;
-  lastUpdated: string; // label like 5m, 2h
-  originalUrl: string;
-  summary: string;
-  source?: "live" | "demo";
-};
-
 export default function OpportunitiesPage() {
-  const [query, setQuery] = React.useState("");
   const [risk, setRisk] = React.useState<"all" | "Low" | "Medium" | "High">(
     "all",
   );
@@ -49,11 +32,6 @@ export default function OpportunitiesPage() {
     [],
   );
   const [error, setError] = React.useState<string | null>(null);
-  const [, setStats] = React.useState({
-    avgApr7d: 0,
-    totalTvlUsd: 0,
-    results: 0,
-  });
 
   // Load opportunities data from real APIs only
   React.useEffect(() => {
@@ -65,14 +43,17 @@ export default function OpportunitiesPage() {
         setError(null);
 
         Logger.info(
-          "🚀 Loading opportunities via API bridge (/api/opportunities)...",
+          "🚀 Loading real Stellar opportunities from DeFiLlama API (/api/opportunities-stellar)...",
         );
 
-        const resp = await fetch("/api/opportunities");
+        const resp = await fetch("/api/opportunities-stellar");
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const json = await resp.json();
-        const realOpportunities: CardOpportunity[] = (json.items || []).map(
-          (it: CardOpportunity) => ({ ...it, source: "live" }),
+        const realOpportunities: CardOpportunity[] = (json.data || []).map(
+          (it: CardOpportunity) => ({
+            ...it,
+            source: it.source ?? "live",
+          }),
         );
 
         // Basic stats (client-side)
@@ -88,14 +69,13 @@ export default function OpportunitiesPage() {
         if (!mounted) return;
 
         Logger.info(
-          `✅ Loaded ${realOpportunities.length} opportunities from REAL APIs`,
+          `✅ Loaded ${realOpportunities.length} opportunities`,
         );
         Logger.info(
           `📊 Stats: ${realStats.avgApr7d.toFixed(1)}% avg APR, $${(realStats.totalTvlUsd / 1_000_000).toFixed(1)}M TVL`,
         );
 
         setOpportunities(realOpportunities);
-        setStats(realStats);
       } catch (error) {
         Logger.error(
           "❌ FAILED to load real data - this should not happen in production!",
@@ -105,7 +85,6 @@ export default function OpportunitiesPage() {
           `Real data loading failed: ${error instanceof Error ? error.message : "Unknown error"}`,
         );
         setOpportunities([]);
-        setStats({ avgApr7d: 0, totalTvlUsd: 0, results: 0 });
       } finally {
         if (mounted) {
           setLoading(false);
@@ -118,11 +97,11 @@ export default function OpportunitiesPage() {
     return () => {
       mounted = false;
     };
-  }, [setLoading, setStats]);
+  }, []);
 
   const filtered = React.useMemo(() => {
     Logger.debug(
-      `🔍 Filtering ${opportunities.length} opportunities with query='${query}', risk='${risk}'`,
+      `🔍 Filtering ${opportunities.length} opportunities with risk='${risk}'`,
     );
 
     const result = opportunities.filter((o) => {
@@ -135,20 +114,12 @@ export default function OpportunitiesPage() {
       // Risk filter
       if (risk !== "all" && o.risk !== risk) return false;
 
-      // Search query
-      if (query) {
-        const q = query.toLowerCase();
-        return (
-          o.protocol.toLowerCase().includes(q) ||
-          o.pair.toLowerCase().includes(q)
-        );
-      }
       return true;
     });
 
     Logger.debug(`✅ Filtered to ${result.length} opportunities`);
     return result;
-  }, [opportunities, query, risk]);
+  }, [opportunities, risk]);
 
   const sorted = React.useMemo(() => {
     const dir = sort.dir === "asc" ? 1 : -1;
@@ -183,8 +154,6 @@ export default function OpportunitiesPage() {
     const avgAPR = count ? filtered.reduce((a, o) => a + o.apr, 0) / count : 0; // Already percent
     const sumTVL = filtered.reduce((a, o) => a + o.tvlUsd, 0);
 
-    console.log('📊 Display stats:', { count, avgAPR, sumTVL });
-
     Logger.debug(
       `📊 Display stats: count=${count}, avgAPR=${avgAPR.toFixed(1)}%, totalTVL=$${(sumTVL / 1_000_000).toFixed(1)}M`,
     );
@@ -200,118 +169,103 @@ export default function OpportunitiesPage() {
   return (
     <>
       <Head>
-        <title>Yield Opportunities | reset</title>
+        <title>Stellar Yield Opportunities | Reset</title>
         <meta
           name="description"
-          content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
+          content="Explore the best Stellar yield farming opportunities with $75M+ TVL from Blend protocol. Live APR/APY rates, risk analysis, and insurance-optimized DeFi opportunities."
         />
-        <meta property="og:title" content="Yield Opportunities | reset" />
+        <meta property="og:title" content="Stellar Yield Opportunities | Reset" />
         <meta
           property="og:description"
-          content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
+          content="Discover premium Stellar DeFi yield opportunities with institutional-grade risk analysis. Real-time data from Blend protocol with $75M+ TVL and low-risk profiles perfect for insurance products."
         />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Yield Opportunities | reset" />
+        <meta name="twitter:title" content="Stellar Yield Opportunities | Reset" />
         <meta
           name="twitter:description"
-          content="Explore the best yield farming opportunities across multiple chains. Find highest APR/APY rates on Ethereum, Solana, and more."
+          content="Live Stellar DeFi yields from Blend protocol. $75M+ TVL, low-risk profiles, institutional-grade analysis. Perfect for insurance and risk management."
         />
       </Head>
-      <main>
+      <main className="relative overflow-hidden bg-[#050505] pb-20 text-white">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at top, rgba(240,145,44,0.08), transparent 55%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.25) 1px, transparent 1px)",
+            backgroundSize: "30px 30px",
+          }}
+        />
         <HeroHeader
-          title="Explore Yield Opportunities"
-          subtitle="Find the best APR/APY on Algorand. Multichain coming soon."
+          title="Stellar Yield Opportunities"
           size="standard"
-          // Multi-chain support enabled
+          // Stellar-focused yield opportunities
           kpis={<HeroKpiBar kpis={displayStats} />}
         />
 
-        <AnimatedFilterBar
-          defaultRisk={
-            risk === "Medium"
-              ? "medium"
-              : risk === "High"
-                ? "high"
-                : risk === "Low"
-                  ? "low"
-                  : "all"
-          }
-          defaultSort={
-            `${sort.key === "tvlUsd" ? "tvl" : sort.key}-${sort.dir}` as
-              | "apr-desc"
-              | "apr-asc"
-              | "apy-desc"
-              | "apy-asc"
-              | "tvl-desc"
-              | "tvl-asc"
-              | "risk-desc"
-              | "risk-asc"
-          }
-          query={query}
-          onQueryChange={(q) => {
-            Logger.debug(`🔍 Search query changed: '${q}'`);
-            setQuery(q);
-          }}
-          onRiskChange={(r) => {
-            Logger.debug(`🎯 Risk filter changed: '${r}'`);
-            const mapped =
-              r === "medium"
-                ? "Medium"
-                : r === "high"
-                  ? "High"
-                  : r === "low"
-                    ? "Low"
-                    : "all";
-            setRisk(mapped as typeof risk);
-          }}
-          onSortChange={(s) => {
-            const [sortKey, dir] = s.split("-") as [string, "asc" | "desc"];
-            const key = (
-              sortKey === "tvl" ? "tvlUsd" : sortKey
-            ) as keyof CardOpportunity;
-            Logger.debug(`📈 Sort changed: ${key} ${dir}`);
-            setSort({ key, dir });
-          }}
-        />
+        <div className="relative z-10 -mt-4">
+          <AnimatedFilterBar
+            defaultRisk={
+              risk === "Medium"
+                ? "medium"
+                : risk === "High"
+                  ? "high"
+                  : risk === "Low"
+                    ? "low"
+                    : "all"
+            }
+            defaultSort={
+              `${sort.key === "tvlUsd" ? "tvl" : sort.key}-${sort.dir}` as
+                | "apr-desc"
+                | "apr-asc"
+                | "apy-desc"
+                | "apy-asc"
+                | "tvl-desc"
+                | "tvl-asc"
+                | "risk-desc"
+                | "risk-asc"
+            }
+            onRiskChange={(r) => {
+              Logger.debug(`🎯 Risk filter changed: '${r}'`);
+              const mapped =
+                r === "medium"
+                  ? "Medium"
+                  : r === "high"
+                    ? "High"
+                    : r === "low"
+                      ? "Low"
+                      : "all";
+              setRisk(mapped as typeof risk);
+            }}
+            onSortChange={(s) => {
+              const [sortKey, dir] = s.split("-") as [string, "asc" | "desc"];
+              const key = (
+                sortKey === "tvl" ? "tvlUsd" : sortKey
+              ) as keyof CardOpportunity;
+              Logger.debug(`📈 Sort changed: ${key} ${dir}`);
+              setSort({ key, dir });
+            }}
+          />
+        </div>
 
-        <section className="mx-auto max-w-6xl px-4 py-8 sm:py-10">
-
-          {/* Real Data Status Indicator */}
-          {!error && !loading && (
-            <div className="mb-10 rounded-lg border border-green-200 bg-green-50 p-4">
-              <div className="flex items-center space-x-3">
-                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
-                <div>
-                  <p className="text-sm font-medium text-green-800">
-                    🚀 Live Data Active
-                  </p>
-                  <p className="text-sm text-green-700">
-                    Real-time data from DeFiLlama API and leading DeFi protocols •
-                    Updated every 5 minutes
-                  </p>
-                </div>
-              </div>
+        <section className="relative z-10 mx-auto max-w-6xl px-4 py-6 sm:py-8" style={{zIndex: 1}}>
+          {error ? (
+            <div className="rounded-2xl border border-rose-500/40 bg-rose-500/10 p-6 text-sm text-rose-100">
+              {error}
             </div>
-          )}
-
-          {/* Error Indicator */}
-          {error && (
-            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
-              <div className="flex items-center space-x-3">
-                <AlertTriangle className="h-5 w-5 text-red-600" />
-                <div>
-                  <p className="text-sm font-medium text-red-800">
-                    ❌ Real Data Loading Failed
-                  </p>
-                  <p className="text-sm text-red-700">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
+          ) : null}
 
           {loading ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 6 }).map((_, i) => (
                 <OpportunityCardPlaceholder key={i} />
               ))}
@@ -320,13 +274,12 @@ export default function OpportunitiesPage() {
             <EmptyState
               onReset={() => {
                 Logger.info("🔄 Resetting all filters to default values");
-                setQuery("");
                 setRisk("all");
                 setSort({ key: "apr", dir: "desc" });
               }}
             />
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {sorted.map((o, index) => {
                 Logger.debug(
                   `🃏 Rendering opportunity ${index + 1}/${sorted.length}: ${o.protocol} - ${o.pair}`,
@@ -335,14 +288,12 @@ export default function OpportunitiesPage() {
                   <OpportunityCard
                     key={o.id}
                     data={o}
-                    disabled={false} // All Stacks opportunities are enabled
+                    disabled={false}
                   />
                 );
               })}
             </div>
           )}
-
-          {/* Bottom info/debug note removed per request */}
         </section>
       </main>
     </>

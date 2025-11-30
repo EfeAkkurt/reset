@@ -1,4 +1,4 @@
-// OI — Gold/Black design tokens (single source of truth)
+// Reset — Gold/Black design tokens (single source of truth)
 // Export these for use in React components, charts, or any JS that needs dynamic colors
 
 export const colors = {

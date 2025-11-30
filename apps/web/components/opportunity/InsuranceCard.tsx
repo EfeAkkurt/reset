@@ -2,25 +2,19 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheckIcon } from "@heroicons/react/24/outline";
+import { ShieldCheckIcon, Activity, Zap } from "lucide-react";
+import clsx from "clsx";
 
 type Tier = "basic" | "standard" | "plus";
 
 type Props = {
-  amount?: number; // principal (USD)
-  days?: number; // duration in days
-  premiumRate30d?: number; // e.g., 0.18% per 30d => 0.0018
-  coverageByTier?: Record<Tier, number>; // % of principal covered (0.6, 0.8, 0.9)
-  deductiblePct?: number; // e.g., 0.10 (10%)
-  coverageCapUSD?: number; // max payout cap in USD
-  riskScore?: number; // 0-100
-  className?: string;
-  onChange?: (_data: {
-    enabled: boolean;
-    tier: Tier;
-    premiumUSD: number;
-    estimatedPayoutUSD: number;
-  }) => void;
+  amount?: number;
+  days?: number;
+  premiumRate30d?: number;
+  coverageByTier?: Record<Tier, number>;
+  deductiblePct?: number;
+  coverageCapUSD?: number;
+  riskScore?: number;
 };
 
 const defaultCoverageByTier: Record<Tier, number> = {
@@ -30,183 +24,128 @@ const defaultCoverageByTier: Record<Tier, number> = {
 };
 
 export function InsuranceCard({
-  amount = 1000,
+  amount = 2500,
   days = 90,
-  premiumRate30d = 0.0018, // %0.18 / 30gün
+  premiumRate30d = 0.0015,
   coverageByTier = defaultCoverageByTier,
-  deductiblePct = 0.1, // %10
-  coverageCapUSD = 100000, // üst sınır
-  riskScore = 27,
-  className,
-  onChange,
+  deductiblePct = 0.1,
+  coverageCapUSD = 100000,
+  riskScore = 32,
 }: Props) {
   const [enabled, setEnabled] = React.useState(false);
   const [tier, setTier] = React.useState<Tier>("standard");
 
-  // hesaplar
-  const months = Math.max(1, Math.ceil(days / 30)); // basit: 1 ay taban
-  const premiumUSD = enabled ? round(amount * premiumRate30d * months, 2) : 0;
-
+  const months = Math.max(1, Math.ceil(days / 30));
+  const premiumUSD = enabled ? amount * premiumRate30d * months : 0;
   const coveredAmount = enabled ? amount * coverageByTier[tier] : 0;
-  const deductibleUSD = enabled ? coveredAmount * deductiblePct : 0;
-
-  const estimatedPayoutRaw = Math.max(0, coveredAmount - deductibleUSD);
-  const estimatedPayoutUSD = enabled
-    ? Math.min(estimatedPayoutRaw, coverageCapUSD)
-    : 0;
-
-  React.useEffect(() => {
-    onChange?.({ enabled, tier, premiumUSD, estimatedPayoutUSD });
-  }, [enabled, tier, premiumUSD, estimatedPayoutUSD, onChange]);
+  const deductibleUSD = coveredAmount * deductiblePct;
+  const estimatedPayout = Math.min(
+    Math.max(0, coveredAmount - deductibleUSD),
+    coverageCapUSD,
+  );
 
   return (
-    <section
-      className={[
-        "sticky top-24 rounded-2xl p-5 sm:p-6",
-        "bg-white/60 dark:bg-neutral-900/50",
-        "backdrop-blur-sm ring-1 ring-black/5 dark:ring-white/10",
-        "shadow-sm",
-        className ?? "",
-      ].join(" ")}
-    >
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/40">
-            <ShieldCheckIcon className="h-5 w-5 text-emerald-400" />
+    <section className="space-y-4 rounded-[32px] border border-[rgba(255,182,72,0.2)] bg-[#070708]/95 p-6 text-white shadow-[0_30px_70px_rgba(0,0,0,0.55)]">
+      <header className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-green-500/15 text-green-200">
+            <ShieldCheckIcon className="h-6 w-6" />
           </div>
           <div>
-            <div className="font-display text-lg text-neutral-900 dark:text-white">
+            <p className="text-[11px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
               Yield Insurance
-            </div>
-            <div className="text-xs text-neutral-500 dark:text-neutral-400">
-              Protect your principal with transparent terms
-            </div>
+            </p>
+            <h3 className="text-xl font-black">
+              Protect principal exposure
+            </h3>
           </div>
         </div>
-
-        {/* Enable Switch */}
         <button
           type="button"
-          onClick={() => setEnabled((v) => !v)}
-          className={[
-            "relative inline-flex h-8 w-14 flex-shrink-0 cursor-pointer rounded-full",
-            enabled ? "bg-emerald-500" : "bg-neutral-300 dark:bg-neutral-700",
-            "transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400/50",
-          ].join(" ")}
+          onClick={() => setEnabled((prev) => !prev)}
+          className={clsx(
+            "relative inline-flex h-10 w-20 items-center rounded-full border border-white/15 p-1 transition",
+            enabled ? "bg-[#F3A233]/20" : "bg-white/5",
+          )}
           aria-pressed={enabled}
-          aria-label="Protect with insurance"
         >
-          <span
-            className={[
-              "pointer-events-none absolute left-1 top-1 inline-block h-6 w-6 transform rounded-full bg-white dark:bg-neutral-100 shadow transition",
-              enabled ? "translate-x-6" : "translate-x-0",
-            ].join(" ")}
-          />
+          <motion.span
+            layout
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-xs font-semibold text-black shadow"
+            animate={{ x: enabled ? 40 : 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 28 }}
+          >
+            {enabled ? "ON" : "OFF"}
+          </motion.span>
         </button>
-      </div>
+      </header>
+      <p className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+        Protect principal exposure
+      </p>
 
-      {/* Collapsible content */}
       <AnimatePresence initial={false}>
         {enabled && (
           <motion.div
-            key="ins-content"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="overflow-hidden"
+            key="insurance-body"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-5 overflow-hidden"
           >
-            {/* Tier selector */}
-            <div className="mt-5 grid grid-cols-3 gap-2">
-              {(["basic", "standard", "plus"] as Tier[]).map((t) => {
-                const active = tier === t;
-                const label =
-                  t === "basic"
-                    ? "Basic"
-                    : t === "standard"
-                      ? "Standard"
-                      : "Plus";
-                const covPct = coverageByTier[t] * 100;
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => setTier(t)}
-                    className={[
-                      "rounded-xl px-3 py-2.5 text-sm font-medium",
-                      "ring-1 transition",
-                      active
-                        ? "bg-emerald-500 text-white ring-emerald-500"
-                        : "bg-white/50 dark:bg-neutral-800/60 text-neutral-800 dark:text-neutral-200 ring-black/10 dark:ring-white/10 hover:bg-white/80 dark:hover:bg-neutral-800",
-                    ].join(" ")}
-                  >
-                    {label}{" "}
-                    <span className="opacity-80">({covPct.toFixed(0)}%)</span>
-                  </button>
-                );
-              })}
+            <div className="grid grid-cols-3 gap-3">
+              {(["basic", "standard", "plus"] as Tier[]).map((option) => (
+                <button
+                  key={option}
+                  onClick={() => setTier(option)}
+                  className={clsx(
+                    "rounded-2xl border px-3 py-3 text-center text-xs uppercase tracking-[0.35em]",
+                    tier === option
+                      ? "border-[#F3A233] bg-[#F3A233] text-black"
+                      : "border-white/10 text-[#D8D9DE]/70 hover:border-[#F3A233]/30",
+                  )}
+                >
+                  {option}
+                </button>
+              ))}
             </div>
 
-            {/* Summary grid */}
-            <div className="mt-5 grid grid-cols-2 gap-3">
-              <Stat
-                label="Premium"
-                valueUSD={premiumUSD}
-                accent="purple"
-                hint={`≈ ${(premiumRate30d * 100).toFixed(2)}% / 30d × ${months} mo`}
-              />
-              <Stat
-                label="Covered Amount"
-                valueUSD={coveredAmount}
-                accent="blue"
-                hint={`${(coverageByTier[tier] * 100).toFixed(0)}% of principal`}
-              />
-              <Stat
-                label="Deductible"
-                valueUSD={deductibleUSD}
-                accent="amber"
-                hint={`${(deductiblePct * 100).toFixed(0)}% of covered`}
-              />
-              <Stat
-                label="Est. Payout (max)"
-                valueUSD={estimatedPayoutUSD}
-                accent="emerald"
-                hint={`Cap: $${abbr(coverageCapUSD)}`}
-              />
+            <div className="grid gap-3 rounded-[28px] border border-white/10 bg-[#0D0E10] p-4 shadow-inner shadow-black/40 md:grid-cols-2">
+              <Stat label="Premium" value={premiumUSD} badge="≈0.18% / 30d" />
+              <Stat label="Covered" value={coveredAmount} badge={`${(coverageByTier[tier] * 100).toFixed(0)}%`} />
+              <Stat label="Deductible" value={deductibleUSD} badge={`${(deductiblePct * 100).toFixed(0)}%`} />
+              <Stat label="Payout Limit" value={estimatedPayout} badge={`Cap $${coverageCapUSD.toLocaleString()}`} />
             </div>
 
-            {/* Coverage in / out */}
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid gap-3 md:grid-cols-2">
               <ListCard
-                title="Covered"
-                items={[
-                  "Protocol bankruptcy / exploit†",
-                  "Smart-contract critical bug",
-                  "LP insolvency due to depeg",
-                ]}
+                title="Covered Perils"
                 accent="emerald"
+                lines={[
+                  "Protocol bankruptcy / exploit",
+                  "Smart-contract malfunction",
+                  "Severe LP insolvency",
+                ]}
               />
               <ListCard
                 title="Not Covered"
-                items={[
-                  "Self-custody loss (seed/ledger)",
-                  "Market price drop / IL",
-                  "Sanctions or KYC failure",
-                ]}
                 accent="rose"
+                lines={[
+                  "Private key compromise",
+                  "Market drawdown / IL",
+                  "Sanctions & compliance events",
+                ]}
               />
             </div>
 
-            {/* Risk strip */}
-            <div className="mt-6 flex items-center justify-between rounded-xl bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 px-3 py-2 ring-1 ring-emerald-400/20">
-              <div className="text-xs text-neutral-600 dark:text-neutral-300">
-                Market condition: <b>Low Volatility</b> • Your risk score:{" "}
-                <b>{riskScore}/100</b>
-              </div>
-              <div className="text-[10px] text-neutral-500 dark:text-neutral-400">
-                †Requires post-mortem & oracle verification
-              </div>
+            <div className="flex flex-wrap items-center gap-3 rounded-2xl border border-white/10 bg-gradient-to-r from-[#1DD1A1]/10 to-[#F3A233]/10 px-4 py-3 text-xs text-[#D8D9DE]">
+              <Activity size={16} />
+              <span>Market condition: Low volatility</span>
+              <span>Risk cost: {riskScore}%</span>
+              <span className="inline-flex items-center gap-1 text-[#F3A233]">
+                <Zap size={14} />
+                Transparent oracle terms
+              </span>
             </div>
           </motion.div>
         )}
@@ -215,91 +154,52 @@ export function InsuranceCard({
   );
 }
 
-/* ——— Helpers ——— */
-
-function round(n: number, p = 2) {
-  return Math.round(n * 10 ** p) / 10 ** p;
-}
-
-function abbr(v: number) {
-  if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
-  if (v >= 1_000) return `${(v / 1_000).toFixed(1)}K`;
-  return v.toFixed(0);
-}
-
 function Stat({
   label,
-  valueUSD,
-  hint,
-  accent = "emerald",
+  value,
+  badge,
 }: {
   label: string;
-  valueUSD: number;
-  hint?: string;
-  accent?: "emerald" | "purple" | "blue" | "amber";
+  value: number;
+  badge: string;
 }) {
-  const ring =
-    accent === "emerald"
-      ? "ring-emerald-400/40"
-      : accent === "purple"
-        ? "ring-purple-400/40"
-        : accent === "blue"
-          ? "ring-sky-400/40"
-          : "ring-amber-400/40";
-
   return (
-    <div
-      className={[
-        "rounded-xl p-3 sm:p-4 bg-white/60 dark:bg-neutral-800/60 backdrop-blur",
-        "ring-1",
-        ring,
-      ].join(" ")}
-    >
-      <div className="text-xs uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+    <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
+      <p className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
         {label}
-      </div>
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25 }}
-        className="mt-0.5 font-display text-lg text-neutral-900 dark:text-white tabular-nums"
-      >
-        ${valueUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })}
-      </motion.div>
-      {hint ? (
-        <div className="mt-0.5 text-[11px] text-neutral-500 dark:text-neutral-400">
-          {hint}
-        </div>
-      ) : null}
+      </p>
+      <p className="mt-2 font-mono text-xl">
+        ${value.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+      </p>
+      <p className="text-[11px] text-[#8F94A3]">{badge}</p>
     </div>
   );
 }
 
 function ListCard({
   title,
-  items,
-  accent = "emerald",
+  lines,
+  accent,
 }: {
   title: string;
-  items: string[];
-  accent?: "emerald" | "rose";
+  lines: string[];
+  accent: "emerald" | "rose";
 }) {
-  const dot = accent === "emerald" ? "bg-emerald-400" : "bg-rose-400";
-
+  const palette =
+    accent === "emerald"
+      ? "from-emerald-400/15 to-emerald-500/5"
+      : "from-rose-500/15 to-rose-500/5";
   return (
-    <div className="rounded-xl p-3 sm:p-4 ring-1 ring-black/5 dark:ring-white/10 bg-white/60 dark:bg-neutral-800/60">
-      <div className="mb-1.5 text-sm font-semibold text-neutral-900 dark:text-white">
-        {title}
-      </div>
-      <ul className="space-y-1.5">
-        {items.map((it, i) => (
-          <li
-            key={i}
-            className="flex items-start gap-2 text-[13px] text-neutral-700 dark:text-neutral-300"
-          >
-            <span className={`mt-1 h-2 w-2 rounded-full ${dot}`} />
-            <span>{it}</span>
-          </li>
+    <div
+      className={clsx(
+        "rounded-2xl border border-white/10 bg-gradient-to-br p-4 text-sm text-[#C6CAD8]",
+        palette,
+      )}
+    >
+      <p className="font-semibold text-white">{title}</p>
+      <ul className="mt-2 space-y-1 text-xs">
+        {lines.map((line) => (
+          <li key={line}>• {line}</li>
         ))}
       </ul>
     </div>

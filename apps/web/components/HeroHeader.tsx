@@ -16,9 +16,9 @@ type Props = {
 };
 
 const sizeToMinH: Record<NonNullable<Props["size"]>, string> = {
-  compact: "min-h-[12vh]",
-  standard: "min-h-[20vh]",
-  large: "min-h-[25vh]",
+  compact: "min-h-[10vh]",
+  standard: "min-h-[16vh]",
+  large: "min-h-[20vh]",
 };
 
 export function HeroHeader({
@@ -35,13 +35,18 @@ export function HeroHeader({
   const reduceMotion = useReducedMotion();
 
   const containerClasses = [
-    "graph-bg graph-density-normal",
-    "relative isolate",
+    "relative isolate overflow-hidden bg-[#0A0A0A]",
     sizeToMinH[size],
     "flex items-center",
     "text-center",
+    "py-10 sm:py-12",
     className ?? "",
   ].join(" ");
+  const gridBackground = {
+    backgroundImage:
+      "linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)",
+    backgroundSize: "28px 28px",
+  };
 
   const titleAnim = reduceMotion
     ? {}
@@ -69,18 +74,40 @@ export function HeroHeader({
 
   return (
     <section className={containerClasses}>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-60"
+      >
+        <div
+          className="absolute inset-0"
+          style={gridBackground}
+        />
+        <div
+          className="absolute left-1/2 top-[35%] h-[680px] w-[680px] -translate-x-1/2 rounded-full blur-[140px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(240,145,44,0.06) 0%, rgba(240,145,44,0) 65%)",
+          }}
+        />
+        <div
+          className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full opacity-30 blur-[120px]"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(255,255,255,0.08) 0%, rgba(0,0,0,0) 70%)",
+          }}
+        />
+      </div>
       <div className="relative z-10 w-full">
-        <div className="mx-auto max-w-3xl px-10 py-10 sm:py-4">
+        <div className="mx-auto max-w-3xl px-6 sm:px-10">
           <motion.h1
-            className="font-display text-white text-3xl sm:text-4xl md:text-5xl
-              tracking-tight mt-20"
+            className="font-display text-3xl mb-16 tracking-tight text-white sm:text-4xl md:text-5xl"
             {...titleAnim}
           >
             {title}
           </motion.h1>
           {subtitle ? (
             <motion.p
-              className="mt-1 text-neutral-400 text-base sm:text-lg mt-5"
+              className="mt-3 text-base text-neutral-200 sm:text-lg"
               {...subtitleAnim}
             >
               {subtitle}
@@ -127,7 +154,7 @@ export function HeroHeader({
         {/* KPI Bar */}
         {kpis && (
           <motion.div
-            className="relative z-10 w-full mt-4"
+            className="relative z-10 w-full mt-8"
             initial={reduceMotion ? {} : { opacity: 0, y: 6 }}
             animate={reduceMotion ? {} : { opacity: 1, y: 0 }}
             transition={

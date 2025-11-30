@@ -1,22 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { realDataAdapter } from "@/lib/adapters/real";
-
-type CardOpportunity = {
-  id: string;
-  protocol: string;
-  pair: string;
-  chain: string;
-  apr: number;
-  apy: number;
-  risk: "Low" | "Medium" | "High";
-  tvlUsd: number;
-  rewardToken: string;
-  lastUpdated: string;
-  originalUrl: string;
-  summary: string;
-  source?: "live" | "demo";
-  logoUrl?: string;
-};
+import { getMockOpportunities } from "@/lib/mock/opportunities";
+import type { CardOpportunity } from "@/lib/types";
 
 export default async function handler(
   req: NextApiRequest,
@@ -40,6 +25,7 @@ export default async function handler(
             reliability: number;
             overallScore: number;
           };
+          dataSource: "live" | "demo";
         };
       }
     | { error: string }
@@ -50,35 +36,48 @@ export default async function handler(
   }
 
   try {
-    const items = await realDataAdapter.fetchOpportunities();
-    // Tag as live source for UI
-    const withSource: CardOpportunity[] = items.map((it) => ({
+    let rawItems: CardOpportunity[];
+    let dataSource: "live" | "demo" = "live";
+
+    try {
+      const items = await realDataAdapter.fetchOpportunities();
+      rawItems = items as CardOpportunity[];
+    } catch (adapterError) {
+      console.error(
+        "[API /opportunities] Real data fetch failed, using mock data",
+        adapterError,
+      );
+      dataSource = "demo";
+      rawItems = getMockOpportunities();
+    }
+
+    const withSource: CardOpportunity[] = rawItems.map((it) => ({
       ...it,
-      source: "live",
+      source: dataSource,
     }));
 
     // Calculate enhanced metadata
-    const totalItems = items.length;
-    const totalTvl = items.reduce((sum, item) => sum + item.tvlUsd, 0);
+    const totalItems = rawItems.length;
+    const totalTvl = rawItems.reduce((sum, item) => sum + item.tvlUsd, 0);
     const avgApr =
       totalItems > 0
-        ? items.reduce((sum, item) => sum + item.apr, 0) / totalItems
+        ? rawItems.reduce((sum, item) => sum + item.apr, 0) / totalItems
         : 0;
     const avgApy =
       totalItems > 0
-        ? items.reduce((sum, item) => sum + item.apy, 0) / totalItems
+        ? rawItems.reduce((sum, item) => sum + item.apy, 0) / totalItems
         : 0;
 
     // Risk distribution
     const riskDistribution = {
-      low: items.filter((item) => item.risk === "Low").length,
-      medium: items.filter((item) => item.risk === "Medium").length,
-      high: items.filter((item) => item.risk === "High").length,
+      low: rawItems.filter((item) => item.risk === "Low").length,
+      medium: rawItems.filter((item) => item.risk === "Medium").length,
+      high: rawItems.filter((item) => item.risk === "High").length,
     };
 
     // Chain distribution
     const chainDistribution: Record<string, number> = {};
-    items.forEach((item) => {
+    rawItems.forEach((item) => {
       chainDistribution[item.chain] = (chainDistribution[item.chain] || 0) + 1;
     });
 
@@ -98,6 +97,7 @@ export default async function handler(
       chainDistribution,
       lastUpdate: new Date().toISOString(),
       dataQuality,
+      dataSource,
     };
 
     return res.status(200).json({ items: withSource, metadata });

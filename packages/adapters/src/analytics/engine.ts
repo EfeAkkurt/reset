@@ -647,7 +647,7 @@ export class AnalyticsEngine {
       ],
       relativePerformance: 120, // Above average
       marketTrends: [
-        { trend: 'Yield OIg growth', impact: 'positive' as const, timeframe: '6 months', description: 'Growing interest in yield optimization' },
+        { trend: 'Yield farming growth', impact: 'positive' as const, timeframe: '6 months', description: 'Growing interest in yield optimization' },
         { trend: 'Liquidity mining decline', impact: 'negative' as const, timeframe: '3 months', description: 'Reduced incentive programs' }
       ]
     };

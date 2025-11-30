@@ -16,7 +16,6 @@ type Props = {
 };
 
 export function HeroKpiBar({ kpis }: Props) {
-  console.log('HeroKpiBar received kpis:', kpis);
   const reduceMotion = useReducedMotion();
 
   const fadeInAnim = reduceMotion
@@ -35,39 +34,47 @@ export function HeroKpiBar({ kpis }: Props) {
   };
 
   return (
-    <motion.div className="mx-auto max-w-5xl px-4" {...fadeInAnim}>
-      {/* Enhanced components temporarily removed due to TypeScript errors */}
-      <div className="bg-white/8 backdrop-blur ring-1 ring-white/15 rounded-2xl px-4 py-3">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+    <motion.div
+      className="mx-auto -mt-8 max-w-5xl px-4 sm:-mt-12"
+      {...fadeInAnim}
+    >
+      <div className="rounded-[28px] border border-alpha-gold-16 bg-[rgba(18,18,20,0.92)] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
           {/* Placeholder for APR Metrics Card */}
-          <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 rounded-xl p-4">
-            <h3 className="text-white/70 text-sm font-medium mb-1">
+          <div className="rounded-2xl border border-alpha-gold-16 bg-[var(--neutral-800)] p-5 shadow-[0_15px_35px_rgba(0,0,0,0.35)]">
+            <h3 className="mb-1 text-sm font-medium text-[var(--text-2)]">
               Average APR
             </h3>
-            <p className="text-2xl font-bold text-white">
-              {Number.isFinite(kpis.avgApr7d) ? kpis.avgApr7d.toFixed(2) : '0.00'}%
+            <p className="text-3xl font-semibold text-white">
+              {Number.isFinite(kpis.avgApr7d) ? kpis.avgApr7d.toFixed(2) : "0.00"}%
             </p>
-            <p className="text-green-400 text-xs">+{mockChange24h.apr}%</p>
+            <p className="text-xs font-medium text-gold-400">
+              +{mockChange24h.apr}%
+            </p>
           </div>
 
           {/* Placeholder for TVL Metrics Card */}
-          <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-xl p-4">
-            <h3 className="text-white/70 text-sm font-medium mb-1">
+          <div className="rounded-2xl border border-alpha-gold-16 bg-[var(--neutral-800)] p-5 shadow-[0_15px_35px_rgba(0,0,0,0.35)]">
+            <h3 className="mb-1 text-sm font-medium text-[var(--text-2)]">
               Total TVL
             </h3>
-            <p className="text-2xl font-bold text-white">
-              ${Number.isFinite(kpis.totalTvlUsd) ? (kpis.totalTvlUsd / 1000000).toFixed(1) : '0.0'}M
+            <p className="text-3xl font-semibold text-white">
+              ${Number.isFinite(kpis.totalTvlUsd) ? (kpis.totalTvlUsd / 1_000_000).toFixed(1) : "0.0"}M
             </p>
-            <p className="text-green-400 text-xs">+{mockChange24h.tvl}%</p>
+            <p className="text-xs font-medium text-gold-400">
+              +{mockChange24h.tvl}%
+            </p>
           </div>
 
           {/* Placeholder for Participants Metrics Card */}
-          <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 rounded-xl p-4">
-            <h3 className="text-white/70 text-sm font-medium mb-1">
+          <div className="rounded-2xl border border-alpha-gold-16 bg-[var(--neutral-800)] p-5 shadow-[0_15px_35px_rgba(0,0,0,0.35)]">
+            <h3 className="mb-1 text-sm font-medium text-[var(--text-2)]">
               Participants
             </h3>
-            <p className="text-2xl font-bold text-white">{Number.isFinite(kpis.results) ? kpis.results : 0}</p>
-            <p className="text-green-400 text-xs">
+            <p className="text-3xl font-semibold text-white">
+              {Number.isFinite(kpis.results) ? kpis.results : 0}
+            </p>
+            <p className="text-xs font-medium text-gold-400">
               +{mockChange24h.participants}%
             </p>
           </div>

@@ -36,8 +36,7 @@ export function ParticleField() {
   }, [count]);
 
   useFrame(() => {
-    const currentMesh = mesh.current;
-    if (!currentMesh) return;
+    if (!mesh.current) return;
 
     // Mouse influence
     const targetX = (mouse.x * viewport.width) / 50;
@@ -71,11 +70,13 @@ export function ParticleField() {
       
       dummy.rotation.set(s * 5, s * 5, s * 5);
       dummy.updateMatrix();
-      
-      currentMesh.setMatrixAt(i, dummy.matrix);
+
+      if (mesh.current) {
+        mesh.current.setMatrixAt(i, dummy.matrix);
+      }
     });
     
-    currentMesh.instanceMatrix.needsUpdate = true;
+    mesh.current.instanceMatrix.needsUpdate = true;
   });
 
   return (

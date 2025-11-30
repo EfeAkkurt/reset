@@ -3,15 +3,18 @@ import * as React from "react";
 export default function OpportunityCardPlaceholder() {
   return (
     <article
-      className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm"
+      className="animate-pulse rounded-3xl border border-alpha-gold-16/40 bg-[var(--neutral-800)] p-6 shadow-[0_15px_40px_rgba(0,0,0,0.45)]"
       aria-label="Opportunity placeholder"
     >
-      <div className="h-4 w-40 rounded bg-neutral-200" />
-      <div className="mt-3 h-3 w-24 rounded bg-neutral-200" />
-      <div className="mt-6 flex items-center justify-between">
-        <div className="h-3 w-16 rounded bg-neutral-200" />
-        <div className="h-8 w-24 rounded-md bg-neutral-900/5" />
+      <div className="h-4 w-32 rounded-full bg-white/10" />
+      <div className="mt-4 h-6 w-48 rounded-full bg-white/10" />
+      <div className="mt-6 grid grid-cols-3 gap-4">
+        <div className="h-10 rounded-2xl bg-white/5" />
+        <div className="h-10 rounded-2xl bg-white/5" />
+        <div className="h-10 rounded-2xl bg-white/5" />
       </div>
+      <div className="mt-6 h-12 rounded-2xl bg-white/5" />
+      <div className="mt-6 h-4 w-24 rounded-full bg-white/10" />
     </article>
   );
 }

@@ -1,21 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useMemo, useState } from "react";
 import CountUp from "react-countup";
-// Recharts components removed - Value Projection chart removed
-import {
-  Calculator,
-  ArrowUpRight,
-  Info,
-  DollarSign,
-  Calendar,
-  Percent,
-  CheckCircle,
-  AlertCircle,
-  ArrowDownRight,
-  Loader2,
-} from "lucide-react";
-import { toast } from "sonner";
+import { Calculator, Calendar, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import clsx from "clsx";
+
 type Opportunity = {
   id: string;
   protocol: string;
@@ -30,12 +18,9 @@ type Opportunity = {
   originalUrl: string;
   summary: string;
 };
-import { colors } from "@/lib/colors";
 
 interface DepositCalculatorProps {
   data: Opportunity;
-  onAmountChange?: (amount: number) => void;
-  onDaysChange?: (days: number) => void;
 }
 
 type CompoundFrequency =
@@ -45,64 +30,30 @@ type CompoundFrequency =
   | "Quarterly"
   | "Annually";
 
-export function DepositCalculator({
-  data,
-  onAmountChange,
-  onDaysChange,
-}: DepositCalculatorProps) {
-  const [amount, setAmount] = useState(1000);
-  const [days, setDays] = useState(90);
-  const [compoundFrequency, setCompoundFrequency] =
-    useState<CompoundFrequency>("Daily");
-  const [isRouterMode, setIsRouterMode] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+const PERIODS_PER_YEAR: Record<CompoundFrequency, number> = {
+  Daily: 365,
+  Weekly: 52,
+  Monthly: 12,
+  Quarterly: 4,
+  Annually: 1,
+};
+
+export function DepositCalculator({ data }: DepositCalculatorProps) {
+  const [amount, setAmount] = useState(2500);
+  const [days, setDays] = useState(120);
+  const [frequency, setFrequency] = useState<CompoundFrequency>("Monthly");
   const [activeTab, setActiveTab] = useState<"deposit" | "withdraw">("deposit");
-  // const [balance, setBalance] = useState<number>(0); // Removed unused balance
 
-  // Notify parent of changes
-  React.useEffect(() => {
-    onAmountChange?.(amount);
-  }, [amount, onAmountChange]);
-
-  React.useEffect(() => {
-    onDaysChange?.(days);
-  }, [days, onDaysChange]);
-
-  // Mock wallet status for UI compatibility
-  // const isWalletReady = true; // Removed unused
-  // const walletError = null; // Removed unused
-  const isTxLoading = false;
-
-  // Check if this is the TestNet Mock-Yield opportunity
-  const isTestNetMockYield =
-    data.id === "testnet-mock-yield-algo" &&
-    data.protocol === "Mock Yield Protocol";
-
-  // Check wallet status
-  const walletStatus = "ready";
-
-  // Always use Router mode for TestNet Mock-Yield
   useEffect(() => {
-    if (isTestNetMockYield) {
-      setIsRouterMode(true);
+    if (activeTab === "withdraw" && amount < 100) {
+      setAmount(100);
     }
-  }, [isTestNetMockYield]);
+  }, [activeTab, amount]);
 
-  // Calculate returns
-  const calculateReturns = () => {
-    const dailyRate = data.apr / 365 / 100;
+  const returns = useMemo(() => {
+    const dailyRate = data.apr / 100 / 365;
     const simpleReturn = amount * dailyRate * days;
-
-    // Compound frequency to periods per year
-    const periodsPerYear: Record<CompoundFrequency, number> = {
-      Daily: 365,
-      Weekly: 52,
-      Monthly: 12,
-      Quarterly: 4,
-      Annually: 1,
-    };
-
-    const n = periodsPerYear[compoundFrequency];
+    const n = PERIODS_PER_YEAR[frequency];
     const compoundedAmount =
       amount * Math.pow(1 + data.apr / 100 / n, (n * days) / 365);
     const compoundReturn = compoundedAmount - amount;
@@ -111,440 +62,176 @@ export function DepositCalculator({
       simple: simpleReturn,
       compound: compoundReturn,
       final: compoundedAmount,
-      effectiveAPY: (((compoundedAmount / amount - 1) * 365) / days) * 100,
+      effectiveAPY:
+        days === 0
+          ? 0
+          : (((compoundedAmount / amount - 1) * 365) / days) * 100,
     };
-  };
-
-  const returns = calculateReturns();
-
-  const handleDeposit = async () => {
-    try {
-      // Mock deposit
-      toast.success("Deposit successful!", {
-        description: `Deposited ${amount} ALGO to Mock Yield Protocol`,
-      });
-
-      setShowSuccess(true);
-
-      // Only redirect for non-TestNet opportunities
-      if (!isTestNetMockYield) {
-        setTimeout(() => {
-          window.open(data.originalUrl, "_blank");
-          toast.success("Redirected to protocol", {
-            description: `${data.protocol} opened in a new tab. Position added to your portfolio.`,
-          });
-          setShowSuccess(false);
-        }, 1500);
-      } else {
-        // For TestNet, just hide success after delay
-        setTimeout(() => setShowSuccess(false), 2000);
-      }
-    } catch (error) {
-      toast.error("Deposit failed", {
-        description: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
-  };
-
-  const handleWithdraw = async () => {
-    try {
-      // Mock withdrawal
-      toast.success("Withdrawal successful!", {
-        description: `Withdrew ${amount} ALGO from Mock Yield Protocol`,
-      });
-
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 1500);
-    } catch (error) {
-      toast.error("Withdrawal failed", {
-        description: error instanceof Error ? error.message : "Unknown error",
-      });
-    }
-  };
+  }, [amount, data.apr, days, frequency]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: 0.15 }}
-      className="space-y-4"
-    >
-      {/* Main Calculator Card */}
-      <div className="sticky top-24 rounded-3xl border border-black/5 bg-white p-5 md:p-6 shadow-sm">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Calculator className="text-zinc-400" size={20} />
-            <h4 className="font-display text-lg text-zinc-900">
-              {isTestNetMockYield ? "TestNet Operations" : "Deposit Calculator"}
-            </h4>
-            {isTestNetMockYield && (
-              <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-full">
-                TestNet Demo
-              </span>
-            )}
-          </div>
-
-          {/* Mode Switcher - Only show for non-TestNet opportunities */}
-          {!isTestNetMockYield && (
-            <div className="inline-flex rounded-lg bg-zinc-100 p-0.5">
-              <button
-                onClick={() => setIsRouterMode(false)}
-                className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
-                  !isRouterMode
-                    ? "bg-white text-zinc-900 shadow-sm"
-                    : "text-zinc-600"
-                }`}
-              >
-                Protocol
-              </button>
-              <button
-                onClick={() => setIsRouterMode(true)}
-                className={`px-3 py-1 text-xs font-medium rounded-md transition-all ${
-                  isRouterMode
-                    ? "bg-white text-zinc-900 shadow-sm"
-                    : "text-zinc-600"
-                }`}
-              >
-                Router
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div className="space-y-4">
-          {/* Wallet Status for Demo */}
-          {isTestNetMockYield && (
-            <div
-              className={`rounded-lg border p-3 ${
-                walletStatus === "ready"
-                  ? "bg-green-50 border-green-200"
-                  : walletStatus === "error"
-                    ? "bg-red-50 border-red-200"
-                    : "bg-yellow-50 border-yellow-200"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    walletStatus === "ready"
-                      ? "bg-green-500"
-                      : walletStatus === "error"
-                        ? "bg-red-500"
-                        : "bg-yellow-500"
-                  }`}
-                ></div>
-                <span
-                  className={`text-sm font-medium ${
-                    walletStatus === "ready"
-                      ? "text-green-800"
-                      : walletStatus === "error"
-                        ? "text-red-800"
-                        : "text-yellow-800"
-                  }`}
-                >
-                  {walletStatus === "ready"
-                    ? "Wallet System Ready"
-                    : walletStatus === "error"
-                      ? "Wallet System Error"
-                      : "Checking Wallet System..."}
-                </span>
-              </div>
-              <div className="mt-2 text-xs text-yellow-700">
-                Please make sure your TestNet wallet is connected using the
-                wallet button in the top-right corner before making deposits or
-                withdrawals.
-
-              </div>
-            </div>
-          )}
-
-          {/* Amount Input */}
-          <div>
-            <label className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-zinc-600 flex items-center gap-1">
-                <DollarSign size={12} />
-                Amount ({isTestNetMockYield ? "ALGO" : "USD"})
-              </span>
-              <span className="text-xs text-zinc-500">
-                {isTestNetMockYield ? "ALGO amount" : "Principal investment"}
-              </span>
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value) || 0)}
-                className="w-full rounded-xl bg-zinc-50 px-4 py-3 text-lg font-semibold tabular-nums ring-1 ring-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-400 transition-all"
-                placeholder={isTestNetMockYield ? "0.1" : "1000"}
-                min={0}
-                max={isTestNetMockYield ? 10000 : 1000000}
-                step={isTestNetMockYield ? 0.01 : 1}
-              />
-              <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                <span className="text-xs text-zinc-500">
-                  {isTestNetMockYield ? "ALGO" : "USD"}
-                </span>
-              </div>
-            </div>
-
-            {/* Quick Amount Buttons */}
-            <div className="mt-2 flex gap-2">
-              {(isTestNetMockYield
-                ? [0.1, 0.5, 1, 5]
-                : [100, 500, 1000, 5000]
-              ).map((val) => (
-                <button
-                  key={val}
-                  onClick={() => setAmount(val)}
-                  className="flex-1 rounded-lg bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-600 hover:bg-zinc-200 transition-colors"
-                >
-                  {isTestNetMockYield
-                    ? `${val} ALGO`
-                    : `$${val.toLocaleString()}`}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Duration Slider - Only for non-TestNet */}
-          {!isTestNetMockYield && (
-            <div>
-              <label className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-zinc-600 flex items-center gap-1">
-                  <Calendar size={12} />
-                  Duration
-                </span>
-                <span className="text-xs font-semibold text-zinc-900 tabular-nums">
-                  {days} days
-                </span>
-              </label>
-              <input
-                type="range"
-                value={days}
-                onChange={(e) => setDays(Number(e.target.value))}
-                className="w-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:bg-white"
-                min={1}
-                max={365}
-                step={1}
-                style={{
-                  background: `linear-gradient(to right, #F6F4EF 0%, #F6F4EF ${(days / 365) * 100}%, ${colors.purple[600]} ${(days / 365) * 100}%, ${colors.purple[600]} 100%)`,
-                  height: "6px",
-                  borderRadius: "3px",
-                  outline: "none",
-                  WebkitAppearance: "none",
-                }}
-              />
-              <div className="mt-2 flex justify-between text-xs text-zinc-500">
-                <span>1d</span>
-                <span>90d</span>
-                <span>180d</span>
-                <span>365d</span>
-              </div>
-            </div>
-          )}
-
-          {/* Compound Frequency - Only for non-TestNet */}
-          {!isTestNetMockYield && (
-            <div>
-              <label className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-zinc-600 flex items-center gap-1">
-                  <Percent size={12} />
-                  Compound Frequency
-                </span>
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {(
-                  [
-                    "Daily",
-                    "Weekly",
-                    "Monthly",
-                    "Quarterly",
-                    "Annually",
-                  ] as const
-                ).map((freq) => (
-                  <button
-                    key={freq}
-                    onClick={() => setCompoundFrequency(freq)}
-                    className={`rounded-lg px-3 py-2 text-xs font-medium transition-all ${
-                      compoundFrequency === freq
-                        ? "bg-[var(--brand-purple)] text-white"
-                        : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
-                    }`}
-                  >
-                    {freq}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Returns Summary - Only for non-TestNet */}
-          {!isTestNetMockYield && (
-            <div className="rounded-xl bg-gradient-to-br from-zinc-50 to-zinc-100 p-4 ring-1 ring-zinc-200">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-zinc-600">Simple Return</span>
-                  <span className="font-semibold text-zinc-900 tabular-nums">
-                    <CountUp
-                      start={0}
-                      end={returns.simple}
-                      duration={0.8}
-                      decimals={2}
-                      prefix="$"
-                      preserveValue
-                    />
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-zinc-600 flex items-center gap-1">
-                    Compound Return
-                    <Info size={10} className="text-zinc-400" />
-                  </span>
-                  <span className="font-semibold text-emerald-600 tabular-nums">
-                    <CountUp
-                      start={0}
-                      end={returns.compound}
-                      duration={0.8}
-                      decimals={2}
-                      prefix="+$"
-                      preserveValue
-                    />
-                  </span>
-                </div>
-
-                <div className="h-px bg-zinc-200" />
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-zinc-700">
-                    Final Amount
-                  </span>
-                  <span className="text-lg font-bold text-zinc-900 tabular-nums">
-                    <CountUp
-                      start={amount}
-                      end={returns.final}
-                      duration={0.8}
-                      decimals={2}
-                      prefix="$"
-                      separator=","
-                      preserveValue
-                    />
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-zinc-600">Effective APY</span>
-                  <span className="text-sm font-semibold text-zinc-900 tabular-nums">
-                    {returns.effectiveAPY.toFixed(2)}%
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Deposit/Withdrawal Tabs - Only for TestNet */}
-          {isTestNetMockYield && (
-            <div className="inline-flex rounded-lg bg-zinc-100 p-0.5 w-full">
-              <button
-                onClick={() => setActiveTab("deposit")}
-                className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-all ${
-                  activeTab === "deposit"
-                    ? "bg-white text-zinc-900 shadow-sm"
-                    : "text-zinc-600"
-                }`}
-              >
-                Deposit
-              </button>
-              <button
-                onClick={() => setActiveTab("withdraw")}
-                className={`flex-1 px-3 py-2 text-xs font-medium rounded-md transition-all ${
-                  activeTab === "withdraw"
-                    ? "bg-white text-zinc-900 shadow-sm"
-                    : "text-zinc-600"
-                }`}
-              >
-                Withdraw
-              </button>
-            </div>
-          )}
-
-          {/* Action Button */}
-          <AnimatePresence mode="wait">
-            {showSuccess ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="flex items-center justify-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-emerald-700"
-              >
-                <CheckCircle size={16} />
-                <span className="text-sm font-medium">
-                  Redirecting to {data.protocol}...
-                </span>
-              </motion.div>
-            ) : (
-              <motion.button
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                onClick={() => {
-                  if (activeTab === "deposit") {
-                    handleDeposit();
-                  } else {
-                    handleWithdraw();
-                  }
-                }}
-                disabled={isTxLoading || walletStatus !== "ready"}
-                className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
-                  isTxLoading
-                    ? "bg-zinc-100 text-zinc-400 cursor-not-allowed"
-                    : "bg-[var(--brand-purple)] text-white hover:bg-[var(--brand-purple-700)] shadow-sm"
-                }`}
-              >
-                {isTxLoading ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" />
-                    Processing...
-                  </>
-                ) : isTestNetMockYield ? (
-                  <>
-                    {activeTab === "deposit" ? (
-                      <>
-                        Deposit {amount} ALGO
-                        <ArrowDownRight size={16} />
-                      </>
-                    ) : (
-                      <>
-                        Withdraw {amount} ALGO
-                        <ArrowUpRight size={16} />
-                      </>
-                    )}
-                  </>
-                ) : isRouterMode ? (
-                  <>
-                    <AlertCircle size={16} />
-                    Router Mode
-                  </>
-                ) : (
-                  <>
-                    Go to {data.protocol}
-                    <ArrowUpRight size={16} />
-                  </>
-                )}
-              </motion.button>
-            )}
-          </AnimatePresence>
-
-          {/* Info Text */}
-          <p className="text-xs text-zinc-500 text-center">
-            {isTestNetMockYield
-              ? `Demo Mode - ${activeTab === "deposit" ? "Deposit" : "Withdraw"} ALGO to TestNet Mock Yield Protocol`
-              : isRouterMode
-                ? "One-click routing will handle the deposit for you"
-                : `You'll be redirected to ${data.protocol}. Non-custodial.`}
+    <section className="space-y-5 rounded-[32px] border border-[rgba(255,182,72,0.2)] bg-gradient-to-br from-[#0F1012] via-[#050505] to-[#010101] p-6 text-white shadow-[0_30px_70px_rgba(0,0,0,0.55)]">
+      <header className="flex items-center justify-between">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+            Deposit Simulator
           </p>
+          <h3 className="text-xl font-black">
+            {data.protocol} • {data.pair}
+          </h3>
+        </div>
+        <Calculator className="text-[#F3A233]" />
+      </header>
+
+      <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+        <label className="text-xs uppercase tracking-[0.4em] text-[#D8D9DE]/70">
+          Amount (USD)
+        </label>
+        <div className="mt-2 flex items-center gap-2">
+          <span className="font-mono text-3xl">$</span>
+          <input
+            type="number"
+            min={0}
+            value={amount}
+            onChange={(e) => setAmount(Number(e.target.value) || 0)}
+            className="w-full bg-transparent text-3xl font-mono focus:outline-none"
+          />
+        </div>
+        <div className="mt-2 grid grid-cols-4 gap-2">
+          {[500, 1000, 2500, 5000].map((preset) => (
+            <button
+              key={preset}
+              type="button"
+              onClick={() => setAmount(preset)}
+              className="rounded-xl border border-white/10 px-2 py-1 text-xs text-[#D8D9DE]/80 transition hover:border-[#F3A233]/40 hover:text-white"
+            >
+              ${preset.toLocaleString()}
+            </button>
+          ))}
         </div>
       </div>
-    </motion.div>
+
+      <div>
+        <label className="mb-2 flex items-center justify-between text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+          Duration
+          <span className="font-mono text-white">{days}d</span>
+        </label>
+        <div className="rounded-2xl border border-white/10 bg-[#101114] px-4 py-3">
+          <div className="flex items-center gap-3 text-xs text-[#9DA1AF]">
+            <Calendar size={14} />
+            Slide to project holding period
+          </div>
+          <input
+            type="range"
+            value={days}
+            min={1}
+            max={365}
+            step={1}
+            onChange={(e) => setDays(Number(e.target.value))}
+            className="mt-3 w-full accent-[#F3A233]"
+          />
+          <div className="mt-1 flex justify-between text-[10px] text-[#6C7080]">
+            <span>1d</span>
+            <span>90d</span>
+            <span>180d</span>
+            <span>365d</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+          Compounding Frequency
+        </label>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {(Object.keys(PERIODS_PER_YEAR) as CompoundFrequency[]).map((option) => (
+            <button
+              key={option}
+              type="button"
+              onClick={() => setFrequency(option)}
+              className={clsx(
+                "rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.35em] transition",
+                frequency === option
+                  ? "bg-[#F3A233] text-black"
+                  : "border border-white/15 text-[#D8D9DE]/60 hover:border-[#F3A233]/30",
+              )}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="rounded-[28px] border border-white/10 bg-[#0B0B0E] p-5 shadow-inner shadow-black/50">
+        <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+          Results
+        </p>
+        <div className="mt-4 space-y-4">
+          {[
+            { label: "Simple Return", value: returns.simple, prefix: "$" },
+            { label: "Compound Return", value: returns.compound, prefix: "$" },
+            { label: "Final Amount", value: returns.final, prefix: "$" },
+            {
+              label: "Effective APY",
+              value: returns.effectiveAPY,
+              prefix: "",
+              suffix: "%",
+            },
+          ].map((row) => (
+            <div
+              key={row.label}
+              className="flex items-center justify-between border-b border-white/5 pb-3 last:border-0 last:pb-0"
+            >
+              <span className="text-xs text-[#9DA1AF]">{row.label}</span>
+              <span className="font-mono text-lg text-white">
+                <CountUp
+                  key={`${row.label}-${amount}-${days}-${frequency}`}
+                  end={row.value}
+                  duration={0.8}
+                  decimals={row.label.includes("APY") ? 2 : 2}
+                  prefix={row.prefix}
+                  suffix={row.suffix}
+                  separator=","
+                />
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 rounded-full border border-white/10 p-1">
+        {["deposit", "withdraw"].map((tab) => (
+          <button
+            key={tab}
+            className={clsx(
+              "flex-1 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em]",
+              activeTab === tab
+                ? "bg-[#F3A233] text-black"
+                : "text-[#D8D9DE]/70 hover:text-white",
+            )}
+            onClick={() => setActiveTab(tab as "deposit" | "withdraw")}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <button
+          type="button"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#F3A233] bg-[#F3A233] px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-black transition hover:shadow-[0_0_35px_rgba(243,162,51,0.4)]"
+        >
+          <ArrowUpRight size={16} />
+          Initiate {activeTab === "deposit" ? "Deposit" : "Withdraw"}
+        </button>
+        <button
+          type="button"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/20 px-4 py-3 text-xs font-semibold uppercase tracking-[0.35em] text-white transition hover:border-[#F3A233]/40"
+        >
+          <ArrowDownRight size={16} />
+          Ghost Action
+        </button>
+      </div>
+    </section>
   );
 }

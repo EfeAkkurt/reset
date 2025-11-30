@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['@adapters/core', '@shared/core'],
+  transpilePackages: ['@adapters/core', '@shared/core', '@stellar/freighter-api', '@jsr/creit-tech__stellar-wallets-kit'],
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },

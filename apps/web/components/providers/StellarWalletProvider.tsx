@@ -1,11 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 
-import { StellarWalletsKit } from "@creit-tech/stellar-wallets-kit/sdk";
-import { defaultModules } from "@creit-tech/stellar-wallets-kit/modules/utils";
-import { SwkAppDarkTheme } from "@creit-tech/stellar-wallets-kit/types";
-import { KitEventType } from "@creit-tech/stellar-wallets-kit/types";
+type StellarWalletsKitType =
+  typeof import("@creit-tech/stellar-wallets-kit/sdk").StellarWalletsKit;
 
 interface StellarWalletContextType {
   address: string | null;
@@ -23,61 +21,79 @@ export const useStellarWallet = () => useContext(StellarWalletContext);
 
 export function StellarWalletProvider({ children }: { children: React.ReactNode }) {
   const [address, setAddress] = useState<string | null>(null);
+  const kitRef = useRef<StellarWalletsKitType | null>(null);
 
   useEffect(() => {
+    let teardown: (() => void) | undefined;
+
     // Initialize the kit only on the client side
     const initKit = async () => {
-      StellarWalletsKit.init({
-        modules: defaultModules(),
-        theme: {
-          ...SwkAppDarkTheme,
-          "primary": "#D6A75C", // Gold-300
-          "primary-foreground": "#000000",
-          "background": "#0A0A0A",
-          "background-secondary": "#111111",
-          "border": "#333333",
-          "font-family": "Inter, sans-serif",
-        },
-      });
-
-      // Check if already connected by trying to get address
       try {
-        const { address: connectedAddress } = await StellarWalletsKit.getAddress();
-        if (connectedAddress) {
-          setAddress(connectedAddress);
+        const [{ StellarWalletsKit }, { defaultModules }, kitTypes] =
+          await Promise.all([
+            import("@creit-tech/stellar-wallets-kit/sdk"),
+            import("@creit-tech/stellar-wallets-kit/modules/utils"),
+            import("@creit-tech/stellar-wallets-kit/types"),
+          ]);
+
+        kitRef.current = StellarWalletsKit;
+
+        StellarWalletsKit.init({
+          modules: defaultModules(),
+          theme: {
+            ...kitTypes.SwkAppDarkTheme,
+            "primary": "#D6A75C", // Gold-300
+            "primary-foreground": "#000000",
+            "background": "#0A0A0A",
+            "background-secondary": "#111111",
+            "border": "#333333",
+            "font-family": "Inter, sans-serif",
+          },
+        });
+
+        // Check if already connected by trying to get address
+        try {
+          const { address: connectedAddress } = await StellarWalletsKit.getAddress();
+          if (connectedAddress) {
+            setAddress(connectedAddress);
+          }
+        } catch {
+          // Not connected, expected behavior
         }
-      } catch {
-        // Not connected, expected behavior
+
+        // Listen for state updates
+        const sub = StellarWalletsKit.on(kitTypes.KitEventType.STATE_UPDATED, (event) => {
+          if (event.payload.address) {
+            setAddress(event.payload.address);
+          }
+        });
+
+        const subDisconnect = StellarWalletsKit.on(kitTypes.KitEventType.DISCONNECT, () => {
+          setAddress(null);
+        });
+
+        teardown = () => {
+          if (typeof sub === "function") sub();
+          if (typeof subDisconnect === "function") subDisconnect();
+        };
+      } catch (err) {
+        console.error("Failed to initialize StellarWalletsKit", err);
       }
-
-      // Listen for state updates
-      const sub = StellarWalletsKit.on(KitEventType.STATE_UPDATED, (event) => {
-        if (event.payload.address) {
-          setAddress(event.payload.address);
-        }
-      });
-
-      const subDisconnect = StellarWalletsKit.on(KitEventType.DISCONNECT, () => {
-        setAddress(null);
-      });
-
-      return () => {
-        // Cleanup subscriptions if possible, though the kit might not expose a direct unsubscribe for all
-        // Based on docs: "To unsubscribe from the updates, do this: `sub()`"
-        // However, the types might be tricky, assuming sub is a function.
-        // If the return type of .on() is a function, we call it.
-        if (typeof sub === 'function') (sub as () => void)();
-        if (typeof subDisconnect === 'function') (subDisconnect as () => void)();
-      };
     };
 
     initKit();
+
+    return () => {
+      if (teardown) teardown();
+    };
   }, []);
 
   const connect = async () => {
     try {
       // The authModal method opens the modal and returns the address when selected
-      const { address: newAddress } = await StellarWalletsKit.authModal();
+      const kit = kitRef.current;
+      if (!kit) throw new Error("Stellar wallet kit not ready");
+      const { address: newAddress } = await kit.authModal();
       setAddress(newAddress);
     } catch (e) {
       console.error("Error opening auth modal:", e);

@@ -21,14 +21,14 @@ const triBlend = (p: number, start: number, middle: number, end: number) => {
 };
 
 export function TabletShowcase({ progress }: TabletShowcaseProps) {
-  const normalized = clamp01((progress - 0.04) / 0.9);
-  const translateY = triBlend(normalized, -10, -562.1995, 0);
-  const scale = triBlend(normalized, 0.8, 0.922251, 1);
-  const rotateX = triBlend(normalized, 30, 11.6624, 0);
-  const opacity = triBlend(normalized, 0.6, 0.85, 1);
+  const normalized = clamp01((progress - 0.02) / 0.7);
+  const translateY = triBlend(normalized, -200, -680, -750);
+  const scale = triBlend(normalized, 0.8, 1.111251, 1.1);
+  const rotateX = triBlend(normalized, 30, 11.6624, 11.6);
+  const opacity = triBlend(normalized, 1, 1, 1);
 
   return (
-    <div className="relative flex w-full justify-center">
+    <div className="relative z-30 flex w-full justify-center">
       <motion.div
         style={{
           y: translateY,
@@ -41,9 +41,20 @@ export function TabletShowcase({ progress }: TabletShowcaseProps) {
         className="relative w-full max-w-[1200px] will-change-transform"
       >
         <div className="relative aspect-[1.38696] w-full overflow-hidden rounded-[32px] border border-white/20 bg-black shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+          <div className="absolute inset-x-[4.2%] top-[11%] bottom-[11%] z-10">
+            <div className="relative h-full w-full overflow-hidden rounded-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+              <Image
+                src="/backgrounds/tabletBG.png"
+                alt="Reset Explore Yield Opportunities interface"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
           <Image
             src="/backgrounds/tablet.svg"
-            alt="reset Opportunities Tablet"
+            alt="Reset Opportunities Tablet"
             fill
             className="object-cover"
             priority

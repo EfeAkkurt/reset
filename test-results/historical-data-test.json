@@ -1,0 +1,293 @@
+{
+  "startTime": "2025-11-29T14:06:35.177Z",
+  "description": "DeFiLlama historical data endpoints testing for risk analysis",
+  "basicEndpoints": [
+    {
+      "endpoint": "Global TVL History",
+      "url": "https://api.llama.fi/v2/historicalChainTvl",
+      "description": "Global DeFi TVL over time",
+      "status": 200,
+      "responseTime": 361,
+      "dataType": "time_series",
+      "dataPoints": 2986,
+      "timeRange": {
+        "earliest": 1506470400,
+        "latest": 1764374400,
+        "span": 257904000
+      },
+      "sampleData": [
+        {
+          "date": 1506470400,
+          "tvl": 0
+        },
+        {
+          "date": 1506556800,
+          "tvl": 0
+        },
+        {
+          "date": 1506643200,
+          "tvl": 0
+        }
+      ]
+    },
+    {
+      "endpoint": "Chains TVL History",
+      "url": "https://api.llama.fi/v2/chains/Ethereum/chart",
+      "description": "Ethereum TVL history (test endpoint structure)",
+      "status": 404,
+      "responseTime": 228,
+      "dataType": "unknown",
+      "dataPoints": 0,
+      "timeRange": null,
+      "sampleData": null
+    },
+    {
+      "endpoint": "Pool Chart Data",
+      "url": "https://api.llama.fi/charts/pool/0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640",
+      "description": "Example pool chart data (USDC-WETH)",
+      "status": 404,
+      "responseTime": 223,
+      "dataType": "unknown",
+      "dataPoints": 0,
+      "timeRange": null,
+      "sampleData": null
+    },
+    {
+      "endpoint": "Pool History",
+      "url": "https://api.llama.fi/pool/0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640/history",
+      "description": "Example pool historical data",
+      "status": 404,
+      "responseTime": 238,
+      "dataType": "unknown",
+      "dataPoints": 0,
+      "timeRange": null,
+      "sampleData": null
+    },
+    {
+      "endpoint": "Volume History",
+      "url": "https://api.llama.fi/volume",
+      "description": "Global volume history",
+      "status": 404,
+      "responseTime": 207,
+      "dataType": "unknown",
+      "dataPoints": 0,
+      "timeRange": null,
+      "sampleData": null
+    },
+    {
+      "endpoint": "Fees History",
+      "url": "https://api.llama.fi/fees",
+      "description": "Protocol fees and revenue history",
+      "status": 404,
+      "responseTime": 240,
+      "dataType": "unknown",
+      "dataPoints": 0,
+      "timeRange": null,
+      "sampleData": null
+    }
+  ],
+  "chainHistorical": [
+    {
+      "chain": "Ethereum",
+      "testedEndpoints": [
+        {
+          "endpoint": "https://api.llama.fi/v2/chains/Ethereum/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/chain/Ethereum/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/v2/historicalChainTvl/Ethereum",
+          "status": 200,
+          "hasData": true
+        },
+        {
+          "endpoint": "https://api.llama.fi/historical/Ethereum/tvl",
+          "status": 404,
+          "hasData": false
+        }
+      ],
+      "supported": true,
+      "workingEndpoint": "https://api.llama.fi/v2/historicalChainTvl/Ethereum"
+    },
+    {
+      "chain": "Bitcoin",
+      "testedEndpoints": [
+        {
+          "endpoint": "https://api.llama.fi/v2/chains/Bitcoin/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/chain/Bitcoin/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/v2/historicalChainTvl/Bitcoin",
+          "status": 200,
+          "hasData": true
+        },
+        {
+          "endpoint": "https://api.llama.fi/historical/Bitcoin/tvl",
+          "status": 404,
+          "hasData": false
+        }
+      ],
+      "supported": true,
+      "workingEndpoint": "https://api.llama.fi/v2/historicalChainTvl/Bitcoin"
+    },
+    {
+      "chain": "Polygon",
+      "testedEndpoints": [
+        {
+          "endpoint": "https://api.llama.fi/v2/chains/Polygon/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/chain/Polygon/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/v2/historicalChainTvl/Polygon",
+          "status": 200,
+          "hasData": true
+        },
+        {
+          "endpoint": "https://api.llama.fi/historical/Polygon/tvl",
+          "status": 404,
+          "hasData": false
+        }
+      ],
+      "supported": true,
+      "workingEndpoint": "https://api.llama.fi/v2/historicalChainTvl/Polygon"
+    },
+    {
+      "chain": "Arbitrum",
+      "testedEndpoints": [
+        {
+          "endpoint": "https://api.llama.fi/v2/chains/Arbitrum/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/chain/Arbitrum/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/v2/historicalChainTvl/Arbitrum",
+          "status": 200,
+          "hasData": true
+        },
+        {
+          "endpoint": "https://api.llama.fi/historical/Arbitrum/tvl",
+          "status": 404,
+          "hasData": false
+        }
+      ],
+      "supported": true,
+      "workingEndpoint": "https://api.llama.fi/v2/historicalChainTvl/Arbitrum"
+    },
+    {
+      "chain": "stellar",
+      "testedEndpoints": [
+        {
+          "endpoint": "https://api.llama.fi/v2/chains/stellar/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/chain/stellar/chart",
+          "status": 404,
+          "hasData": false
+        },
+        {
+          "endpoint": "https://api.llama.fi/v2/historicalChainTvl/stellar",
+          "status": 200,
+          "hasData": true
+        },
+        {
+          "endpoint": "https://api.llama.fi/historical/stellar/tvl",
+          "status": 404,
+          "hasData": false
+        }
+      ],
+      "supported": true,
+      "workingEndpoint": "https://api.llama.fi/v2/historicalChainTvl/stellar"
+    }
+  ],
+  "parameterTests": [
+    {
+      "parameterTest": "Time Range - Last 30 days",
+      "url": "https://api.llama.fi/v2/chains/Ethereum/chart?start=1761833201",
+      "description": "Last 30 days",
+      "status": 404,
+      "dataPoints": 0,
+      "parametersSupported": false
+    },
+    {
+      "parameterTest": "Time Range - Start and End",
+      "url": "https://api.llama.fi/v2/chains/Ethereum/chart?start=1640995200&end=1643673600",
+      "description": "Specific date range",
+      "status": 404,
+      "dataPoints": 0,
+      "parametersSupported": false
+    },
+    {
+      "parameterTest": "Period Parameter",
+      "url": "https://api.llama.fi/v2/chains/Ethereum/chart?period=daily",
+      "description": "Daily period",
+      "status": 404,
+      "dataPoints": 0,
+      "parametersSupported": false
+    },
+    {
+      "parameterTest": "Smooth Parameter",
+      "url": "https://api.llama.fi/v2/chains/Ethereum/chart?smooth=true",
+      "description": "Smooth data",
+      "status": 404,
+      "dataPoints": 0,
+      "parametersSupported": false
+    }
+  ],
+  "yieldsHistorical": [
+    {
+      "endpoint": "Current Yields",
+      "url": "https://api.llama.fi/yields",
+      "status": 404,
+      "yieldData": {
+        "totalPools": 0,
+        "chains": [],
+        "averageApy": 0,
+        "lendingPools": 0
+      }
+    },
+    {
+      "endpoint": "Yields History (if exists)",
+      "url": "https://api.llama.fi/yields/history",
+      "status": 404,
+      "yieldData": {
+        "totalPools": 0,
+        "chains": [],
+        "averageApy": 0,
+        "lendingPools": 0
+      }
+    }
+  ],
+  "endTime": "2025-11-29T14:06:42.892Z",
+  "implementationCode": "/**\n * DeFiLlama Historical Data Implementation\n * Generated based on API testing results\n */\n\nclass DefiLlamaHistoricalData {\n    constructor() {\n        this.baseUrl = 'https://api.llama.fi';\n        this.cache = new Map();\n        this.cacheTimeout = 5 * 60 * 1000; // 5 minutes\n    }\n\n    async getHistoricalData(endpoint, params = {}) {\n        const cacheKey = `${endpoint}:${JSON.stringify(params)}`;\n\n        if (this.cache.has(cacheKey)) {\n            const cached = this.cache.get(cacheKey);\n            if (Date.now() - cached.timestamp < this.cacheTimeout) {\n                return cached.data;\n            }\n        }\n\n        try {\n            const url = new URL(`${this.baseUrl}${endpoint}`);\n            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));\n\n            const response = await fetch(url.toString());\n\n            if (!response.ok) {\n                throw new Error(`HTTP ${response.status}: ${response.statusText}`);\n            }\n\n            const data = await response.json();\n\n            this.cache.set(cacheKey, {\n                data: data,\n                timestamp: Date.now()\n            });\n\n            return data;\n\n        } catch (error) {\n            console.error(`Failed to fetch historical data from ${endpoint}:`, error);\n            throw error;\n        }\n    }\n\n    \n    // Supported endpoints based on testing:\n    async getGlobalTVLHistory() {\n        return this.getHistoricalData('https://api.llama.fi/v2/historicalChainTvl');\n    }\n\n    \n    // Supported chains for historical data:\n    \n    async getEthereumChart(params = {}) {\n        return this.getHistoricalData('https://api.llama.fi/v2/historicalChainTvl/Ethereum', params);\n    }\n    async getBitcoinChart(params = {}) {\n        return this.getHistoricalData('https://api.llama.fi/v2/historicalChainTvl/Bitcoin', params);\n    }\n    async getPolygonChart(params = {}) {\n        return this.getHistoricalData('https://api.llama.fi/v2/historicalChainTvl/Polygon', params);\n    }\n    async getArbitrumChart(params = {}) {\n        return this.getHistoricalData('https://api.llama.fi/v2/historicalChainTvl/Arbitrum', params);\n    }\n    async getstellarChart(params = {}) {\n        return this.getHistoricalData('https://api.llama.fi/v2/historicalChainTvl/stellar', params);\n    }\n\n    // Utility methods for insurance calculations\n    calculateVolatility(data, field = 'tvlUsd') {\n        if (!Array.isArray(data) || data.length < 2) return 0;\n\n        const values = data.map(d => d[field] || d.tvl || 0).filter(v => v > 0);\n        if (values.length < 2) return 0;\n\n        const returns = [];\n        for (let i = 1; i < values.length; i++) {\n            if (values[i - 1] > 0) {\n                returns.push((values[i] - values[i - 1]) / values[i - 1]);\n            }\n        }\n\n        const mean = returns.reduce((sum, r) => sum + r, 0) / returns.length;\n        const variance = returns.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / returns.length;\n\n        return Math.sqrt(variance) * Math.sqrt(365); // Annualized volatility\n    }\n\n    calculateRiskScore(pool, historicalData) {\n        const volatility = this.calculateVolatility(historicalData);\n        const tvl = pool.tvlUsd || 0;\n\n        // Simple risk scoring based on volatility and TVL\n        let riskScore = 0;\n\n        // Volatility component (0-50 points)\n        riskScore += Math.min(50, volatility * 100);\n\n        // TVL component (0-30 points) - lower TVL = higher risk\n        if (tvl < 100000) riskScore += 30;\n        else if (tvl < 1000000) riskScore += 20;\n        else if (tvl < 10000000) riskScore += 10;\n\n        // Chain component (0-20 points)\n        if (pool.chain !== 'Ethereum') riskScore += 10;\n\n        return Math.min(100, riskScore);\n    }\n}\n\nmodule.exports = DefiLlamaHistoricalData;",
+  "analysis": {
+    "availableEndpoints": 1,
+    "supportedChains": 5,
+    "parametersSupported": 0,
+    "yieldsDataAvailable": false,
+    "recommendation": "⚠️  LIMITED SUPPORT: Minimal historical data available. Consider alternative data providers for comprehensive risk analysis."
+  }
+}
