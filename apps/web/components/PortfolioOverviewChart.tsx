@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   ResponsiveContainer,
@@ -12,25 +12,35 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  Legend,
 } from "recharts";
-import CountUp from "react-countup";
 import clsx from "clsx";
 
+type Period = "24H" | "7D" | "30D" | "90D";
 type Row = { t: string; total: number; pnl: number; chg24h: number };
 
-function demo(rows = 30): Row[] {
+const PERIOD_OPTIONS: Period[] = ["24H", "7D", "30D", "90D"];
+
+const RANGE_CONFIG: Record<
+  Period,
+  { points: number; stepMinutes: number; queryDays: number }
+> = {
+  "24H": { points: 24, stepMinutes: 60, queryDays: 1 },
+  "7D": { points: 7, stepMinutes: 1440, queryDays: 7 },
+  "30D": { points: 30, stepMinutes: 1440, queryDays: 30 },
+  "90D": { points: 90, stepMinutes: 1440, queryDays: 90 },
+};
+
+function demo(points = 30, stepMinutes = 1440): Row[] {
   const out: Row[] = [];
-  let total = 100000,
-    pnl = 0;
-  // Use fixed base date to avoid hydration mismatch
-  const baseDate = new Date(Math.floor(Date.now() / 86400000) * 86400000);
-  for (let i = rows - 1; i >= 0; i--) {
-    const dt = new Date(baseDate.getTime() - i * 86400000);
-    const r = (Math.random() - 0.45) * 0.02; // ±2%
+  let total = 100000;
+  let pnl = 0;
+  const baseDate = Date.now();
+  for (let i = points - 1; i >= 0; i--) {
+    const dt = new Date(baseDate - i * stepMinutes * 60_000);
+    const r = (Math.random() - 0.45) * 0.02;
     const change = total * r;
     total = Math.max(2000, total + change);
-    pnl += change * 0.4; // pnlin daha sönük artışı
+    pnl += change * 0.4;
     out.push({
       t: dt.toISOString().slice(0, 10),
       total: Math.round(total),
@@ -45,219 +55,264 @@ export default function PortfolioOverviewChart({
   data,
   className,
   period = "30D",
+  onPeriodChange,
 }: {
   data?: Row[];
   className?: string;
-  period?: "24H" | "7D" | "30D";
+  period?: Period;
+  onPeriodChange?: (period: Period) => void;
 }) {
-  // Generate demo data based on period
-  const periodDays = period === "24H" ? 1 : period === "7D" ? 7 : 30;
-  const chartData = data || demo(periodDays);
   const reduceMotion = useReducedMotion();
-  const [visible, setVisible] = useState({
-    total: true,
-    pnl: true,
-    chg24h: true,
-  });
+  const config = RANGE_CONFIG[period];
+  const chartData = useMemo(() => {
+    const source = data?.length ? data : demo(config.points, config.stepMinutes);
+    if (!source.length) return [];
+    const trimmed =
+      source.length > config.points
+        ? source.slice(source.length - config.points)
+        : source;
+    return trimmed;
+  }, [data, config.points, config.stepMinutes]);
 
   const kpis = useMemo(() => {
+    if (!chartData.length) {
+      return {
+        total: 0,
+        pnl: 0,
+        changePct: 0,
+        changeLabel: "Change",
+        volume: 0,
+        participants: 0,
+        apr: 0,
+      };
+    }
     const last = chartData.at(-1)!;
     const first = chartData[0]!;
-    const periodLabel =
-      period === "24H" ? "24h" : period === "7D" ? "7D" : "30D";
+    const changePct = ((last.total - first.total) / first.total) * 100;
     return {
       total: last.total,
       pnl: last.pnl,
-      change24h: last.chg24h,
-      changePct: ((last.total - first.total) / first.total) * 100,
-      periodLabel,
+      changePct,
+      changeLabel:
+        period === "24H" ? "24H Change" : `${period} Performance`,
+      volume: Math.abs(last.chg24h * 12),
+      participants: Math.max(72, Math.round(last.total / 90000)),
+      apr: Math.max(0, ((last.pnl - (chartData.at(-2)?.pnl ?? 0)) / last.total) * 100),
     };
   }, [chartData, period]);
+
+  const projections = useMemo(() => {
+    const base = kpis.total;
+    return [7, 30, 90].map((h) => {
+      const projectedApy = Math.max(0, kpis.apr * (h / 30));
+      const gain = (base * projectedApy) / 100;
+      const confidence =
+        gain > base * 0.015 ? "High" : gain > base * 0.008 ? "Medium" : "Low";
+      return { horizon: h, projectedApy, gain, confidence };
+    });
+  }, [kpis.apr, kpis.total]);
 
   return (
     <motion.section
       id="portfolio-overview"
       initial={reduceMotion ? undefined : { opacity: 0, y: 8 }}
       animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       className={clsx(
-        "rounded-3xl border border-black/5 bg-[var(--sand-50,#F6F4EF)] p-4 md:p-6",
+        "relative overflow-hidden rounded-[40px] border border-[rgba(255,182,72,0.18)] bg-[#121214] p-8 text-white shadow-[0_45px_120px_rgba(0,0,0,0.6)]",
         className,
       )}
     >
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h3 className="font-display text-lg md:text-xl text-zinc-900">
-            Portfolio Overview
-          </h3>
-          <p className="text-sm text-zinc-600">
-            Total Value, Net PnL ve 24h Change
-          </p>
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/10 via-white/5 to-transparent opacity-70" />
+      <div className="relative flex flex-col gap-6">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.55em] text-[#D8D9DE]/70">
+              Reset Portfolio
+            </p>
+            <h3 className="mt-2 font-display text-3xl font-black">
+              Portfolio Overview
+            </h3>
+            <p className="mt-2 max-w-2xl text-sm text-[#D8D9DE]/80">
+              Total portfolio telemetry with institutional-grade risk tracking
+              and engineered charting.
+            </p>
+          </div>
+          <div className="inline-flex items-center rounded-full bg-black/40 p-1 ring-1 ring-white/5">
+            {PERIOD_OPTIONS.map((option) => (
+              <TimeframeButton
+                key={option}
+                label={option}
+                active={period === option}
+                onClick={() => onPeriodChange?.(option)}
+              />
+            ))}
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Toggle
-            label="Total"
-            color="#8C45FF"
-            active={visible.total}
-            onChange={(v) => setVisible((s) => ({ ...s, total: v }))}
-          />
-          <Toggle
-            label="Net PnL"
-            color="#6C7BFF"
-            active={visible.pnl}
-            onChange={(v) => setVisible((s) => ({ ...s, pnl: v }))}
-          />
-          <Toggle
-            label="24h Change"
-            color="#10B981"
-            active={visible.chg24h}
-            onChange={(v) => setVisible((s) => ({ ...s, chg24h: v }))}
-          />
-        </div>
-      </div>
 
-      {/* KPI strip */}
-      <div className="mt-4 grid grid-cols-3 gap-3 max-md:grid-cols-1">
-        <Kpi label="Total Portfolio">
-          <CountUp end={kpis.total} duration={0.8} prefix="$" separator="," />
-        </Kpi>
-        <Kpi label="Net PnL">
-          <span
-            className={kpis.pnl >= 0 ? "text-emerald-600" : "text-rose-600"}
-          >
-            <CountUp
-              end={kpis.pnl}
-              duration={0.8}
-              prefix={kpis.pnl >= 0 ? "+$" : "-$"}
-              separator=","
-            />
-          </span>
-        </Kpi>
-        <Kpi label={`${kpis.periodLabel} %`}>
-          <CountUp
-            end={kpis.changePct}
-            decimals={2}
-            duration={0.8}
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <MetricBadge
+            label="Current APR"
+            value={kpis.apr}
             suffix="%"
+            tone={kpis.apr >= 0 ? "positive" : "negative"}
           />
-        </Kpi>
-      </div>
+          <MetricBadge label="TVL (USD)" value={kpis.total} prefix="$" />
+          <MetricBadge label="24H Volume" value={kpis.volume} prefix="$" />
+          <MetricBadge
+            label="Participants"
+            value={kpis.participants}
+            suffix=""
+          />
+        </div>
 
-      <div className="mt-4 h-[300px] md:h-[360px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={chartData}>
-            <defs>
-              <linearGradient id="gTotal" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#8C45FF" stopOpacity={0.7} />
-                <stop offset="100%" stopColor="#8C45FF" stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            <CartesianGrid stroke="rgba(0,0,0,.06)" vertical={false} />
-            <XAxis
-              dataKey="t"
-              tick={{ fill: "rgba(0,0,0,.55)", fontSize: 12 }}
-              tickMargin={8}
-              axisLine={false}
-              tickLine={false}
-            />
-            <YAxis
-              tickFormatter={(v) => "$" + Intl.NumberFormat().format(v)}
-              width={0}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "rgba(0,0,0,.55)", fontSize: 12 }}
-            />
-            <Tooltip content={<Tip />} />
-            <Legend
-              verticalAlign="top"
-              height={24}
-              formatter={(val) => (
-                <span className="text-xs text-zinc-600">{val}</span>
-              )}
-            />
+        <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-b from-[#151618] to-[#0A0B0C] p-5 shadow-inner shadow-black/60">
+          <div className="pointer-events-none absolute inset-2 rounded-[24px] border border-white/5 opacity-40" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.03),transparent_50%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:40px_40px]" />
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4 text-sm text-[#CED1DB]">
+            <span>TVL (area) • Net PnL (line) • 24H Change (bars)</span>
+            <span className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+              Live charting
+            </span>
+          </div>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart
+                data={chartData}
+                margin={{ top: 10, right: 20, bottom: 0, left: -10 }}
+              >
+                <defs>
+                  <linearGradient id="portfolioArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F3A233" stopOpacity={0.4} />
+                    <stop offset="90%" stopColor="#C77E25" stopOpacity={0.08} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid
+                  vertical={false}
+                  stroke="rgba(255,255,255,0.08)"
+                  strokeDasharray="3 6"
+                />
+                <Tooltip content={<Tip />} cursor={{ strokeDasharray: "3 3" }} />
+                <XAxis
+                  dataKey="t"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={10}
+                  tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 11 }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={10}
+                  tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 11 }}
+                  width={80}
+                  tickFormatter={(value) =>
+                    `$${Intl.NumberFormat("en-US", {
+                      notation: "compact",
+                      maximumFractionDigits: 1,
+                    }).format(value)}`
+                  }
+                />
+                <Bar
+                  dataKey="chg24h"
+                  fill="rgba(45,225,186,0.35)"
+                  radius={[4, 4, 2, 2]}
+                  name="24H Change"
+                  barSize={10}
+                  isAnimationActive={!reduceMotion}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="total"
+                  name="Total Value"
+                  stroke="#F3A233"
+                  strokeWidth={3}
+                  fill="url(#portfolioArea)"
+                  isAnimationActive={!reduceMotion}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="pnl"
+                  name="Net PnL"
+                  stroke="#8BCBFF"
+                  strokeWidth={3}
+                  dot={false}
+                  isAnimationActive={!reduceMotion}
+                />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-[#A2A8B7]">
+            <LegendSwatch color="#F3A233" label="Total Value" />
+            <LegendSwatch color="#8BCBFF" label="Net PnL" />
+            <LegendSwatch color="#2DE1BA" label="24H Change" />
+          </div>
+        </div>
 
-            {/* 24h change bars */}
-            {visible.chg24h && (
-              <Bar
-                dataKey="chg24h"
-                name="24h Change"
-                fill="#10B981"
-                opacity={0.35}
-                isAnimationActive={!reduceMotion}
-              />
-            )}
-            {/* Total value area */}
-            {visible.total && (
-              <Area
-                type="monotone"
-                dataKey="total"
-                name="Total Value"
-                stroke="#8C45FF"
-                fill="url(#gTotal)"
-                strokeWidth={2}
-                isAnimationActive={!reduceMotion}
-              />
-            )}
-            {/* Net PnL line */}
-            {visible.pnl && (
-              <Line
-                type="monotone"
-                dataKey="pnl"
-                name="Net PnL"
-                stroke="#6C7BFF"
-                strokeWidth={2.2}
-                dot={false}
-                isAnimationActive={!reduceMotion}
-              />
-            )}
-          </ComposedChart>
-        </ResponsiveContainer>
+        <div className="grid gap-3 md:grid-cols-3">
+          {projections.map((proj) => (
+            <ProjectionCard key={proj.horizon} {...proj} />
+          ))}
+        </div>
       </div>
     </motion.section>
   );
 }
 
-function Kpi({
+function MetricBadge({
   label,
-  children,
+  value,
+  prefix = "",
+  suffix = "",
+  tone = "neutral",
 }: {
   label: string;
-  children: React.ReactNode;
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  tone?: "positive" | "negative" | "neutral";
 }) {
+  const toneClass =
+    tone === "positive"
+      ? "text-emerald-300"
+      : tone === "negative"
+        ? "text-rose-300"
+        : "text-white";
   return (
-    <div className="rounded-2xl bg-white/60 px-4 py-3 ring-1 ring-black/5">
-      <div className="text-[11px] uppercase tracking-wide text-zinc-500">
+    <div className="group rounded-3xl border border-white/10 bg-[#17181D] px-5 py-4 shadow-inner shadow-black/30">
+      <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
         {label}
-      </div>
-      <div className="mt-0.5 font-sans text-base md:text-lg font-semibold text-zinc-900 tabular-nums">
-        {children}
-      </div>
+      </p>
+      <p className={clsx("mt-2 font-mono text-3xl", toneClass)}>
+        {prefix}
+        {value.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+        {suffix}
+      </p>
+      <div className="mt-3 h-px w-10 bg-[rgba(255,182,72,0.25)] transition-all group-hover:w-20 group-hover:bg-[#F3A233]" />
     </div>
   );
 }
 
-function Toggle({
+function TimeframeButton({
   label,
-  color,
   active,
-  onChange,
+  onClick,
 }: {
   label: string;
-  color: string;
-  active: boolean;
-  onChange: (v: boolean) => void;
+  active?: boolean;
+  onClick?: () => void;
 }) {
   return (
     <button
-      onClick={() => onChange(!active)}
+      type="button"
+      onClick={onClick}
       className={clsx(
-        "rounded-full px-3.5 py-1.5 text-sm ring-1 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-400",
+        "rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.4em] transition",
         active
-          ? "text-white"
-          : "bg-white text-zinc-700 ring-zinc-200 hover:bg-zinc-100",
+          ? "bg-[#F3A233] text-black shadow-[0_0_30px_rgba(243,162,51,0.35)]"
+          : "text-[#D8D9DE]/70 hover:text-white",
       )}
-      style={active ? { background: color, borderColor: color } : {}}
-      aria-pressed={active}
     >
       {label}
     </button>
@@ -277,25 +332,78 @@ function Tip({
   const row: Record<string, number> = {};
   payload.forEach((p) => (row[p.dataKey] = p.value));
   return (
-    <div className="rounded-xl bg-white px-3 py-2 shadow-lg ring-1 ring-black/5">
-      <div className="text-xs text-zinc-500">{label}</div>
-      <div className="mt-1 grid grid-cols-1 gap-1 text-sm">
-        {"total" in row && (
-          <div>
-            <b>Total:</b> ${Intl.NumberFormat().format(row.total)}
-          </div>
-        )}
-        {"pnl" in row && (
-          <div>
-            <b>Net PnL:</b> ${Intl.NumberFormat().format(row.pnl)}
-          </div>
-        )}
-        {"chg24h" in row && (
-          <div>
-            <b>24h Change:</b> ${Intl.NumberFormat().format(row.chg24h)}
-          </div>
-        )}
+    <div className="rounded-2xl border border-[rgba(255,182,72,0.3)] bg-[#0B0B0E]/95 px-4 py-3 text-sm text-white shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+      <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+        {label}
+      </p>
+      {"total" in row && (
+        <p className="mt-2 font-mono text-base">
+          Total · ${row.total.toLocaleString()}
+        </p>
+      )}
+      {"pnl" in row && (
+        <p className="font-mono text-base text-[#4DB4FF]">
+          Net PnL · ${row.pnl.toLocaleString()}
+        </p>
+      )}
+      {"chg24h" in row && (
+        <p className="text-xs text-[#16A34A]">
+          24H Change · ${row.chg24h.toLocaleString()}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function LegendSwatch({ color, label }: { color: string; label: string }) {
+  return (
+    <span className="inline-flex items-center gap-2">
+      <span
+        className="h-1 w-8 rounded-full"
+        style={{ backgroundColor: color }}
+      />
+      {label}
+    </span>
+  );
+}
+
+function ProjectionCard({
+  horizon,
+  projectedApy,
+  gain,
+  confidence,
+}: {
+  horizon: number;
+  projectedApy: number;
+  gain: number;
+  confidence: string;
+}) {
+  const confidenceTone =
+    confidence === "High"
+      ? "text-emerald-300"
+      : confidence === "Medium"
+        ? "text-amber-200"
+        : "text-rose-200";
+  return (
+    <div className="rounded-3xl border border-white/10 bg-[#101115] px-5 py-4 shadow-inner shadow-black/40">
+      <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+        {horizon}d Projection
+      </p>
+      <div className="mt-3 flex items-center justify-between text-sm">
+        <span className="text-[#9EA2B3]">Projected APY</span>
+        <span className="font-mono text-xl text-white">
+          {projectedApy.toFixed(2)}%
+        </span>
       </div>
+      <div className="mt-2 flex items-center justify-between text-sm">
+        <span className="text-[#9EA2B3]">Expected gain</span>
+        <span className="font-mono text-lg text-white">
+          ${gain.toFixed(2)}
+        </span>
+      </div>
+      <p className={clsx("mt-2 text-xs uppercase tracking-[0.35em]", confidenceTone)}>
+        {confidence} confidence
+      </p>
     </div>
   );
 }

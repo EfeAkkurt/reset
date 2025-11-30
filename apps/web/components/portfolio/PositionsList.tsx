@@ -2,7 +2,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { colors } from "@/lib/colors";
 // Local type definitions
 type RedirectEntry = {
   id: string;
@@ -32,11 +31,15 @@ type Opportunity = {
   summary: string;
 };
 
+import { protocolLogo } from "@/lib/logos";
+import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import { formatUSD, formatTVL } from "@/lib/format";
+
 // Local constants
 const RISK_COLORS: Record<string, string> = {
-  Low: "bg-green-100 text-green-800 border-green-300",
-  Medium: "bg-yellow-100 text-yellow-800 border-yellow-300",
-  High: "bg-red-100 text-red-800 border-red-300",
+  Low: "border-emerald-400/40 bg-emerald-400/10 text-emerald-200",
+  Medium: "border-[rgba(243,162,51,0.45)] bg-[rgba(243,162,51,0.12)] text-[#F3A233]",
+  High: "border-red-400/50 bg-red-500/10 text-red-200",
 };
 
 // Mocked opportunity catalog with randomized APR/APY/TVL per reload scenario
@@ -127,9 +130,6 @@ function getOpportunityById(id: string): Opportunity | undefined {
     summary: `${meta.protocol} ${meta.pair} pool on Stellar with ${risk} risk`,
   };
 }
-import { protocolLogo } from "@/lib/logos";
-import { AreaChart, Area, ResponsiveContainer } from "recharts";
-import { Button, Badge } from "@/components/ui/primitives";
 
 type Position = {
   id: string;
@@ -184,94 +184,76 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
   const toggle = (id: string) => setOpen((s) => ({ ...s, [id]: !s[id] }));
 
   return (
-    <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+    <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
       <AnimatePresence>
         {positions.map((p, idx) => {
           const l = protocolLogo(p.protocol);
           const data = Array.from({ length: 14 }).map((_, i) => ({
             x: i,
             y: Number(
-              (p.current / (p.deposited || 1) + Math.sin(i) * 0.05).toFixed(4),
+              (p.current / (p.deposited || 1) + Math.sin(i / 1.5) * 0.04).toFixed(
+                4,
+              ),
             ),
           }));
+          const chainLabel = p.chain.toUpperCase();
+          const aprText =
+            typeof p.apr === "number" ? `${p.apr.toFixed(1)}%` : "--";
+          const apyText =
+            typeof p.apy === "number" ? `${p.apy.toFixed(1)}%` : "--";
           return (
-            <motion.div
+            <motion.article
               key={p.id}
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.04 * idx }}
-              className={`rounded-3xl border border-black/5 bg-[var(--sand-50,#F6F4EF)] p-4 md:p-6`}
+              transition={{ delay: 0.05 * idx }}
+              className="relative overflow-hidden rounded-[28px] border border-[rgba(255,182,72,0.12)] bg-gradient-to-b from-[#191A1E] via-[#111215] to-[#090909] p-6 text-white shadow-[0_30px_70px_rgba(0,0,0,0.65)]"
             >
-              <motion.div
-                whileHover={{ y: -2, scale: 1.01 }}
-                className="space-y-3"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="grid h-10 w-10 place-items-center rounded-full text-sm font-semibold"
-                      style={{ background: l.bg, color: l.fg }}
-                    >
-                      {l.letter}
-                    </div>
-                    <div>
-                      <div
-                        className={`text-xs uppercase tracking-wide text-[${colors.zinc[500]}]`}
-                      >
-                        {p.protocol}
-                      </div>
-                      <div
-                        className={`mt-1 text-lg font-semibold text-[${colors.zinc[900]}]`}
-                      >
-                        {p.pair}
-                      </div>
-                    </div>
-                  </div>
-                  <Badge className={`${RISK_COLORS[p.risk]} border`}>
-                    {p.risk}
-                  </Badge>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <div className={`text-[${colors.zinc[500]}]`}>
-                      Deposited
-                    </div>
-                    <div className={`font-medium text-[${colors.zinc[900]}]`}>
-                      ${p.deposited.toFixed(2)}
-                    </div>
+              <div className="relative flex items-start justify-between gap-3">
+                <div className="flex items-center gap-4">
+                  <div
+                    className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 text-lg font-bold shadow-inner shadow-black/60"
+                    style={{ background: l.bg, color: l.fg }}
+                  >
+                    {l.letter}
                   </div>
                   <div>
-                    <div className={`text-[${colors.zinc[500]}]`}>
-                      Current Value
-                    </div>
-                    <div className={`font-medium text-[${colors.zinc[900]}]`}>
-                      ${p.current.toFixed(2)}
-                    </div>
-                  </div>
-                  <div>
-                    <div className={`text-[${colors.zinc[500]}]`}>APR/APY</div>
-                    <div className={`font-medium text-[${colors.zinc[900]}]`}>
-                      {p.apr?.toFixed(1)}% / {p.apy?.toFixed(1)}%
-                    </div>
-                  </div>
-                  <div>
-                    <div className={`text-[${colors.zinc[500]}]`}>TVL</div>
-                    <div className={`font-medium text-[${colors.zinc[900]}]`}>
-                      ${(p.tvlUsd / 1_000_000).toFixed(2)}M
-                    </div>
+                    <p className="text-[11px] uppercase tracking-[0.45em] text-[#D8D9DE]/70">
+                      {p.protocol} Strategy
+                    </p>
+                    <p className="mt-1 text-2xl font-semibold text-white">
+                      {p.pair}
+                    </p>
+                    <p className="text-xs uppercase tracking-[0.3em] text-[#D8D9DE]/60">
+                      {chainLabel} · TVL {(p.tvlUsd / 1_000_000).toFixed(2)}M
+                    </p>
                   </div>
                 </div>
+                <RiskBadge level={p.risk} />
+              </div>
 
-                <div className="h-16 w-full">
+              <div className="mt-6 grid gap-4 text-sm md:grid-cols-2">
+                <Metric label="Deposited" value={formatUSD(p.deposited)} />
+                <Metric label="Current Value" value={formatUSD(p.current)} />
+                <Metric
+                  label="APR / APY"
+                  value={`${aprText} / ${apyText}`}
+                />
+                <Metric label="TVL ($M)" value={formatTVL(p.tvlUsd)} />
+                <Metric
+                  label="Reward Token"
+                  value={`${p.rewardToken} (est.)`}
+                  className="md:col-span-2"
+                />
+              </div>
+
+              <div className="mt-6">
+                <div className="h-24 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart
-                      data={data}
-                      margin={{ left: 0, right: 0, top: 6, bottom: 0 }}
-                    >
+                    <AreaChart data={data} margin={{ left: 0, right: 0 }}>
                       <defs>
                         <linearGradient
-                          id={`gPos-${idx}`}
+                          id={`position-gradient-${idx}`}
                           x1="0"
                           y1="0"
                           x2="0"
@@ -279,12 +261,12 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
                         >
                           <stop
                             offset="0%"
-                            stopColor="#059669"
-                            stopOpacity={0.35}
+                            stopColor="#F3A233"
+                            stopOpacity={0.4}
                           />
                           <stop
                             offset="100%"
-                            stopColor="#059669"
+                            stopColor="#F3A233"
                             stopOpacity={0}
                           />
                         </linearGradient>
@@ -292,28 +274,29 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
                       <Area
                         type="monotone"
                         dataKey="y"
-                        stroke="#059669"
+                        stroke="#F3A233"
                         strokeWidth={2}
-                        fill={`url(#gPos-${idx})`}
+                        fill={`url(#position-gradient-${idx})`}
                       />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
+                <div className="mt-3 h-px w-full bg-gradient-to-r from-transparent via-[#F3A233]/35 to-transparent" />
+              </div>
 
-                <div className="flex items-center justify-between">
-                  <div className={`text-xs text-[${colors.zinc[600]}]`}>
-                    Reward: {p.rewardToken} (est.)
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Button variant="secondary" onClick={() => toggle(p.id)}>
-                      Details
-                    </Button>
-                    <Link href={`/opportunities/${p.id}`}>
-                      <Button>Deposit</Button>
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
+              <div className="mt-6 flex flex-wrap gap-2 text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+                Reward schedule aligned with ZEST incentives.
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-3">
+                <ActionButton onClick={() => toggle(p.id)}>Details</ActionButton>
+                <ActionButton href={`/opportunities/${p.id}`} variant="gold">
+                  Deposit
+                </ActionButton>
+                <ActionButton variant="outline" disabled>
+                  Withdraw
+                </ActionButton>
+              </div>
 
               <AnimatePresence>
                 {open[p.id] && (
@@ -321,61 +304,117 @@ export const PositionsList: React.FC<{ rows: RedirectEntry[] }> = ({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="mt-3 overflow-hidden rounded-lg border bg-white/70 p-3 text-sm"
+                    className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-[#0B0B0D] p-4 text-sm text-[#D8D9DE]"
                   >
-                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                      <div>
-                        <div className={`text-[${colors.zinc[500]}]`}>
-                          Transaction History
-                        </div>
-                        <div className="mt-1 space-y-1">
-                          {p.txs.map((t, i) => (
-                            <div
-                              key={i}
-                              className="flex items-center justify-between"
-                            >
-                              <span>
-                                {t.action || "Deposit"} •{" "}
-                                {new Date(t.ts).toLocaleString()}
-                              </span>
-                              {t.txid && (
-                                <a
-                                  className={`text-[${colors.emerald[700]}] hover:underline`}
-                                  href={`https://explorer.hiro.so/txid/${t.txid}?chain=testnet`}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  Explorer
-                                </a>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div>
-                        <div className={`text-[${colors.zinc[500]}]`}>
-                          Actions
-                        </div>
-                        <div className="mt-2 flex gap-2">
-                          <Button>Deposit</Button>
-                          <Button variant="secondary" disabled>
-                            Withdraw
-                          </Button>
-                        </div>
+                    <div className="text-[11px] uppercase tracking-[0.4em] text-[#F3A233]">
+                      Transaction History
+                    </div>
+                    <div className="mt-3 space-y-2 text-[13px]">
+                      {p.txs.map((t, index) => (
                         <div
-                          className={`mt-1 text-xs text-[${colors.zinc[500]}]`}
+                          key={`${t.txid || index}-${t.ts}`}
+                          className="flex items-center justify-between"
                         >
-                          Router (B) links will appear here.
+                          <span className="tabular-nums text-white">
+                            {t.action || "Deposit"} •{" "}
+                            {new Date(t.ts).toLocaleDateString()}
+                          </span>
+                          {t.txid && (
+                            <a
+                              className="text-[#F3A233] underline-offset-4 hover:underline"
+                              href={`https://explorer.hiro.so/txid/${t.txid}?chain=testnet`}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Explorer
+                            </a>
+                          )}
                         </div>
-                      </div>
+                      ))}
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.div>
+            </motion.article>
           );
         })}
       </AnimatePresence>
     </div>
   );
 };
+
+function Metric({
+  label,
+  value,
+  className = "",
+}: {
+  label: string;
+  value: string;
+  className?: string;
+}) {
+  return (
+    <div className={`group ${className}`}>
+      <div className="text-[11px] uppercase tracking-[0.4em] text-[#D8D9DE]/60">
+        {label}
+      </div>
+      <div className="mt-1 font-mono text-lg tabular-nums text-white">
+        {value}
+      </div>
+      <div className="mt-2 h-[1px] w-8 bg-[rgba(255,182,72,0.2)] transition-all group-hover:w-14 group-hover:bg-[#F3A233]" />
+    </div>
+  );
+}
+
+function RiskBadge({ level }: { level: "Low" | "Medium" | "High" }) {
+  return (
+    <span
+      className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.35em] ${RISK_COLORS[level]}`}
+      style={{ borderWidth: '0.7px' }}
+    >
+      {level} Risk
+    </span>
+  );
+}
+
+type ActionButtonProps = {
+  children: React.ReactNode;
+  variant?: "ghost" | "gold" | "outline";
+  href?: string;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+function ActionButton({
+  children,
+  variant = "ghost",
+  href,
+  className = "",
+  ...props
+}: ActionButtonProps) {
+  const base =
+    "flex-1 rounded-xl border px-4 py-2 text-xs font-semibold uppercase tracking-[0.4em] transition disabled:pointer-events-none disabled:opacity-40 text-center inline-flex items-center justify-center";
+  const variants: Record<string, string> = {
+    ghost:
+      "border-white/10 bg-transparent text-white hover:border-[#F3A233]/40",
+    gold:
+      "border-[#F3A233] bg-[#F3A233] text-black shadow-[0_0_25px_rgba(243,162,51,0.3)] hover:shadow-[0_0_35px_rgba(243,162,51,0.45)]",
+    outline:
+      "border-white/20 text-white hover:border-[#F3A233]/50 hover:text-[#F3A233]",
+  };
+
+  if (href) {
+    return (
+      <Link href={href} className={`${base} ${variants[variant]} ${className}`}>
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <button
+      className={`${base} ${variants[variant]} ${className}`}
+      type="button"
+      {...props}
+    >
+      {children}
+    </button>
+  );
+}

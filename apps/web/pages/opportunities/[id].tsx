@@ -214,31 +214,31 @@ export default function OpportunityDetailPage() {
       <Head>
         <title>
           {data
-            ? `${data.protocol} ${data.pair} | OI UI`
-            : "Opportunity Details | OI UI"}
+            ? `${data.protocol} ${data.pair} | Reset UI`
+            : "Opportunity Details | Reset UI"}
         </title>
         <meta
           name="description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield OIg opportunity on Stacks.`
-              : "View detailed information about yield OIg opportunities on OI UI."
+              ? `Detailed information about ${data.protocol} ${data.pair} yield opportunity on Stacks.`
+              : "View detailed information about yield opportunities on Reset."
           }
         />
         <meta
           property="og:title"
           content={
             data
-              ? `${data.protocol} ${data.pair} | OI UI`
-              : "Opportunity Details | OI UI"
+              ? `${data.protocol} ${data.pair} | Reset UI`
+              : "Opportunity Details | Reset UI"
           }
         />
         <meta
           property="og:description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield OIg opportunity on Stacks.`
-              : "View detailed information about yield OIg opportunities on OI UI."
+              ? `Detailed information about ${data.protocol} ${data.pair} yield opportunity on Stacks.`
+              : "View detailed information about yield opportunities on Reset."
           }
         />
         <meta property="og:type" content="website" />
@@ -247,40 +247,22 @@ export default function OpportunityDetailPage() {
           name="twitter:title"
           content={
             data
-              ? `${data.protocol} ${data.pair} | OI UI`
-              : "Opportunity Details | OI UI"
+              ? `${data.protocol} ${data.pair} | Reset UI`
+              : "Opportunity Details | Reset UI"
           }
         />
         <meta
           name="twitter:description"
           content={
             data
-              ? `Detailed information about ${data.protocol} ${data.pair} yield OIg opportunity on Stacks.`
-              : "View detailed information about yield OIg opportunities on OI UI."
+              ? `Detailed information about ${data.protocol} ${data.pair} yield Reset opportunity on Stacks.`
+              : "View detailed information about yield opportunities on Reset."
           }
         />
       </Head>
-      <main className="min-h-screen pb-20">
-        <div className="mx-auto max-w-7xl px-6 py-8">
-          {/* Real Data Status Indicator */}
-          {!error && !loading && data && (
-            <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">
-              <div className="flex items-center space-x-3">
-                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
-                <div>
-                  <p className="text-sm font-medium text-green-800">
-                    🚀 Live Data Active
-                  </p>
-                  <p className="text-sm text-green-700">
-                    Real-time data from DeFiLlama API and leading DeFi protocols
-                    • ID: {data.id}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Error Indicator */}
+      <main className="relative min-h-screen bg-[#030304] pb-20 text-white">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(243,162,51,0.15),transparent_55%)]" />
+        <div className="relative mx-auto max-w-7xl px-6 py-10">
           {error && data && (
             <div className="mb-6">
               {errorType === "chart-data" && (
@@ -295,27 +277,22 @@ export default function OpportunityDetailPage() {
             </div>
           )}
 
-          {/* Hero Section */}
           {data && <OpportunityHero data={data} />}
 
-          {/* Compare Button */}
           {data && (
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex items-center justify-end">
               <motion.button
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
                 whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileTap={{ scale: 0.96 }}
                 onClick={() => {
-                  Logger.info(`Adding opportunity to compare`, {
-                    opportunityId: data.id,
-                  });
-                  // CompareItem matches CardOpportunity structurally (logo? optional)
+                  Logger.info("Adding to compare", { opportunityId: data.id });
                   addItem(
                     data as unknown as import("@/components/opportunity/CompareBar").CompareItem,
                   );
                 }}
-                className="typo-btn-sm-muted inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2 ring-1 ring-zinc-200 hover:bg-zinc-50 transition-all hover:shadow-sm"
+                className="inline-flex items-center gap-2 rounded-full border border-[rgba(243,162,51,0.4)] bg-black/40 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-[#F3A233] shadow-[0_10px_20px_rgba(0,0,0,0.35)] transition hover:border-[#F3A233] hover:text-white"
               >
                 <GitCompare size={16} />
                 Add to Compare
@@ -323,29 +300,22 @@ export default function OpportunityDetailPage() {
             </div>
           )}
 
-          {/* Main Content Grid */}
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - 2/3 */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Performance Overview */}
+          <div className="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+            <div className="space-y-8 lg:sticky lg:top-24">
               {data && <OpportunityOverviewCard data={data} />}
-
-              {/* Risk Analysis */}
               {data && <RiskAnalysis data={data} />}
             </div>
-            {/* Right Column - 1/3 */}
-            <div className="lg:col-span-1 space-y-6">
+            <div className="space-y-8">
               {data && <DepositCalculator data={data} />}
-
               {data && (
                 <InsuranceCard
-                  amount={1000}
+                  amount={2500}
                   days={90}
-                  premiumRate30d={0.0018}
+                  premiumRate30d={0.0015}
                   coverageByTier={{ basic: 0.6, standard: 0.8, plus: 0.9 }}
                   deductiblePct={0.1}
                   coverageCapUSD={100000}
-                  riskScore={27}
+                  riskScore={32}
                 />
               )}
             </div>

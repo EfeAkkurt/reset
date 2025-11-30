@@ -5,7 +5,7 @@
 /* Import typography system */
 @import "./typography.css";
 
-/* OI — Gold/Black Design System */
+/* Reset — Gold/Black Design System */
 :root {
   /* Core brand colors */
   --bg: #0A0A0A;
@@ -579,4 +579,48 @@ h1, h2, h3, .font-display {
   body {
     @apply antialiased;
   }
+}
+
+/* Logo animations */
+.animate-logo-hover {
+  animation: logoHover 0.3s ease-in-out;
+}
+
+.animate-logo-click {
+  animation: logoClick 0.6s ease-in-out;
+}
+
+@keyframes logoHover {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes logoClick {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(0.9) rotate(-5deg); }
+  50% { transform: scale(0.8) rotate(5deg); }
+  75% { transform: scale(0.9) rotate(-2deg); }
+  100% { transform: scale(0) rotate(0deg); opacity: 0; }
+}
+
+/* Header scroll hide/show animations */
+.header-logo-visible {
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.header-logo-hidden {
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+}
+
+/* Header background when scrolled */
+.header-scrolled {
+  backdrop-filter: blur(12px);
+  background: rgba(10, 10, 10, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }

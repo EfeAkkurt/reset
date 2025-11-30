@@ -257,7 +257,7 @@ export default function OpportunitiesPage() {
           />
         </div>
 
-        <section className="relative z-10 mx-auto max-w-6xl px-4 py-6 sm:py-8">
+        <section className="relative z-10 mx-auto max-w-6xl px-4 py-6 sm:py-8" style={{zIndex: 1}}>
           {error ? (
             <div className="rounded-2xl border border-rose-500/40 bg-rose-500/10 p-6 text-sm text-rose-100">
               {error}
