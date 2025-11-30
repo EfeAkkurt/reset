@@ -99,9 +99,9 @@ export const InsuranceCoverage = memo(() => {
             <div className="w-4 h-4 rounded bg-[var(--gold-300)]/20 flex items-center justify-center">
               <span className="text-xs text-[var(--gold-300)]">✓</span>
             </div>
-            <span className="text-sm text-white/60">Coverage Config</span>
+            <span className="text-sm tracking-[0.05em] text-white/60">Coverage Config</span>
           </div>
-          <span className="rounded-full bg-[var(--gold-300)]/15 px-3 py-1 text-xs text-[var(--gold-300)]">
+          <span className="rounded-full bg-[var(--gold-300)]/15 px-3 py-1 text-xs tracking-[0.05em] text-[var(--gold-300)]">
             configurable
           </span>
         </div>
@@ -146,7 +146,7 @@ export const InsuranceCoverage = memo(() => {
 
           {/* Covered Risks - reduced animations */}
           <div className="mb-6">
-            <div className="text-xs text-white/60 mb-3">Covered risks:</div>
+            <div className="text-xs tracking-[0.05em] text-white/60 mb-3">Covered risks:</div>
             <div className="space-y-2">
               {coveredRisks.map((risk) => (
                 <div
@@ -165,8 +165,8 @@ export const InsuranceCoverage = memo(() => {
           {/* Policy Hash & Button */}
           <div className="absolute bottom-2 left-6 right-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-white/40">Policy:</span>
-              <span className="text-xs font-mono text-white/60 bg-white/5 px-2 py-1 rounded">
+              <span className="text-xs tracking-[0.01em] text-white/40">Policy:</span>
+              <span className="text-xs font-mono tracking-[0.01em] text-white/60 bg-white/5 px-2 py-1 rounded">
                 {policyHash}
               </span>
             </div>

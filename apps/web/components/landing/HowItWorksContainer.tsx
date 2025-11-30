@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { StepCard } from "./StepCard";
 import { RiskStep } from "./RiskStep";
 import { InsuranceStep } from "./InsuranceStep";
+import { WithdrawStep } from "./WithdrawStep";
 
 type Side = "left" | "right";
 
@@ -148,6 +149,20 @@ export function HowItWorksContainer({ progress }: HowItWorksContainerProps) {
       if (index === 1) {
         return (
           <InsuranceStep
+            key={step.badge}
+            id={`step-card-${index}`}
+            index={index}
+            step={step}
+            total={STEP_DATA.length}
+            progress={easedProgress}
+            cardsOffset={cardsOffset}
+          />
+        );
+      }
+
+      if (index === 2) {
+        return (
+          <WithdrawStep
             key={step.badge}
             id={`step-card-${index}`}
             index={index}

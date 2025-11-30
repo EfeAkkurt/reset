@@ -128,11 +128,11 @@ export const RiskStep = memo<RiskStepProps>(({
                     <div className="h-8 w-8 rounded-full border border-[color:var(--alpha-gold-16)]/60 bg-[color:var(--alpha-gold-16)]/20 flex items-center justify-center">
                       <Shield className="h-4 w-4 text-[color:var(--gold-500)]" strokeWidth={1.6} />
                     </div>
-                    <span className="text-[12px] uppercase tracking-[0.18em] text-[color:var(--text-2)]/80">
+                    <span className="text-[12px] uppercase tracking-[0.05em] text-[color:var(--text-2)]/80">
                       Risk Radar
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-[#4ADE80] text-[11px] uppercase tracking-[0.16em]">
+                  <div className="flex items-center gap-2 text-[#4ADE80] text-[11px] uppercase tracking-[0.05em]">
                     <span className="relative flex h-[10px] w-[10px] items-center justify-center">
                       <span className="absolute inline-flex h-[6px] w-[6px] rounded-full bg-[#4ADE80] opacity-70 animate-ping" />
                       <span className="relative inline-flex h-[6px] w-[6px] rounded-full bg-[#4ADE80]" />
@@ -158,7 +158,7 @@ export const RiskStep = memo<RiskStepProps>(({
                         <PolarAngleAxis
                           dataKey="metric"
                           tickLine={false}
-                          tick={{ fill: "rgba(216,217,222,0.75)", fontSize: 11 }}
+                          tick={{ fill: "rgba(216,217,222,0.75)", fontSize: 11, letterSpacing: "0.05em" }}
                         />
                         <PolarRadiusAxis
                           axisLine={false}
@@ -190,7 +190,7 @@ export const RiskStep = memo<RiskStepProps>(({
                   </motion.div>
                 </div>
 
-                <p className="relative z-10 mt-4 text-[11px] text-[color:var(--text-2)]/60">
+                <p className="relative z-10 mt-4 text-[11px] tracking-[0.01em] text-[color:var(--text-2)]/60">
                   Aggregated risk across volatility, liquidity & protocol health.
                 </p>
               </motion.div>
@@ -203,11 +203,11 @@ export const RiskStep = memo<RiskStepProps>(({
               viewport={{ once: true, amount: 0.5 }}
               transition={{ duration: 0.7, delay: 0.1, ease: [0.19, 1, 0.22, 1] }}
             >
-              <div className="inline-flex items-center gap-2 rounded-full bg-[color:var(--neutral-900)]/80 border border-[color:var(--alpha-gold-16)] px-3 py-[6px] text-[11px] tracking-[0.16em] uppercase text-[color:var(--text-2)]">
+              <div className="inline-flex items-center gap-2 rounded-full bg-[color:var(--neutral-900)]/80 border border-[color:var(--alpha-gold-16)] px-3 py-[6px] text-[11px] tracking-[0.05em] uppercase text-[color:var(--text-2)]">
                 <span className="inline-flex h-[6px] w-[6px] rounded-full bg-[color:var(--gold-500)]" />
                 {step.badge}
               </div>
-              <h3 className="text-[30px] sm:text-[34px] lg:text-[38px] font-semibold leading-[1.15] text-white max-w-lg">
+              <h3 className="text-[30px] sm:text-[34px] lg:text-[38px] font-semibold leading-[1.15] tracking-[0.05em] text-white max-w-lg">
                 Decode the{" "}
                 <span className="relative inline-flex text-[color:var(--gold-500)]">
                   <span className="relative z-10">risk</span>
@@ -215,10 +215,10 @@ export const RiskStep = memo<RiskStepProps>(({
                 </span>{" "}
                 , not just the return
               </h3>
-              <p className="text-[14px] leading-relaxed text-[color:var(--text-2)] max-w-md">
+              <p className="text-[14px] leading-relaxed tracking-[0.01em] text-[color:var(--text-2)] max-w-md">
                 {step.body}
               </p>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-[color:var(--text-2)]/70">
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-[12px] tracking-[0.01em] text-[color:var(--text-2)]/70">
                 {microBullets.map((item) => (
                   <span key={item} className="inline-flex items-center gap-2">
                     <span className="inline-flex h-[6px] w-[6px] rounded-full bg-[color:var(--gold-500)]" />

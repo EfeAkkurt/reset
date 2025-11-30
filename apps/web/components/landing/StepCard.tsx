@@ -25,7 +25,7 @@ interface StepCardProps {
 
 // Memoize the badge component to prevent unnecessary re-renders
 const Badge = memo(({ children }: { children: React.ReactNode }) => (
-  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs tracking-[0.01em] uppercase text-white/80">
+  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 text-xs tracking-[0.05em] uppercase text-white/80">
     <span className="inline-block h-2 w-2 rounded-full bg-[var(--gold-300)]" />
     {children}
   </div>
@@ -177,10 +177,10 @@ export const StepCard = memo<StepCardProps>(({
         }}
       >
         <Badge>{step.badge}</Badge>
-        <h3 className="text-[32px] font-semibold leading-[1.07] md:text-[40px] lg:text-[44px] lg:leading-[1.04] text-white">
+        <h3 className="text-[32px] font-semibold leading-[1.07] tracking-[0.05em] md:text-[40px] lg:text-[44px] lg:leading-[1.04] text-white">
           {step.title}
         </h3>
-        <p className="mt-3 text-[17px] leading-[1.55] text-white/70 md:text-[18px] line-clamp-2">
+        <p className="mt-3 text-[17px] leading-[1.55] tracking-[0.01em] text-white/70 md:text-[18px] line-clamp-2">
           {step.body}
         </p>
       </motion.div>
