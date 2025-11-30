@@ -328,7 +328,7 @@ class RealDataAdapter {
 
       const adapterManager = await this.getAdapterManager();
       const realOpportunities: SharedOpportunity[] =
-        await adapterManager.getAllOpportunities();
+        (await adapterManager.getAllOpportunities()) as unknown as SharedOpportunity[];
 
       Logger.info(
         `Fetched ${realOpportunities.length} opportunities from adapter`,

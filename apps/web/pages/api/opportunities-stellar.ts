@@ -29,9 +29,9 @@ interface Opportunity {
   apyReward?: number;
   rewardToken: string | string[];
   tvlUsd: number;
-  risk: "low" | "med" | "high";
-  source: "api" | "mock";
-  lastUpdated: number;
+  risk: "Low" | "Medium" | "High";
+  source: "api" | "mock" | "live";
+  lastUpdated: number | string;
   disabled?: boolean;
   poolId?: string;
   underlyingTokens?: string[];
@@ -41,6 +41,11 @@ interface Opportunity {
   exposure?: string;
   ilRisk?: string;
   stablecoin?: boolean;
+  originalUrl?: string;
+  summary?: string;
+  protocolPair?: string;
+  rewardTokens?: string[];
+  allTokens?: string[];
 }
 
 async function fetchDefiLlamaPools(): Promise<DefiLlamaPool[]> {

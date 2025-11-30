@@ -54,7 +54,7 @@ const TimeRangePill = ({
     whileTap={{ scale: 0.95 }}
     onClick={onClick}
     className={clsx(
-      "relative rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider transition-colors",
+      "relative rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.01em]r transition-colors",
       active
         ? "bg-[var(--gold-500)] text-black"
         : "border border-[rgba(216,217,222,0.18)] bg-[rgba(255,255,255,0.02)] text-[var(--text-2)] hover:border-[var(--gold-500)] hover:text-white"
@@ -78,7 +78,7 @@ const ChartModePill = ({
     whileTap={{ scale: 0.95 }}
     onClick={onClick}
     className={clsx(
-      "rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider transition-all",
+      "rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.01em]r transition-all",
       active
         ? "bg-[rgba(224,145,44,0.15)] text-[var(--gold-500)] ring-1 ring-[var(--gold-500)]"
         : "text-[var(--text-2)] hover:text-white"
@@ -88,23 +88,6 @@ const ChartModePill = ({
   </motion.button>
 );
 
-const LegendDot = ({
-  color,
-  label,
-}: {
-  color: string;
-  label: string;
-}) => (
-  <div className="flex items-center gap-2">
-    <div
-      className="h-2 w-2 rounded-full shadow-[0_0_8px_rgba(0,0,0,0.5)]"
-      style={{ background: color }}
-    />
-    <span className="text-[10px] font-medium uppercase tracking-wider text-[var(--text-2)]/80">
-      {label}
-    </span>
-  </div>
-);
 
 // --- Mock Data Generator ---
 
@@ -205,7 +188,7 @@ export function CinematicOpportunityChart({
 
     return (
       <div className="rounded-2xl border border-[rgba(255,182,72,0.3)] bg-[rgba(10,10,10,0.95)] px-4 py-3 shadow-[0_18px_50px_rgba(0,0,0,0.9)] backdrop-blur-md">
-        <p className="mb-2 text-[10px] uppercase tracking-widest text-[var(--text-2)]/70">
+        <p className="mb-2 text-[10px] uppercase tracking-[0.01em]st text-[var(--text-2)]/70">
           {new Date(pt.timestamp).toLocaleString()}
         </p>
         <div className="space-y-1 font-mono text-sm">
@@ -237,10 +220,10 @@ export function CinematicOpportunityChart({
       {/* Header */}
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-[var(--text-2)]/70">
+          <p className="text-[11px] uppercase tracking-[0.01em] text-[var(--text-2)]/70">
             PERFORMANCE OVERVIEW
           </p>
-          <h3 className="mt-1 text-sm font-medium tracking-[0.14em] text-[var(--text)] md:text-base">
+          <h3 className="mt-1 text-sm font-medium tracking-[0.01em] text-[var(--text)] md:text-base">
             Multi-layer analytics
           </h3>
         </div>
@@ -275,7 +258,7 @@ export function CinematicOpportunityChart({
       {/* Chart Container */}
       <div className="relative flex-1 rounded-3xl border border-[rgba(255,182,72,0.14)] bg-[radial-gradient(circle_at_top_left,rgba(224,145,44,0.08),transparent_55%),linear-gradient(to_bottom,#121214,#0A0A0A)] px-2 py-4 shadow-[0_24px_80px_rgba(0,0,0,0.75)] md:px-6 md:py-5">
         <div className="absolute left-6 top-5 z-10">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--text-2)]/60">
+          <p className="text-[10px] uppercase tracking-[0.01em] text-[var(--text-2)]/60">
             Cinematic chart zone
           </p>
         </div>

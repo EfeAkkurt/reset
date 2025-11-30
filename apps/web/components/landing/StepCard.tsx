@@ -1,7 +1,7 @@
 "use client";
 
 import React, { memo, useMemo } from "react";
-import { motion, useTransform, MotionValue } from "framer-motion";
+import { motion, useTransform, MotionValue, type Variants } from "framer-motion";
 import { OpportunityScatter } from "./visuals/OpportunityScatter";
 import { RiskRadar } from "./visuals/RiskRadar";
 import { InsuranceCoverage } from "./visuals/InsuranceCoverage";
@@ -35,16 +35,35 @@ const Badge = memo(({ children }: { children: React.ReactNode }) => (
 
 Badge.displayName = "Badge";
 
+// HeroStats variants for animation
+const cardVariants: Variants = {
+  rest: { scale: 1, rotateZ: 0, y: 0 },
+  hover: (wobble: number) => ({
+    scale: 1.03,
+    rotateZ: wobble,
+    y: -2,
+    transition: { type: "spring", stiffness: 260, damping: 18 },
+  }),
+  tap: { scale: 0.98 },
+};
+
+const innerVariants: Variants = {
+  rest: { scale: 1, y: 0 },
+  hover: {
+    scale: 1.03,
+    y: -4,
+    transition: { type: "spring", stiffness: 320, damping: 16, delay: 0.03 },
+  },
+};
+
 // Memoize visual card factory
 const VisualCard = memo(({ index }: { index: number }) => {
   switch (index) {
     case 0:
-      return <OpportunityScatter />;
-    case 1:
       return <RiskRadar />;
-    case 2:
+    case 1:
       return <InsuranceCoverage />;
-    case 3:
+    case 2:
       return <WithdrawWidget />;
     default:
       return <DefaultVisualCard />;
@@ -134,7 +153,7 @@ export const StepCard = memo<StepCardProps>(({
   );
 
   const visualOrderClasses = useMemo(() =>
-    step.side === "right" ? "lg:order-1 lg:self-start lg:-mt-6 xl:-mt-10 2xl:-mt-12" : "",
+    step.side === "right" ? "lg:order-1 lg:self-start lg:-mt-6 xl:-mt-10 2xl:-mt-12" : "lg:self-start lg:-mt-12 xl:-mt-16 2xl:-mt-20",
     [step.side]
   );
 

@@ -50,27 +50,8 @@ function useThrottledValue(value: number | undefined, delay: number = 16) {
 
 const STEP_DATA: StepData[] = [
   {
-    side: "left",
-    badge: "Step 01",
-    title: (
-      <>
-        Spot the{" "}
-        <span style={{
-          background: "var(--btn-grad)",
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          color: "transparent",
-        }}>
-          signals
-        </span>{" "}
-        before the crowd
-      </>
-    ),
-    body: "Track every pool and protocol with real-time APRs and TVL shifts across chains",
-  },
-  {
     side: "right",
-    badge: "Step 02",
+    badge: "Step 01",
     title: (
       <>
         Decode the{" "}
@@ -89,7 +70,7 @@ const STEP_DATA: StepData[] = [
   },
   {
     side: "left",
-    badge: "Step 03",
+    badge: "Step 02",
     title: (
       <>
         Shield your{" "}
@@ -108,7 +89,7 @@ const STEP_DATA: StepData[] = [
   },
   {
     side: "right",
-    badge: "Step 04",
+    badge: "Step 03",
     title: (
       <>
         Earn, withdraw, repeat — all in your{" "}

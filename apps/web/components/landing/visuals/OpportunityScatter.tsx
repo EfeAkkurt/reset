@@ -139,7 +139,7 @@ export const OpportunityScatter = memo(() => {
       />
 
       {/* Content */}
-      <div className="relative z-10 p-8 md:p-10 lg:p-12 h-full flex flex-col">
+      <div className="relative z-10 p-8 md:p-10 lg:p-12 h-full flex flex-col mb-8">
         {/* Header */}
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">

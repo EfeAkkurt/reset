@@ -26,9 +26,9 @@ export const RiskRadar = memo(() => {
   // Pre-calculate radar polygon points
   const radarPoints = useMemo(() => {
     const angleStep = (2 * Math.PI) / riskData.length;
-    const centerX = 374; // Half of container width
-    const centerY = 275;
-    const maxRadius = 130; // Optimized radius
+    const centerX = 748; // Half of container width (2x)
+    const centerY = 550; // 2x
+    const maxRadius = 260; // Optimized radius (2x)
 
     return riskData.map((point, i) => {
       const angle = i * angleStep - Math.PI / 2;
@@ -42,9 +42,9 @@ export const RiskRadar = memo(() => {
   // Pre-calculate label positions
   const labelPositions = useMemo(() => {
     const angleStep = (2 * Math.PI) / riskData.length;
-    const centerX = 374;
-    const centerY = 275;
-    const labelDistance = 180;
+    const centerX = 748; // 2x
+    const centerY = 550; // 2x
+    const labelDistance = 360; // 2x
 
     return riskData.map((point, i) => {
       const angle = i * angleStep - Math.PI / 2;
@@ -89,9 +89,9 @@ export const RiskRadar = memo(() => {
         </div>
 
         {/* Optimized Radar Chart */}
-        <div className="relative flex-1 min-h-[450px] overflow-hidden rounded-xl bg-gradient-to-b from-white/5 to-white/0">
+        <div className="relative flex-1 min-h-[900px] overflow-hidden rounded-xl bg-gradient-to-b from-white/5 to-white/0 mb-8">
           <svg
-            viewBox="0 0 748 550"
+            viewBox="0 0 1496 1100"
             className="absolute inset-0 h-full w-full"
             style={{ maxWidth: "95%", margin: "0 auto" }}
           >
@@ -99,29 +99,29 @@ export const RiskRadar = memo(() => {
             {[0.25, 0.5, 0.75, 1.0].map((level, i) => (
               <circle
                 key={i}
-                cx="374"
-                cy="275"
-                r={130 * level}
+                cx="748"
+                cy="550"
+                r={260 * level}
                 fill="none"
                 stroke="rgba(255,255,255,0.15)"
-                strokeWidth="1.5"
+                strokeWidth="3"
               />
             ))}
 
             {/* Grid lines - simplified */}
             {riskData.map((_, i) => {
               const angle = (i * 2 * Math.PI) / riskData.length - Math.PI / 2;
-              const x = 374 + Math.cos(angle) * 130;
-              const y = 275 + Math.sin(angle) * 130;
+              const x = 748 + Math.cos(angle) * 260;
+              const y = 550 + Math.sin(angle) * 260;
               return (
                 <line
                   key={i}
-                  x1="374"
-                  y1="275"
+                  x1="748"
+                  y1="550"
                   x2={x}
                   y2={y}
                   stroke="rgba(255,255,255,0.2)"
-                  strokeWidth="1"
+                  strokeWidth="2"
                 />
               );
             })}
@@ -140,7 +140,7 @@ export const RiskRadar = memo(() => {
               fill="url(#riskGradient)"
               fillOpacity={0.25}
               stroke={riskColor}
-              strokeWidth="2"
+              strokeWidth="4"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: 1 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
@@ -152,7 +152,7 @@ export const RiskRadar = memo(() => {
                 key={i}
                 cx={point.x}
                 cy={point.y}
-                r="5"
+                r="10"
                 fill={riskColor}
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
@@ -168,7 +168,7 @@ export const RiskRadar = memo(() => {
                 y={label.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="text-[22px] font-medium fill-white/85"
+                className="text-[44px] font-medium fill-white/85"
                 style={{ willChange: "transform" }}
               >
                 {label.text}
