@@ -3,7 +3,7 @@
 ## 📋 Current Contract Status
 
 ### ✅ **SimpleInsurance** - DEPLOYED & WORKING
-- **Contract ID**: `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP`
+- **Contract ID**: `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD`
 - **TypeScript SDK**: ✅ Ready and tested
 - **Status**: Production ready
 

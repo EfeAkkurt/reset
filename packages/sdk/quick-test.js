@@ -11,12 +11,12 @@ async function quickTest() {
   try {
     // Initialize SDK with your deployed contract
     const sdk = new SmartContractSDK(
-      "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+      "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
       "testnet"
     );
 
     console.log('✅ SDK initialized successfully');
-    console.log('✅ Contract ID: CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP');
+    console.log('✅ Contract ID: CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD');
     console.log('✅ Network: Stellar Testnet');
 
     // Use existing funded test account
@@ -35,7 +35,7 @@ async function quickTest() {
     console.log('\n💻 Usage Example:');
     console.log('```javascript');
     console.log('const { SmartContractSDK } = require("./src/index.js");');
-    console.log('const sdk = new SmartContractSDK("CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP", "testnet");');
+    console.log('const sdk = new SmartContractSDK("CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD", "testnet");');
     console.log('const policyId = await sdk.createPolicy(userAddress, amount);');
     console.log('```');
 

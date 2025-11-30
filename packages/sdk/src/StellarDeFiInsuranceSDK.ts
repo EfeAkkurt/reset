@@ -6,7 +6,9 @@
 // Avoid static imports of @stellar/stellar-sdk in browser bundles to bypass sodium-native/Node polyfills.
 // We'll lazy-require when needed; xdr is lightweight enough to require directly.
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { xdr } = require('@stellar/stellar-base');
+const { xdr, Keypair } = require('@stellar/stellar-base');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const SorobanClient = require('soroban-client');
 
 import {
   NetworkConfig,
@@ -99,7 +101,19 @@ export class StellarDeFiInsuranceSDK {
     return (contracts: ContractAddress[], wallet?: WalletConfig) => {
       const contractMap: any = {};
       contracts.forEach(contract => {
-        contractMap[contract.type] = contract.address;
+        switch (contract.type) {
+          case ContractType.SimpleInsurance:
+            contractMap.simpleInsurance = contract.address;
+            break;
+          case ContractType.YieldAggregator:
+            contractMap.yieldAggregator = contract.address;
+            break;
+          case ContractType.Treasury:
+            contractMap.treasury = contract.address;
+            break;
+          default:
+            contractMap[contract.type] = contract.address;
+        }
       });
 
       return new StellarDeFiInsuranceSDK({
@@ -392,48 +406,41 @@ export class StellarDeFiInsuranceSDK {
 
   private initializeClients(): void {
     try {
-      let ServerCtor: any;
+      // Browser stub for Horizon; Soroban RPC below
+      this.server = {
+        loadAccount: async () => {
+          throw new Error('Horizon client unavailable in browser stub');
+        },
+        ledgers: () => ({ limit: () => ({ call: async () => ({}) }) }),
+        transactions: () => ({ transaction: () => ({ call: async () => ({}) }) }),
+        submitTransaction: async () => ({ successful: false, hash: '' }),
+      };
+
+      // Real Soroban RPC client for testnet/mainnet/futurenet
+      this.sorobanClient = new SorobanClient.Server(this.config.network.sorobanRpcUrl, {
+        allowHttp: this.config.network.sorobanRpcUrl.startsWith('http://'),
+      });
+
+      // Patch getLedgerEntries to use object params for newer RPC servers
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const stellar = require('@stellar/stellar-sdk');
-        ServerCtor = stellar.Server || (stellar.default && stellar.default.Server);
-      } catch {
-        ServerCtor = undefined;
-      }
-
-      if (ServerCtor) {
-        this.server = new ServerCtor(this.config.network.horizonUrl);
-      } else {
-        // Browser/demo stub
-        this.server = {
-          loadAccount: async () => {
-            throw new Error('Horizon client unavailable in browser stub');
-          },
-          ledgers: () => ({ limit: () => ({ call: async () => ({}) }) }),
-          transactions: () => ({ transaction: () => ({ call: async () => ({}) }) }),
-          submitTransaction: async () => ({ successful: false, hash: '' }),
+        const jsonrpc = require('soroban-client/lib/jsonrpc');
+        const original = this.sorobanClient._getLedgerEntries?.bind(this.sorobanClient);
+        this.sorobanClient._getLedgerEntries = async (...keys: any[]) => {
+          const payload = { keys: keys.map((k: any) => k.toXDR('base64')) };
+          return jsonrpc.post(this.sorobanClient.serverURL.toString(), 'getLedgerEntries', payload);
         };
-      }
-
-      // Initialize Soroban RPC client
-      // Note: You would need to import the actual Soroban client here
-      // this.sorobanClient = new SorobanClient(this.config.network.sorobanRpcUrl);
-
-      // For now, we'll create a mock client that would be replaced with the real one
-      this.sorobanClient = {
-        sendTransaction: async (op: any, options?: any) => {
-          // Mock implementation - replace with real Soroban client
-          return { hash: 'mock-hash', gasUsed: '1000000' };
-        },
-        simulateTransaction: async (op: any) => {
-          // Mock implementation - replace with real Soroban client
-          return { result: 'mock-result', estimatedGas: '1000000' };
-        },
-        getHealth: async () => {
-          // Mock implementation
-          return { status: 'healthy' };
+        if (this.sorobanClient.getLedgerEntries) {
+          this.sorobanClient.getLedgerEntries = async (...keys: any[]) => {
+            const raw = await this.sorobanClient._getLedgerEntries(...keys);
+            if (raw.entries) return raw;
+            if (original) return original(...keys);
+            return raw;
+          };
         }
-      };
+      } catch {
+        // If patching fails, continue with default behavior
+      }
     } catch (error) {
       throw new ConfigurationError(
         `Failed to initialize clients: ${error instanceof Error ? error.message : String(error)}`

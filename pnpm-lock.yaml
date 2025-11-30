@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@stellar-defi-insurance/sdk': workspace:*
   three: 0.170.0
   '@types/three': 0.170.0
 
@@ -193,7 +194,7 @@ importers:
         specifier: ^12.0.0
         version: 12.3.0
       soroban-client:
-        specifier: ^1.0.1
+        specifier: 1.0.1
         version: 1.0.1
     devDependencies:
       '@rollup/plugin-node-resolve':

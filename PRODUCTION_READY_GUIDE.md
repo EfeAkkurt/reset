@@ -9,10 +9,10 @@ Your TypeScript smart contract SDK and deployed testnet contract are **productio
 ## 🚀 What You Have
 
 ### 1. **Deployed Testnet Contract**
-- **Contract ID**: `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP`
+- **Contract ID**: `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD`
 - **Network**: Stellar Testnet
 - **Status**: ✅ All functions working
-- **Explorer**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP)
+- **Explorer**: [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD)
 
 ### 2. **Production-Ready TypeScript SDK**
 - **Location**: `packages/sdk/src/index.js`
@@ -35,7 +35,7 @@ const { SmartContractSDK } = require('./packages/sdk/src/index.js');
 
 // Initialize SDK with your deployed contract
 const sdk = new SmartContractSDK(
-  "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+  "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
   "testnet"
 );
 
@@ -72,7 +72,7 @@ function InsuranceDApp() {
   useEffect(() => {
     const init = async () => {
       const insuranceSDK = new SmartContractSDK(
-        "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+        "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
         "testnet"
       );
       setSdk(insuranceSDK);
@@ -114,7 +114,7 @@ const app = express();
 app.use(express.json());
 
 const sdk = new SmartContractSDK(
-  "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+  "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
   "testnet"
 );
 
@@ -202,7 +202,7 @@ node final-test-contract.js
 ### Environment Variables
 ```bash
 # Contract Configuration
-CONTRACT_ID=CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP
+CONTRACT_ID=CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD
 NETWORK=testnet
 RPC_URL=https://soroban-testnet.stellar.org
 ```

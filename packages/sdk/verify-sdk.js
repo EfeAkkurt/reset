@@ -13,7 +13,7 @@ try {
 
   // 2. Check if we can create an instance
   const sdk = new SmartContractSDK(
-    "CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP",
+    "CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD",
     "testnet"
   );
   console.log('✅ SDK instance created successfully');
@@ -28,7 +28,7 @@ try {
 
   // 4. Check contract info
   console.log('\n📋 Contract Information:');
-  console.log('   Contract ID: CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP');
+  console.log('   Contract ID: CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD');
   console.log('   Network: Stellar Testnet');
   console.log('   RPC URL: https://soroban-testnet.stellar.org');
 
@@ -37,7 +37,7 @@ try {
 
   console.log('\n💻 Usage Example:');
   console.log('```javascript');
-  console.log('const sdk = new SmartContractSDK("CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP", "testnet");');
+  console.log('const sdk = new SmartContractSDK("CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD", "testnet");');
   console.log('const policyId = await sdk.createPolicy(userAddress, 1000);');
   console.log('const policies = await sdk.getUserPolicies(userAddress);');
   console.log('```');

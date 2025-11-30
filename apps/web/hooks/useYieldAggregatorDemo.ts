@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { getResetSdk } from "@/lib/sdk/resetSdk";
 import { useStellarWallet } from "@/components/providers/StellarWalletProvider";
 import { toast } from "sonner";
+import { getResetSdk } from "@/lib/sdk/resetSdk";
 
 type DepositState = {
   depositId?: string;
@@ -55,17 +55,23 @@ export function useYieldAggregatorDemo() {
         let depositId = `demo-${Date.now().toString(16)}`;
 
         if (agg) {
-          const result = await agg.deposit({
+          const op = await agg.deposit({
             user: address,
             amount: Math.max(1, Math.floor(amount)),
-            poolId: "default",
+            insurancePercentage: Math.max(0, Math.min(100, Math.floor(insurancePct))),
           });
 
-          if (result.success) {
-            txHash = result.transactionHash || txHash;
-            depositId = result.result?.poolId || depositId;
-          } else if (result.error) {
-            toast.error("Deposit failed", { description: result.error });
+          if ((op as any).xdr) {
+            const signed = await signAndSend({
+              xdr: (op as any).xdr,
+              rpcUrl: "https://soroban-testnet.stellar.org",
+            });
+            txHash = signed.hash || txHash;
+          } else if (op.success) {
+            txHash = op.transactionHash || txHash;
+            depositId = op.result?.poolId || depositId;
+          } else if (op.error) {
+            toast.error("Deposit failed", { description: op.error });
           }
         }
 

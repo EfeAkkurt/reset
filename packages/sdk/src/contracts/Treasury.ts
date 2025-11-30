@@ -76,7 +76,10 @@ export class Treasury {
   }
 
   private validateConfig(): void {
-    if (!validateStellarAddress(this.config.contractAddress.address)) {
+    const addr = this.config.contractAddress.address;
+    const isStellar = validateStellarAddress(addr);
+    const isContract = /^[A-Z0-9]{56}$/.test(addr) || /^[a-fA-F0-9]{64}$/.test(addr);
+    if (!isStellar && !isContract) {
       throw new ValidationError('Invalid contract address', 'contractAddress');
     }
 

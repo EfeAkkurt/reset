@@ -6,7 +6,7 @@
 
 | Contract | Contract ID | Status | Evidence |
 |----------|-------------|---------|----------|
-| **SimpleInsurance** | `CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP` | ✅ **DEPLOYED & WORKING** | ✅ WASM code responding to function calls |
+| **SimpleInsurance** | `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD` | ✅ **DEPLOYED & WORKING** | ✅ WASM code responding to function calls |
 | **YieldAggregator** | `CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD` | ✅ **DEPLOYED & WORKING** | ✅ WASM code responding to function calls |
 | **Treasury** | `CAA6RLYC724TXZUXYWTHKCHJLGTFV23DNAMGLN2HR2KXSGYYVZKCGKHH` | ✅ **DEPLOYED & WORKING** | ✅ WASM code responding to function calls |
 
@@ -171,7 +171,7 @@ function DeFiInsuranceApp() {
 
 ```bash
 # Your Contract IDs
-echo "SimpleInsurance: CCZHH3REOS3222YNXMO3SHEAHFWMPEPB6VH3K7TME6P4CCJQ3H7BNXWP"
+echo "SimpleInsurance: CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD"
 echo "YieldAggregator: CB5HXIT4SWNMWOPW67D66PA2AFRYGYLIBGDRQSHWVDW2GHMGGAQG27YD"
 echo "Treasury: CAA6RLYC724TXZUXYWTHKCHJLGTFV23DNAMGLN2HR2KXSGYYVZKCGKHH"
 
