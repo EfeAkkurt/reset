@@ -13,7 +13,7 @@ function truncateAddress(address: string) {
 function WalletNavigation() {
   const [mounted, setMounted] = useState(false);
   const { address, connect, disconnect } = useStellarWallet();
-  const [hideLinks, setHideLinks] = useState(false);
+  const [collapseNav, setCollapseNav] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -21,8 +21,10 @@ function WalletNavigation() {
 
   useEffect(() => {
     const onScroll = () => {
-      setHideLinks(window.scrollY > 100);
+      const shouldCollapse = window.scrollY > 120;
+      setCollapseNav(shouldCollapse);
     };
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -42,19 +44,28 @@ function WalletNavigation() {
   return (
     <header
       className="fixed z-[9999] top-[calc(env(safe-area-inset-top,0px)+14px)] right-[calc(env(safe-area-inset-right,0px)+24px)] left-auto"
-      style={{ pointerEvents: "none" }}
+      style={{
+        pointerEvents: "none",
+        opacity: collapseNav ? 0 : 1,
+        transform: collapseNav ? "translateY(-40px)" : "translateY(0)",
+        transition: "opacity 0.35s ease, transform 0.35s ease",
+      }}
     >
       <nav
         className="pointer-events-auto"
         aria-label="Primary"
-        style={{ position: "relative", zIndex: 1 }}
+        style={{
+          position: "relative",
+          zIndex: 1,
+          pointerEvents: collapseNav ? "none" : "auto",
+        }}
       >
         <ul className="flex items-center list-none m-0 p-0 gap-4 space-x-4 [&>li+li]:ml-4">
           <li
             style={{
-              opacity: hideLinks ? 0 : 1,
-              transform: hideLinks ? "translateY(-10px)" : "translateY(0)",
-              pointerEvents: hideLinks ? "none" : "auto",
+              opacity: collapseNav ? 0 : 1,
+              transform: collapseNav ? "translateY(-10px)" : "translateY(0)",
+              pointerEvents: collapseNav ? "none" : "auto",
               transition: "opacity 0.3s ease, transform 0.3s ease",
             }}
           >
@@ -74,9 +85,9 @@ function WalletNavigation() {
           <li
             style={{
               marginLeft: 16,
-              opacity: hideLinks ? 0 : 1,
-              transform: hideLinks ? "translateY(-10px)" : "translateY(0)",
-              pointerEvents: hideLinks ? "none" : "auto",
+              opacity: collapseNav ? 0 : 1,
+              transform: collapseNav ? "translateY(-10px)" : "translateY(0)",
+              pointerEvents: collapseNav ? "none" : "auto",
               transition: "opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s",
             }}
           >
@@ -87,9 +98,9 @@ function WalletNavigation() {
           <li
             style={{
               marginLeft: 16,
-              opacity: hideLinks ? 0 : 1,
-              transform: hideLinks ? "translateY(-10px)" : "translateY(0)",
-              pointerEvents: hideLinks ? "none" : "auto",
+              opacity: collapseNav ? 0 : 1,
+              transform: collapseNav ? "translateY(-10px)" : "translateY(0)",
+              pointerEvents: collapseNav ? "none" : "auto",
               transition: "opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s",
             }}
           >

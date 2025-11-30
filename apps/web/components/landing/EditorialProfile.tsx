@@ -18,16 +18,6 @@ export function EditorialProfile() {
       {/* Editorial Content */}
       <div className="w-full max-w-3xl flex flex-col items-center text-center">
         <motion.div style={{ opacity }} className="space-y-8">
-          <div className="space-y-2">
-            <h2 className="font-display text-6xl md:text-8xl font-bold tracking-tighter text-white leading-[0.8]">
-              THE<br />ARCHITECT
-            </h2>
-            <div className="h-1 w-24 bg-[var(--gold-300)]" />
-          </div>
-
-          <p className="text-xl md:text-2xl font-light leading-relaxed text-white/80 max-w-md">
-            "We are not just building a protocol. We are building the <span className="text-[var(--gold-300)] italic">standard</span> for on-chain reliability."
-          </p>
 
           <div className="space-y-4 pt-8">
             <h3 className="text-sm uppercase tracking-[0.01em] text-white/40">Connect</h3>

@@ -90,7 +90,7 @@ export function Market({ progress = 0 }: { progress?: number }) {
                 
                 {/* Live Data Visualization */}
                 <div className="absolute inset-0 z-10">
-                   <LiveMarketData />
+                   <LiveMarketData progress={progress} />
                 </div>
               </div>
             </div>
