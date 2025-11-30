@@ -253,14 +253,14 @@ export function RiskAnalysis({ data }: RiskAnalysisProps) {
       ) : (
         <>
           <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-            <div className="rounded-[28px] border border-white/10 bg-gradient-to-b from-[#121214] to-[#070708] p-6 text-center shadow-inner shadow-black/50">
+            <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-b from-[#121214] to-[#070708] p-6 text-center shadow-inner shadow-black/50">
               <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/60">
                 Global Risk Score
               </p>
               <GaugeChart score={riskScore} />
               <p className="text-sm text-[#D8D9DE]/70">
                 {gaugeLabel} exposure • Confidence{" "}
-                {(riskData?.confidence ?? 0.82) * 100}%
+                {Math.round((riskData?.confidence ?? 0.82) * 100)}%
               </p>
             </div>
 
@@ -268,7 +268,7 @@ export function RiskAnalysis({ data }: RiskAnalysisProps) {
               {riskItems.map((item) => (
                 <div
                   key={item.category}
-                  className="rounded-2xl border border-white/5 bg-[#0C0D0F] px-4 py-3 shadow-inner shadow-black/40 transition hover:-translate-y-0.5"
+                  className="rounded-2xl border border-white/10 bg-[#0C0D0F] px-4 py-3 shadow-inner shadow-black/40 transition hover:-translate-y-0.5"
                 >
                   <div className="flex items-center gap-3">
                     <div

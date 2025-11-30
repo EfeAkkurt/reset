@@ -42,7 +42,7 @@ type ChartPoint = {
   projection?: number;
 };
 
-const TIME_OPTIONS = ["7D", "30D", "90D"] as const;
+const TIME_OPTIONS = ["6H", "24H", "7D", "30D", "90D"] as const;
 
 export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) {
   const [timeRange, setTimeRange] = useState<(typeof TIME_OPTIONS)[number]>(
@@ -52,10 +52,21 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  const days = useMemo(
-    () => (timeRange === "7D" ? 7 : timeRange === "30D" ? 30 : 90),
-    [timeRange],
-  );
+  const windowConfig = useMemo(() => {
+    switch (timeRange) {
+      case "6H":
+        return { days: 1, stepMinutes: 30, formatter: "time" as const };
+      case "24H":
+        return { days: 1, stepMinutes: 60, formatter: "time" as const };
+      case "7D":
+        return { days: 7, stepMinutes: 1440, formatter: "date" as const };
+      case "30D":
+        return { days: 30, stepMinutes: 1440, formatter: "date" as const };
+      case "90D":
+      default:
+        return { days: 90, stepMinutes: 1440, formatter: "date" as const };
+    }
+  }, [timeRange]);
 
   useEffect(() => {
     let mounted = true;
@@ -64,7 +75,7 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
         setLoading(true);
         setErr(null);
         const resp = await fetch(
-          `/api/opportunities/${data.id}/chart?days=${days}`,
+          `/api/opportunities/${data.id}/chart?days=${windowConfig.days}`,
         );
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const json = await resp.json();
@@ -76,7 +87,13 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
           volume24h?: number;
         }> = json.series || [];
         const mapped: ChartPoint[] = pts.map((p) => ({
-          date: new Date(p.timestamp).toISOString().slice(0, 10),
+          date:
+            windowConfig.formatter === "time"
+              ? new Date(p.timestamp).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : new Date(p.timestamp).toISOString().slice(0, 10),
           apr: Number((p.apy ?? p.apr ?? data.apr).toFixed(2)),
           tvl: Number(((p.tvlUsd / 1_000_000) || 0).toFixed(2)),
           volume: Math.round(p.volume24h || data.tvlUsd * 0.015),
@@ -95,21 +112,34 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
     return () => {
       mounted = false;
     };
-  }, [data.apr, data.id, data.tvlUsd, days]);
+  }, [data.apr, data.id, data.tvlUsd, windowConfig]);
 
   const fallbackSeries = useMemo(() => {
     const pts: ChartPoint[] = [];
     const baseTvl = Math.max(1, data.tvlUsd / 1_000_000);
-    for (let i = days - 1; i >= 0; i--) {
+    const points =
+      windowConfig.formatter === "time"
+        ? windowConfig.days === 1 && windowConfig.stepMinutes === 30
+          ? 12
+          : 24
+        : windowConfig.days;
+    const stepMs = windowConfig.stepMinutes * 60_000;
+    for (let i = points - 1; i >= 0; i--) {
       pts.push({
-        date: new Date(Date.now() - i * 86400000).toISOString().slice(0, 10),
+        date:
+          windowConfig.formatter === "time"
+            ? new Date(Date.now() - i * stepMs).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            : new Date(Date.now() - i * 86400000).toISOString().slice(0, 10),
         apr: Number((data.apr + Math.sin(i / 3) * 0.6).toFixed(2)),
         tvl: Number((baseTvl + Math.cos(i / 6) * 0.25).toFixed(2)),
         volume: Math.round(data.tvlUsd * 0.015 + Math.sin(i) * 8000),
       });
     }
     return pts;
-  }, [data.apr, data.tvlUsd, days]);
+  }, [data.apr, data.tvlUsd, windowConfig]);
 
   const chartPoints = useMemo(() => {
     const source = series.length ? series : fallbackSeries;
@@ -180,29 +210,35 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
     );
   };
 
-  const metricTiles = [
-    {
-      label: "Current APR",
-      value: `${metrics.apr.toFixed(2)}%`,
-      sub: "Net blended yield",
-    },
-    {
-      label: "TVL (USD)",
-      value: `$${metrics.tvl.toFixed(2)}M`,
-      sub: "Liquidity at rest",
-    },
-    {
-      label: "24h Volume",
-      value: `$${metrics.volume24h.toLocaleString()}`,
-      sub: "Flow through venue",
-    },
-    {
-      label: "Participants",
-      value: metrics.participants.toLocaleString(),
-      sub: "Wallets with exposure",
-      icon: <Users size={16} />,
-    },
-  ];
+const metricTiles = [
+  {
+    label: "Current APR",
+    value: `${metrics.apr.toFixed(2)}%`,
+    sub: "Net blended yield",
+  },
+  {
+    label: "TVL (USD)",
+    value: `$${metrics.tvl.toFixed(2)}M`,
+    sub: "Liquidity at rest",
+  },
+  {
+    label: "24h Volume",
+    value: `$${metrics.volume24h.toLocaleString()}`,
+    sub: "Flow through venue",
+  },
+  {
+    label: "Participants",
+    value: metrics.participants.toLocaleString(),
+    sub: "Wallets with exposure",
+    icon: <Users size={16} />,
+  },
+];
+
+const projectionConfig = [
+  { horizon: 7, confidence: "High" },
+  { horizon: 30, confidence: "Medium" },
+  { horizon: 90, confidence: "Low" },
+];
 
   return (
     <motion.section
@@ -251,7 +287,7 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
         {metricTiles.map((tile) => (
           <div
             key={tile.label}
-            className="group rounded-2xl border-l-4 border-[#F3A233] bg-[#111214] px-5 py-4 shadow-inner shadow-black/50 transition-all hover:-translate-y-1 hover:border-[#E0912C]"
+            className="group rounded-2xl border border-white/10 bg-[#111214] px-5 py-4 shadow-inner shadow-black/50 transition-all hover:-translate-y-1"
           >
             <div className="flex items-center justify-between">
               <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
@@ -377,7 +413,7 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
       </div>
 
       <div className="grid gap-3 md:grid-cols-3">
-        {[7, 30, 90].map((horizon) => {
+        {projectionConfig.map((proj) => {
           const base = chartPoints.at(-1)?.tvl ?? metrics.tvl;
           const slope =
             chartPoints.length > 1
@@ -385,19 +421,41 @@ export function OpportunityOverviewCard({ data }: OpportunityOverviewCardProps) 
                   chartPoints[0]!.projection!) /
                 (chartPoints.length - 1)
               : 0;
-          const projected = base + slope * (horizon / 7);
+          const projected = base + slope * (proj.horizon / 7);
+          const projectedApy = metrics.apr * (proj.horizon / 30);
+          const expectedGain = (base * projectedApy) / 100;
+          const tone =
+            proj.confidence === "High"
+              ? "text-emerald-300"
+              : proj.confidence === "Medium"
+                ? "text-amber-200"
+                : "text-rose-200";
           return (
             <div
-              key={horizon}
+              key={proj.horizon}
               className="rounded-2xl border border-white/10 bg-[#101215] px-4 py-3 shadow-inner shadow-black/40"
             >
               <p className="text-[10px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
-                {horizon}d Projection
+                {proj.horizon}d Projection
               </p>
               <p className="mt-2 font-mono text-xl text-white">
                 ${projected.toFixed(2)}M
               </p>
-              <p className="text-xs text-[#8F94A3]">Based on current slope</p>
+              <div className="mt-2 flex items-center justify-between text-sm text-[#9EA2B3]">
+                <span>Projected APY</span>
+                <span className="font-mono text-white">
+                  {projectedApy.toFixed(2)}%
+                </span>
+              </div>
+              <div className="mt-1 flex items-center justify-between text-sm text-[#9EA2B3]">
+                <span>Expected gain</span>
+                <span className="font-mono text-white">
+                  ${expectedGain.toFixed(2)}
+                </span>
+              </div>
+              <p className={clsx("mt-2 text-xs uppercase tracking-[0.35em]", tone)}>
+                {proj.confidence} confidence
+              </p>
             </div>
           );
         })}

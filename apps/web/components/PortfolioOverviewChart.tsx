@@ -15,18 +15,28 @@ import {
 } from "recharts";
 import clsx from "clsx";
 
-type Period = "24H" | "7D" | "30D";
+type Period = "24H" | "7D" | "30D" | "90D";
 type Row = { t: string; total: number; pnl: number; chg24h: number };
 
-const PERIOD_OPTIONS: Period[] = ["24H", "7D", "30D"];
+const PERIOD_OPTIONS: Period[] = ["24H", "7D", "30D", "90D"];
 
-function demo(rows = 30): Row[] {
+const RANGE_CONFIG: Record<
+  Period,
+  { points: number; stepMinutes: number; queryDays: number }
+> = {
+  "24H": { points: 24, stepMinutes: 60, queryDays: 1 },
+  "7D": { points: 7, stepMinutes: 1440, queryDays: 7 },
+  "30D": { points: 30, stepMinutes: 1440, queryDays: 30 },
+  "90D": { points: 90, stepMinutes: 1440, queryDays: 90 },
+};
+
+function demo(points = 30, stepMinutes = 1440): Row[] {
   const out: Row[] = [];
   let total = 100000;
   let pnl = 0;
-  const baseDate = new Date(Math.floor(Date.now() / 86400000) * 86400000);
-  for (let i = rows - 1; i >= 0; i--) {
-    const dt = new Date(baseDate.getTime() - i * 86400000);
+  const baseDate = Date.now();
+  for (let i = points - 1; i >= 0; i--) {
+    const dt = new Date(baseDate - i * stepMinutes * 60_000);
     const r = (Math.random() - 0.45) * 0.02;
     const change = total * r;
     total = Math.max(2000, total + change);
@@ -53,13 +63,29 @@ export default function PortfolioOverviewChart({
   onPeriodChange?: (period: Period) => void;
 }) {
   const reduceMotion = useReducedMotion();
-  const periodDays = period === "24H" ? 1 : period === "7D" ? 7 : 30;
-  const chartData = useMemo(
-    () => (data?.length ? data : demo(periodDays)),
-    [data, periodDays],
-  );
+  const config = RANGE_CONFIG[period];
+  const chartData = useMemo(() => {
+    const source = data?.length ? data : demo(config.points, config.stepMinutes);
+    if (!source.length) return [];
+    const trimmed =
+      source.length > config.points
+        ? source.slice(source.length - config.points)
+        : source;
+    return trimmed;
+  }, [data, config.points, config.stepMinutes]);
 
   const kpis = useMemo(() => {
+    if (!chartData.length) {
+      return {
+        total: 0,
+        pnl: 0,
+        changePct: 0,
+        changeLabel: "Change",
+        volume: 0,
+        participants: 0,
+        apr: 0,
+      };
+    }
     const last = chartData.at(-1)!;
     const first = chartData[0]!;
     const changePct = ((last.total - first.total) / first.total) * 100;
@@ -67,9 +93,24 @@ export default function PortfolioOverviewChart({
       total: last.total,
       pnl: last.pnl,
       changePct,
-      changeLabel: period === "24H" ? "24H Change" : `${period} Change`,
+      changeLabel:
+        period === "24H" ? "24H Change" : `${period} Performance`,
+      volume: Math.abs(last.chg24h * 12),
+      participants: Math.max(72, Math.round(last.total / 90000)),
+      apr: Math.max(0, ((last.pnl - (chartData.at(-2)?.pnl ?? 0)) / last.total) * 100),
     };
   }, [chartData, period]);
+
+  const projections = useMemo(() => {
+    const base = kpis.total;
+    return [7, 30, 90].map((h) => {
+      const projectedApy = Math.max(0, kpis.apr * (h / 30));
+      const gain = (base * projectedApy) / 100;
+      const confidence =
+        gain > base * 0.015 ? "High" : gain > base * 0.008 ? "Medium" : "Low";
+      return { horizon: h, projectedApy, gain, confidence };
+    });
+  }, [kpis.apr, kpis.total]);
 
   return (
     <motion.section
@@ -109,24 +150,26 @@ export default function PortfolioOverviewChart({
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <MetricBadge label="Total Portfolio" value={kpis.total} prefix="$" />
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <MetricBadge
-            label="Net PnL"
-            value={kpis.pnl}
-            prefix={kpis.pnl >= 0 ? "+$" : "-$"}
-            tone={kpis.pnl >= 0 ? "positive" : "negative"}
-          />
-          <MetricBadge
-            label={kpis.changeLabel}
-            value={Math.abs(kpis.changePct)}
+            label="Current APR"
+            value={kpis.apr}
             suffix="%"
-            prefix={kpis.changePct >= 0 ? "+" : "-"}
-            tone={kpis.changePct >= 0 ? "positive" : "negative"}
+            tone={kpis.apr >= 0 ? "positive" : "negative"}
+          />
+          <MetricBadge label="TVL (USD)" value={kpis.total} prefix="$" />
+          <MetricBadge label="24H Volume" value={kpis.volume} prefix="$" />
+          <MetricBadge
+            label="Participants"
+            value={kpis.participants}
+            suffix=""
           />
         </div>
 
-        <div className="rounded-[28px] border border-white/10 bg-gradient-to-b from-[#16171B] to-[#0B0C0E] p-5 shadow-inner shadow-black/50">
+        <div className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-b from-[#151618] to-[#0A0B0C] p-5 shadow-inner shadow-black/60">
+          <div className="pointer-events-none absolute inset-2 rounded-[24px] border border-white/5 opacity-40" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.03),transparent_50%)]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:40px_40px]" />
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/5 pb-4 text-sm text-[#CED1DB]">
             <span>TVL (area) • Net PnL (line) • 24H Change (bars)</span>
             <span className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/70">
@@ -141,8 +184,8 @@ export default function PortfolioOverviewChart({
               >
                 <defs>
                   <linearGradient id="portfolioArea" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#AA7CFF" stopOpacity={0.45} />
-                    <stop offset="90%" stopColor="#AA7CFF" stopOpacity={0.05} />
+                    <stop offset="0%" stopColor="#F3A233" stopOpacity={0.4} />
+                    <stop offset="90%" stopColor="#C77E25" stopOpacity={0.08} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
@@ -173,7 +216,7 @@ export default function PortfolioOverviewChart({
                 />
                 <Bar
                   dataKey="chg24h"
-                  fill="rgba(16,185,129,0.45)"
+                  fill="rgba(45,225,186,0.35)"
                   radius={[4, 4, 2, 2]}
                   name="24H Change"
                   barSize={10}
@@ -183,7 +226,7 @@ export default function PortfolioOverviewChart({
                   type="monotone"
                   dataKey="total"
                   name="Total Value"
-                  stroke="#A67CFF"
+                  stroke="#F3A233"
                   strokeWidth={3}
                   fill="url(#portfolioArea)"
                   isAnimationActive={!reduceMotion}
@@ -192,7 +235,7 @@ export default function PortfolioOverviewChart({
                   type="monotone"
                   dataKey="pnl"
                   name="Net PnL"
-                  stroke="#4DB4FF"
+                  stroke="#8BCBFF"
                   strokeWidth={3}
                   dot={false}
                   isAnimationActive={!reduceMotion}
@@ -201,10 +244,16 @@ export default function PortfolioOverviewChart({
             </ResponsiveContainer>
           </div>
           <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-[#A2A8B7]">
-            <LegendSwatch color="#A67CFF" label="Total Value" />
-            <LegendSwatch color="#4DB4FF" label="Net PnL" />
-            <LegendSwatch color="#16A34A" label="24H Change" />
+            <LegendSwatch color="#F3A233" label="Total Value" />
+            <LegendSwatch color="#8BCBFF" label="Net PnL" />
+            <LegendSwatch color="#2DE1BA" label="24H Change" />
           </div>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-3">
+          {projections.map((proj) => (
+            <ProjectionCard key={proj.horizon} {...proj} />
+          ))}
         </div>
       </div>
     </motion.section>
@@ -315,5 +364,46 @@ function LegendSwatch({ color, label }: { color: string; label: string }) {
       />
       {label}
     </span>
+  );
+}
+
+function ProjectionCard({
+  horizon,
+  projectedApy,
+  gain,
+  confidence,
+}: {
+  horizon: number;
+  projectedApy: number;
+  gain: number;
+  confidence: string;
+}) {
+  const confidenceTone =
+    confidence === "High"
+      ? "text-emerald-300"
+      : confidence === "Medium"
+        ? "text-amber-200"
+        : "text-rose-200";
+  return (
+    <div className="rounded-3xl border border-white/10 bg-[#101115] px-5 py-4 shadow-inner shadow-black/40">
+      <p className="text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/70">
+        {horizon}d Projection
+      </p>
+      <div className="mt-3 flex items-center justify-between text-sm">
+        <span className="text-[#9EA2B3]">Projected APY</span>
+        <span className="font-mono text-xl text-white">
+          {projectedApy.toFixed(2)}%
+        </span>
+      </div>
+      <div className="mt-2 flex items-center justify-between text-sm">
+        <span className="text-[#9EA2B3]">Expected gain</span>
+        <span className="font-mono text-lg text-white">
+          ${gain.toFixed(2)}
+        </span>
+      </div>
+      <p className={clsx("mt-2 text-xs uppercase tracking-[0.35em]", confidenceTone)}>
+        {confidence} confidence
+      </p>
+    </div>
   );
 }

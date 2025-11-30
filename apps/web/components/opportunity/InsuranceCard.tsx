@@ -64,19 +64,24 @@ export function InsuranceCard({
           type="button"
           onClick={() => setEnabled((prev) => !prev)}
           className={clsx(
-            "relative inline-flex h-10 w-18 items-center rounded-full p-1 transition",
-            enabled ? "bg-[#1DD1A1]" : "bg-white/10",
+            "relative inline-flex h-10 w-20 items-center rounded-full border border-white/15 p-1 transition",
+            enabled ? "bg-[#F3A233]/20" : "bg-white/5",
           )}
           aria-pressed={enabled}
         >
-          <span
-            className={clsx(
-              "inline-block h-8 w-8 rounded-full bg-white shadow transition",
-              enabled ? "translate-x-7" : "translate-x-0",
-            )}
-          />
+          <motion.span
+            layout
+            className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-xs font-semibold text-black shadow"
+            animate={{ x: enabled ? 40 : 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 28 }}
+          >
+            {enabled ? "ON" : "OFF"}
+          </motion.span>
         </button>
       </header>
+      <p className="text-xs uppercase tracking-[0.35em] text-[#D8D9DE]/60">
+        Protect principal exposure
+      </p>
 
       <AnimatePresence initial={false}>
         {enabled && (

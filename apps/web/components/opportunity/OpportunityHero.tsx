@@ -85,18 +85,18 @@ export function OpportunityHero({ data }: OpportunityHeroProps) {
           <span>{protocol}</span>
         </motion.nav>
 
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex-1">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex-1 space-y-4">
             <motion.h1
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="font-display text-[clamp(2.5rem,5vw,4.5rem)] font-black uppercase tracking-tight"
+              className="font-display text-[clamp(2.5rem,3.8vw,3.5rem)] font-black uppercase tracking-tight"
             >
               {protocol} — {pair}
             </motion.h1>
-            <div className="mt-3 h-px w-24 bg-[rgba(255,182,72,0.4)]" />
-            <div className="mt-3 flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/80">
+            <div className="h-px w-24 bg-[rgba(255,182,72,0.4)]" />
+            <div className="flex flex-wrap gap-3 text-[11px] uppercase tracking-[0.35em] text-[#D8D9DE]/80">
               {descriptorStack.map((item) => (
                 <span
                   key={item}
@@ -107,19 +107,19 @@ export function OpportunityHero({ data }: OpportunityHeroProps) {
               ))}
             </div>
             {summary && (
-              <p className="mt-4 max-w-3xl text-sm text-[#D8D9DE]/85">
-                {summary}
+              <p className="max-w-2xl text-sm text-[#D8D9DE]/85">
+                {summary.split(".")[0]}
               </p>
             )}
           </div>
 
-          <div className="grid flex-1 gap-3">
+          <div className="flex flex-col gap-3">
             {heroStats.map((stat) => (
               <motion.div
                 key={stat.label}
-                whileHover={{ y: -4, rotateX: 1.5, scale: 1.02 }}
+                whileHover={{ y: -6, rotateX: 1.5, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 200, damping: 18 }}
-                className="group rounded-[22px] border border-[rgba(255,182,72,0.2)] bg-[#111214]/80 px-5 py-4 shadow-inner shadow-black/40 backdrop-blur"
+                className="group rounded-[20px] border border-[rgba(255,182,72,0.2)] bg-[#111214]/80 px-5 py-4 text-right shadow-inner shadow-black/40 backdrop-blur"
               >
                 <div className="flex items-center justify-between">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#D8D9DE]/70">
@@ -138,9 +138,10 @@ export function OpportunityHero({ data }: OpportunityHeroProps) {
                     {stat.delta}
                   </span>
                 </div>
-                <p className="mt-3 font-mono text-[2.4rem] leading-none text-white">
+                <p className="mt-3 font-mono text-[2.2rem] leading-none">
                   {stat.value}
                 </p>
+                <div className="mt-2 h-px w-full bg-[rgba(255,182,72,0.3)]" />
               </motion.div>
             ))}
           </div>

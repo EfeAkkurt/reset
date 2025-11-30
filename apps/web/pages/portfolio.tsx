@@ -374,12 +374,10 @@ export default function PortfolioPage() {
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 <PositionsList rows={rows as any} />
               </div>
-              <aside className="lg:w-[360px] lg:shrink-0 lg:pl-6 space-y-6">
-                <div className="lg:sticky lg:top-24">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  <AccountSummary rows={rows as any} />
-                </div>
-                <div className="rounded-[24px] border border-white/10 bg-[#121214] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)] lg:sticky lg:top-[calc(24px+320px)]">
+              <aside className="lg:w-[360px] lg:shrink-0 lg:pl-6 flex flex-col gap-6">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                <AccountSummary rows={rows as any} />
+                <div className="rounded-[24px] border border-white/10 bg-[#121214] p-6 shadow-[0_20px_50px_rgba(0,0,0,0.55)] lg:sticky lg:top-[calc(24px+360px)]">
                   <p className="text-[12px] uppercase tracking-[0.4em] text-[#D8D9DE]/70">
                     Actions
                   </p>

@@ -263,14 +263,6 @@ export default function OpportunityDetailPage() {
       <main className="relative min-h-screen bg-[#030304] pb-20 text-white">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(243,162,51,0.15),transparent_55%)]" />
         <div className="relative mx-auto max-w-7xl px-6 py-10">
-          {/* Real Data Indicator */}
-          {!error && !loading && data && (
-            <div className="mb-6 flex flex-wrap items-center gap-3 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.35em] text-[#D8D9DE]">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-              Live Data — {data.id}
-            </div>
-          )}
-
           {error && data && (
             <div className="mb-6">
               {errorType === "chart-data" && (

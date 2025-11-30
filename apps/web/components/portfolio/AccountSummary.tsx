@@ -28,7 +28,7 @@ export const AccountSummary: React.FC<{ rows: RedirectEntry[] }> = ({
   );
 
   return (
-    <section className="space-y-5 text-white">
+    <section className="space-y-5 text-white lg:sticky lg:top-24">
       <div className="relative overflow-hidden rounded-[28px] border border-[rgba(255,182,72,0.25)] bg-gradient-to-b from-[#151518] to-[#0A0A0B] p-6 shadow-[0_25px_60px_rgba(0,0,0,0.65)]">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 via-white/5 to-transparent opacity-40" />
         <div className="relative">
