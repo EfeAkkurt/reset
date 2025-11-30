@@ -10,7 +10,7 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-} from "recharts";
+} from "@/components/charts/DynamicRecharts";
 import {
   X,
   ArrowLeftRight,
@@ -21,6 +21,7 @@ import {
 import type { CompareItem } from "./CompareBar";
 import { colors } from "@/lib/colors";
 import { protocolLogo } from "@/lib/logos";
+import { ChartWrapper } from "@/components/ui/ChartWrapper";
 
 interface CompareModalProps {
   itemA: CompareItem;
@@ -226,8 +227,9 @@ function ComparePanel({
 
       {/* Chart */}
       <div className="flex-1 min-h-[200px]">
+        <ChartWrapper>
         {series.length === 0 ? (
-          <div className="text-xs text-zinc-500">
+          <div className="text-xs text-zinc-500 flex items-center justify-center h-64">
             No comparison data available.
           </div>
         ) : (
@@ -349,6 +351,7 @@ function ComparePanel({
             </ComposedChart>
           </ResponsiveContainer>
         )}
+        </ChartWrapper>
       </div>
 
       {/* Summary */}
