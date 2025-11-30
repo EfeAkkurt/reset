@@ -118,20 +118,12 @@ export const OpportunityCard: React.FC<
 };
 
 function MetricCard({ label, value }: { label: string; value: string }) {
-  const lengthFactor = Math.min(
-    1,
-    Math.max(0.4, value.toString().replace(/[^0-9.]/g, "").length / 6),
-  );
   return (
-    <div className="group rounded-2xl border border-white/10 bg-[#17181D] px-4 py-3 shadow-inner shadow-black/50">
+    <div>
       <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-white/45">
         {label}
       </p>
       <p className="mt-2 font-mono text-xl text-white">{value}</p>
-      <div
-        className="mt-3 h-px bg-[rgba(255,182,72,0.25)] transition-all group-hover:w-full group-hover:bg-[#F3A233]"
-        style={{ width: `${lengthFactor * 100}%` }}
-      />
     </div>
   );
 }
